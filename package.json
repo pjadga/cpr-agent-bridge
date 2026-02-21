@@ -1,0 +1,15 @@
+{
+  "name": "cpr-agent",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "laravel-echo": "^1.16.0",
+    "pusher-js": "^8.4.0-rc2"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
