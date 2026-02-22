@@ -14,7 +14,7 @@
   ],
   "esmodules": ["dist/module.mjs"],
   "url": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge",
-  "manifest": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/blob/main/module.json",
+  "manifest": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/module.json",
   "download": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge",
-  "license": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/blob/main/LICENSE.md"
+  "license": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/LICENSE.md"
 }
