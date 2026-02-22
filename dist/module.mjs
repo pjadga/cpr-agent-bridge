@@ -153,8 +153,8 @@ var He = /* @__PURE__ */ function(v) {
   G(s, v);
   var f = J(s);
   function s(a, i, l) {
-    var c;
-    return q(this, s), c = f.call(this), c.name = i, c.pusher = a, c.options = l, c.eventFormatter = new gt(c.options.namespace), c.subscribe(), c;
+    var u;
+    return q(this, s), u = f.call(this), u.name = i, u.pusher = a, u.options = l, u.eventFormatter = new gt(u.options.namespace), u.subscribe(), u;
   }
   return z(s, [{
     key: "subscribe",
@@ -184,10 +184,10 @@ var He = /* @__PURE__ */ function(v) {
     key: "listenToAll",
     value: function(i) {
       var l = this;
-      return this.subscription.bind_global(function(c, R) {
-        if (!c.startsWith("pusher:")) {
-          var S = l.options.namespace.replace(/\./g, "\\"), O = c.startsWith(S) ? c.substring(S.length + 1) : "." + c;
-          i(O, R);
+      return this.subscription.bind_global(function(u, I) {
+        if (!u.startsWith("pusher:")) {
+          var k = l.options.namespace.replace(/\./g, "\\"), P = u.startsWith(k) ? u.substring(k.length + 1) : "." + u;
+          i(P, I);
         }
       }), this;
     }
@@ -284,8 +284,8 @@ var He = /* @__PURE__ */ function(v) {
        */
       function(i) {
         return this.on("pusher:subscription_succeeded", function(l) {
-          i(Object.keys(l.members).map(function(c) {
-            return l.members[c];
+          i(Object.keys(l.members).map(function(u) {
+            return l.members[u];
           }));
         }), this;
       }
@@ -323,8 +323,8 @@ var He = /* @__PURE__ */ function(v) {
   G(s, v);
   var f = J(s);
   function s(a, i, l) {
-    var c;
-    return q(this, s), c = f.call(this), c.events = {}, c.listeners = {}, c.name = i, c.socket = a, c.options = l, c.eventFormatter = new gt(c.options.namespace), c.subscribe(), c;
+    var u;
+    return q(this, s), u = f.call(this), u.events = {}, u.listeners = {}, u.name = i, u.socket = a, u.options = l, u.eventFormatter = new gt(u.options.namespace), u.subscribe(), u;
   }
   return z(s, [{
     key: "subscribe",
@@ -385,10 +385,10 @@ var He = /* @__PURE__ */ function(v) {
   }, {
     key: "on",
     value: function(i, l) {
-      var c = this;
-      return this.listeners[i] = this.listeners[i] || [], this.events[i] || (this.events[i] = function(R, S) {
-        c.name === R && c.listeners[i] && c.listeners[i].forEach(function(O) {
-          return O(S);
+      var u = this;
+      return this.listeners[i] = this.listeners[i] || [], this.events[i] || (this.events[i] = function(I, k) {
+        u.name === I && u.listeners[i] && u.listeners[i].forEach(function(P) {
+          return P(k);
         });
       }, this.socket.on(i, this.events[i])), this.listeners[i].push(l), this;
     }
@@ -409,8 +409,8 @@ var He = /* @__PURE__ */ function(v) {
   }, {
     key: "unbindEvent",
     value: function(i, l) {
-      this.listeners[i] = this.listeners[i] || [], l && (this.listeners[i] = this.listeners[i].filter(function(c) {
-        return c !== l;
+      this.listeners[i] = this.listeners[i] || [], l && (this.listeners[i] = this.listeners[i].filter(function(u) {
+        return u !== l;
       })), (!l || this.listeners[i].length === 0) && (this.events[i] && (this.socket.removeListener(i, this.events[i]), delete this.events[i]), delete this.listeners[i]);
     }
   }]), s;
@@ -449,8 +449,8 @@ var He = /* @__PURE__ */ function(v) {
        */
       function(i) {
         return this.on("presence:subscribed", function(l) {
-          i(l.map(function(c) {
-            return c.user_info;
+          i(l.map(function(u) {
+            return u.user_info;
           }));
         }), this;
       }
@@ -695,8 +695,8 @@ var He = /* @__PURE__ */ function(v) {
      */
   }, {
     key: "listen",
-    value: function(i, l, c) {
-      return this.channel(i).listen(l, c);
+    value: function(i, l, u) {
+      return this.channel(i).listen(l, u);
     }
     /**
      * Get a channel instance by name.
@@ -736,9 +736,9 @@ var He = /* @__PURE__ */ function(v) {
   }, {
     key: "leave",
     value: function(i) {
-      var l = this, c = [i, "private-" + i, "private-encrypted-" + i, "presence-" + i];
-      c.forEach(function(R, S) {
-        l.leaveChannel(R);
+      var l = this, u = [i, "private-" + i, "private-encrypted-" + i, "presence-" + i];
+      u.forEach(function(I, k) {
+        l.leaveChannel(I);
       });
     }
     /**
@@ -778,8 +778,8 @@ var He = /* @__PURE__ */ function(v) {
     value: function() {
       var i = this, l = this.getSocketIO();
       return this.socket = l(this.options.host, this.options), this.socket.on("reconnect", function() {
-        Object.values(i.channels).forEach(function(c) {
-          c.subscribe();
+        Object.values(i.channels).forEach(function(u) {
+          u.subscribe();
         });
       }), this.socket;
     }
@@ -800,8 +800,8 @@ var He = /* @__PURE__ */ function(v) {
      */
   }, {
     key: "listen",
-    value: function(i, l, c) {
-      return this.channel(i).listen(l, c);
+    value: function(i, l, u) {
+      return this.channel(i).listen(l, u);
     }
     /**
      * Get a channel instance by name.
@@ -833,9 +833,9 @@ var He = /* @__PURE__ */ function(v) {
   }, {
     key: "leave",
     value: function(i) {
-      var l = this, c = [i, "private-" + i, "presence-" + i];
-      c.forEach(function(R) {
-        l.leaveChannel(R);
+      var l = this, u = [i, "private-" + i, "presence-" + i];
+      u.forEach(function(I) {
+        l.leaveChannel(I);
       });
     }
     /**
@@ -879,7 +879,7 @@ var He = /* @__PURE__ */ function(v) {
      */
   }, {
     key: "listen",
-    value: function(i, l, c) {
+    value: function(i, l, u) {
       return new Se();
     }
     /**
@@ -1126,7 +1126,7 @@ var wt = { exports: {} };
         function i(l) {
           if (a[l])
             return a[l].exports;
-          var c = a[l] = {
+          var u = a[l] = {
             /******/
             i: l,
             /******/
@@ -1135,21 +1135,21 @@ var wt = { exports: {} };
             exports: {}
             /******/
           };
-          return s[l].call(c.exports, c, c.exports, i), c.l = !0, c.exports;
+          return s[l].call(u.exports, u, u.exports, i), u.l = !0, u.exports;
         }
-        return i.m = s, i.c = a, i.d = function(l, c, R) {
-          i.o(l, c) || Object.defineProperty(l, c, { enumerable: !0, get: R });
+        return i.m = s, i.c = a, i.d = function(l, u, I) {
+          i.o(l, u) || Object.defineProperty(l, u, { enumerable: !0, get: I });
         }, i.r = function(l) {
           typeof Symbol < "u" && Symbol.toStringTag && Object.defineProperty(l, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(l, "__esModule", { value: !0 });
-        }, i.t = function(l, c) {
-          if (c & 1 && (l = i(l)), c & 8 || c & 4 && typeof l == "object" && l && l.__esModule) return l;
-          var R = /* @__PURE__ */ Object.create(null);
-          if (i.r(R), Object.defineProperty(R, "default", { enumerable: !0, value: l }), c & 2 && typeof l != "string") for (var S in l) i.d(R, S, (function(O) {
-            return l[O];
-          }).bind(null, S));
-          return R;
+        }, i.t = function(l, u) {
+          if (u & 1 && (l = i(l)), u & 8 || u & 4 && typeof l == "object" && l && l.__esModule) return l;
+          var I = /* @__PURE__ */ Object.create(null);
+          if (i.r(I), Object.defineProperty(I, "default", { enumerable: !0, value: l }), u & 2 && typeof l != "string") for (var k in l) i.d(I, k, (function(P) {
+            return l[P];
+          }).bind(null, k));
+          return I;
         }, i.n = function(l) {
-          var c = l && l.__esModule ? (
+          var u = l && l.__esModule ? (
             /******/
             function() {
               return l.default;
@@ -1160,9 +1160,9 @@ var wt = { exports: {} };
               return l;
             }
           );
-          return i.d(c, "a", c), c;
-        }, i.o = function(l, c) {
-          return Object.prototype.hasOwnProperty.call(l, c);
+          return i.d(u, "a", u), u;
+        }, i.o = function(l, u) {
+          return Object.prototype.hasOwnProperty.call(l, u);
         }, i.p = "", i(i.s = 2);
       }([
         /* 0 */
@@ -1170,10 +1170,10 @@ var wt = { exports: {} };
         function(s, a, i) {
           var l = this && this.__extends || /* @__PURE__ */ function() {
             var m = function(p, y) {
-              return m = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(w, k) {
-                w.__proto__ = k;
-              } || function(w, k) {
-                for (var A in k) k.hasOwnProperty(A) && (w[A] = k[A]);
+              return m = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(w, S) {
+                w.__proto__ = S;
+              } || function(w, S) {
+                for (var A in S) S.hasOwnProperty(A) && (w[A] = S[A]);
               }, m(p, y);
             };
             return function(p, y) {
@@ -1185,7 +1185,7 @@ var wt = { exports: {} };
             };
           }();
           Object.defineProperty(a, "__esModule", { value: !0 });
-          var c = 256, R = (
+          var u = 256, I = (
             /** @class */
             function() {
               function m(p) {
@@ -1195,13 +1195,13 @@ var wt = { exports: {} };
                 return this._paddingCharacter ? (p + 2) / 3 * 4 | 0 : (p * 8 + 5) / 6 | 0;
               }, m.prototype.encode = function(p) {
                 for (var y = "", w = 0; w < p.length - 2; w += 3) {
-                  var k = p[w] << 16 | p[w + 1] << 8 | p[w + 2];
-                  y += this._encodeByte(k >>> 3 * 6 & 63), y += this._encodeByte(k >>> 2 * 6 & 63), y += this._encodeByte(k >>> 1 * 6 & 63), y += this._encodeByte(k >>> 0 * 6 & 63);
+                  var S = p[w] << 16 | p[w + 1] << 8 | p[w + 2];
+                  y += this._encodeByte(S >>> 3 * 6 & 63), y += this._encodeByte(S >>> 2 * 6 & 63), y += this._encodeByte(S >>> 1 * 6 & 63), y += this._encodeByte(S >>> 0 * 6 & 63);
                 }
                 var A = p.length - w;
                 if (A > 0) {
-                  var k = p[w] << 16 | (A === 2 ? p[w + 1] << 8 : 0);
-                  y += this._encodeByte(k >>> 3 * 6 & 63), y += this._encodeByte(k >>> 2 * 6 & 63), A === 2 ? y += this._encodeByte(k >>> 1 * 6 & 63) : y += this._paddingCharacter || "", y += this._paddingCharacter || "";
+                  var S = p[w] << 16 | (A === 2 ? p[w + 1] << 8 : 0);
+                  y += this._encodeByte(S >>> 3 * 6 & 63), y += this._encodeByte(S >>> 2 * 6 & 63), A === 2 ? y += this._encodeByte(S >>> 1 * 6 & 63) : y += this._paddingCharacter || "", y += this._paddingCharacter || "";
                 }
                 return y;
               }, m.prototype.maxDecodedLength = function(p) {
@@ -1211,17 +1211,17 @@ var wt = { exports: {} };
               }, m.prototype.decode = function(p) {
                 if (p.length === 0)
                   return new Uint8Array(0);
-                for (var y = this._getPaddingLength(p), w = p.length - y, k = new Uint8Array(this.maxDecodedLength(w)), A = 0, P = 0, D = 0, j = 0, N = 0, H = 0, W = 0; P < w - 4; P += 4)
-                  j = this._decodeChar(p.charCodeAt(P + 0)), N = this._decodeChar(p.charCodeAt(P + 1)), H = this._decodeChar(p.charCodeAt(P + 2)), W = this._decodeChar(p.charCodeAt(P + 3)), k[A++] = j << 2 | N >>> 4, k[A++] = N << 4 | H >>> 2, k[A++] = H << 6 | W, D |= j & c, D |= N & c, D |= H & c, D |= W & c;
-                if (P < w - 1 && (j = this._decodeChar(p.charCodeAt(P)), N = this._decodeChar(p.charCodeAt(P + 1)), k[A++] = j << 2 | N >>> 4, D |= j & c, D |= N & c), P < w - 2 && (H = this._decodeChar(p.charCodeAt(P + 2)), k[A++] = N << 4 | H >>> 2, D |= H & c), P < w - 3 && (W = this._decodeChar(p.charCodeAt(P + 3)), k[A++] = H << 6 | W, D |= W & c), D !== 0)
+                for (var y = this._getPaddingLength(p), w = p.length - y, S = new Uint8Array(this.maxDecodedLength(w)), A = 0, E = 0, D = 0, j = 0, N = 0, H = 0, V = 0; E < w - 4; E += 4)
+                  j = this._decodeChar(p.charCodeAt(E + 0)), N = this._decodeChar(p.charCodeAt(E + 1)), H = this._decodeChar(p.charCodeAt(E + 2)), V = this._decodeChar(p.charCodeAt(E + 3)), S[A++] = j << 2 | N >>> 4, S[A++] = N << 4 | H >>> 2, S[A++] = H << 6 | V, D |= j & u, D |= N & u, D |= H & u, D |= V & u;
+                if (E < w - 1 && (j = this._decodeChar(p.charCodeAt(E)), N = this._decodeChar(p.charCodeAt(E + 1)), S[A++] = j << 2 | N >>> 4, D |= j & u, D |= N & u), E < w - 2 && (H = this._decodeChar(p.charCodeAt(E + 2)), S[A++] = N << 4 | H >>> 2, D |= H & u), E < w - 3 && (V = this._decodeChar(p.charCodeAt(E + 3)), S[A++] = H << 6 | V, D |= V & u), D !== 0)
                   throw new Error("Base64Coder: incorrect characters for decoding");
-                return k;
+                return S;
               }, m.prototype._encodeByte = function(p) {
                 var y = p;
                 return y += 65, y += 25 - p >>> 8 & 6, y += 51 - p >>> 8 & -75, y += 61 - p >>> 8 & -15, y += 62 - p >>> 8 & 3, String.fromCharCode(y);
               }, m.prototype._decodeChar = function(p) {
-                var y = c;
-                return y += (42 - p & p - 44) >>> 8 & -c + p - 43 + 62, y += (46 - p & p - 48) >>> 8 & -c + p - 47 + 63, y += (47 - p & p - 58) >>> 8 & -c + p - 48 + 52, y += (64 - p & p - 91) >>> 8 & -c + p - 65 + 0, y += (96 - p & p - 123) >>> 8 & -c + p - 97 + 26, y;
+                var y = u;
+                return y += (42 - p & p - 44) >>> 8 & -u + p - 43 + 62, y += (46 - p & p - 48) >>> 8 & -u + p - 47 + 63, y += (47 - p & p - 58) >>> 8 & -u + p - 48 + 52, y += (64 - p & p - 91) >>> 8 & -u + p - 65 + 0, y += (96 - p & p - 123) >>> 8 & -u + p - 97 + 26, y;
               }, m.prototype._getPaddingLength = function(p) {
                 var y = 0;
                 if (this._paddingCharacter) {
@@ -1234,17 +1234,17 @@ var wt = { exports: {} };
               }, m;
             }()
           );
-          a.Coder = R;
-          var S = new R();
-          function O(m) {
-            return S.encode(m);
+          a.Coder = I;
+          var k = new I();
+          function P(m) {
+            return k.encode(m);
           }
-          a.encode = O;
+          a.encode = P;
           function L(m) {
-            return S.decode(m);
+            return k.decode(m);
           }
           a.decode = L;
-          var I = (
+          var R = (
             /** @class */
             function(m) {
               l(p, m);
@@ -1255,101 +1255,101 @@ var wt = { exports: {} };
                 var w = y;
                 return w += 65, w += 25 - y >>> 8 & 6, w += 51 - y >>> 8 & -75, w += 61 - y >>> 8 & -13, w += 62 - y >>> 8 & 49, String.fromCharCode(w);
               }, p.prototype._decodeChar = function(y) {
-                var w = c;
-                return w += (44 - y & y - 46) >>> 8 & -c + y - 45 + 62, w += (94 - y & y - 96) >>> 8 & -c + y - 95 + 63, w += (47 - y & y - 58) >>> 8 & -c + y - 48 + 52, w += (64 - y & y - 91) >>> 8 & -c + y - 65 + 0, w += (96 - y & y - 123) >>> 8 & -c + y - 97 + 26, w;
+                var w = u;
+                return w += (44 - y & y - 46) >>> 8 & -u + y - 45 + 62, w += (94 - y & y - 96) >>> 8 & -u + y - 95 + 63, w += (47 - y & y - 58) >>> 8 & -u + y - 48 + 52, w += (64 - y & y - 91) >>> 8 & -u + y - 65 + 0, w += (96 - y & y - 123) >>> 8 & -u + y - 97 + 26, w;
               }, p;
-            }(R)
+            }(I)
           );
-          a.URLSafeCoder = I;
-          var u = new I();
+          a.URLSafeCoder = R;
+          var c = new R();
           function h(m) {
-            return u.encode(m);
+            return c.encode(m);
           }
           a.encodeURLSafe = h;
           function g(m) {
-            return u.decode(m);
+            return c.decode(m);
           }
           a.decodeURLSafe = g, a.encodedLength = function(m) {
-            return S.encodedLength(m);
+            return k.encodedLength(m);
           }, a.maxDecodedLength = function(m) {
-            return S.maxDecodedLength(m);
+            return k.maxDecodedLength(m);
           }, a.decodedLength = function(m) {
-            return S.decodedLength(m);
+            return k.decodedLength(m);
           };
         },
         /* 1 */
         /***/
         function(s, a, i) {
           Object.defineProperty(a, "__esModule", { value: !0 });
-          var l = "utf8: invalid string", c = "utf8: invalid source encoding";
-          function R(L) {
-            for (var I = new Uint8Array(S(L)), u = 0, h = 0; h < L.length; h++) {
+          var l = "utf8: invalid string", u = "utf8: invalid source encoding";
+          function I(L) {
+            for (var R = new Uint8Array(k(L)), c = 0, h = 0; h < L.length; h++) {
               var g = L.charCodeAt(h);
-              g < 128 ? I[u++] = g : g < 2048 ? (I[u++] = 192 | g >> 6, I[u++] = 128 | g & 63) : g < 55296 ? (I[u++] = 224 | g >> 12, I[u++] = 128 | g >> 6 & 63, I[u++] = 128 | g & 63) : (h++, g = (g & 1023) << 10, g |= L.charCodeAt(h) & 1023, g += 65536, I[u++] = 240 | g >> 18, I[u++] = 128 | g >> 12 & 63, I[u++] = 128 | g >> 6 & 63, I[u++] = 128 | g & 63);
+              g < 128 ? R[c++] = g : g < 2048 ? (R[c++] = 192 | g >> 6, R[c++] = 128 | g & 63) : g < 55296 ? (R[c++] = 224 | g >> 12, R[c++] = 128 | g >> 6 & 63, R[c++] = 128 | g & 63) : (h++, g = (g & 1023) << 10, g |= L.charCodeAt(h) & 1023, g += 65536, R[c++] = 240 | g >> 18, R[c++] = 128 | g >> 12 & 63, R[c++] = 128 | g >> 6 & 63, R[c++] = 128 | g & 63);
             }
-            return I;
+            return R;
           }
-          a.encode = R;
-          function S(L) {
-            for (var I = 0, u = 0; u < L.length; u++) {
-              var h = L.charCodeAt(u);
+          a.encode = I;
+          function k(L) {
+            for (var R = 0, c = 0; c < L.length; c++) {
+              var h = L.charCodeAt(c);
               if (h < 128)
-                I += 1;
+                R += 1;
               else if (h < 2048)
-                I += 2;
+                R += 2;
               else if (h < 55296)
-                I += 3;
+                R += 3;
               else if (h <= 57343) {
-                if (u >= L.length - 1)
+                if (c >= L.length - 1)
                   throw new Error(l);
-                u++, I += 4;
+                c++, R += 4;
               } else
                 throw new Error(l);
             }
-            return I;
+            return R;
           }
-          a.encodedLength = S;
-          function O(L) {
-            for (var I = [], u = 0; u < L.length; u++) {
-              var h = L[u];
+          a.encodedLength = k;
+          function P(L) {
+            for (var R = [], c = 0; c < L.length; c++) {
+              var h = L[c];
               if (h & 128) {
                 var g = void 0;
                 if (h < 224) {
-                  if (u >= L.length)
-                    throw new Error(c);
-                  var m = L[++u];
+                  if (c >= L.length)
+                    throw new Error(u);
+                  var m = L[++c];
                   if ((m & 192) !== 128)
-                    throw new Error(c);
+                    throw new Error(u);
                   h = (h & 31) << 6 | m & 63, g = 128;
                 } else if (h < 240) {
-                  if (u >= L.length - 1)
-                    throw new Error(c);
-                  var m = L[++u], p = L[++u];
+                  if (c >= L.length - 1)
+                    throw new Error(u);
+                  var m = L[++c], p = L[++c];
                   if ((m & 192) !== 128 || (p & 192) !== 128)
-                    throw new Error(c);
+                    throw new Error(u);
                   h = (h & 15) << 12 | (m & 63) << 6 | p & 63, g = 2048;
                 } else if (h < 248) {
-                  if (u >= L.length - 2)
-                    throw new Error(c);
-                  var m = L[++u], p = L[++u], y = L[++u];
+                  if (c >= L.length - 2)
+                    throw new Error(u);
+                  var m = L[++c], p = L[++c], y = L[++c];
                   if ((m & 192) !== 128 || (p & 192) !== 128 || (y & 192) !== 128)
-                    throw new Error(c);
+                    throw new Error(u);
                   h = (h & 15) << 18 | (m & 63) << 12 | (p & 63) << 6 | y & 63, g = 65536;
                 } else
-                  throw new Error(c);
+                  throw new Error(u);
                 if (h < g || h >= 55296 && h <= 57343)
-                  throw new Error(c);
+                  throw new Error(u);
                 if (h >= 65536) {
                   if (h > 1114111)
-                    throw new Error(c);
-                  h -= 65536, I.push(String.fromCharCode(55296 | h >> 10)), h = 56320 | h & 1023;
+                    throw new Error(u);
+                  h -= 65536, R.push(String.fromCharCode(55296 | h >> 10)), h = 56320 | h & 1023;
                 }
               }
-              I.push(String.fromCharCode(h));
+              R.push(String.fromCharCode(h));
             }
-            return I.join("");
+            return R.join("");
           }
-          a.decode = O;
+          a.decode = P;
         },
         /* 2 */
         /***/
@@ -1375,7 +1375,7 @@ var wt = { exports: {} };
               delete this[e.number];
             }
           }
-          var c = new l("_pusher_script_", "Pusher.ScriptReceivers"), R = {
+          var u = new l("_pusher_script_", "Pusher.ScriptReceivers"), I = {
             VERSION: "8.4.0",
             PROTOCOL: 7,
             wsPort: 80,
@@ -1402,10 +1402,10 @@ var wt = { exports: {} };
             cdn_http: "http://js.pusher.com",
             cdn_https: "https://js.pusher.com",
             dependency_suffix: ""
-          }, S = R;
-          class O {
+          }, k = I;
+          class P {
             constructor(e) {
-              this.options = e, this.receivers = e.receivers || c, this.loading = {};
+              this.options = e, this.receivers = e.receivers || u, this.loading = {};
             }
             load(e, t, r) {
               var o = this;
@@ -1417,10 +1417,10 @@ var wt = { exports: {} };
                   if (o.receivers.remove(b), o.loading[e]) {
                     var C = o.loading[e];
                     delete o.loading[e];
-                    for (var E = function(F) {
+                    for (var x = function(F) {
                       F || d.cleanup();
-                    }, x = 0; x < C.length; x++)
-                      C[x](_, E);
+                    }, O = 0; O < C.length; O++)
+                      C[O](_, x);
                   }
                 });
                 d.send(b);
@@ -1434,14 +1434,14 @@ var wt = { exports: {} };
               return this.getRoot(t) + "/" + e + this.options.suffix + ".js";
             }
           }
-          var L = new l("_pusher_dependencies", "Pusher.DependenciesReceivers"), I = new O({
-            cdn_http: S.cdn_http,
-            cdn_https: S.cdn_https,
-            version: S.VERSION,
-            suffix: S.dependency_suffix,
+          var L = new l("_pusher_dependencies", "Pusher.DependenciesReceivers"), R = new P({
+            cdn_http: k.cdn_http,
+            cdn_https: k.cdn_https,
+            version: k.VERSION,
+            suffix: k.dependency_suffix,
             receivers: L
           });
-          const u = {
+          const c = {
             baseUrl: "https://pusher.com",
             urls: {
               authenticationEndpoint: {
@@ -1462,11 +1462,11 @@ var wt = { exports: {} };
             }
           };
           var g = { buildLogSuffix: function(n) {
-            const e = "See:", t = u.urls[n];
+            const e = "See:", t = c.urls[n];
             if (!t)
               return "";
             let r;
-            return t.fullUrl ? r = t.fullUrl : t.path && (r = u.baseUrl + t.path), r ? `${e} ${r}` : "";
+            return t.fullUrl ? r = t.fullUrl : t.path && (r = c.baseUrl + t.path), r ? `${e} ${r}` : "";
           } }, m;
           (function(n) {
             n.UserAuthentication = "user-authentication", n.ChannelAuthorization = "channel-authorization";
@@ -1486,7 +1486,7 @@ var wt = { exports: {} };
               super(e), Object.setPrototypeOf(this, new.target.prototype);
             }
           }
-          class k extends Error {
+          class S extends Error {
             constructor(e) {
               super(e), Object.setPrototypeOf(this, new.target.prototype);
             }
@@ -1496,7 +1496,7 @@ var wt = { exports: {} };
               super(e), Object.setPrototypeOf(this, new.target.prototype);
             }
           }
-          class P extends Error {
+          class E extends Error {
             constructor(e) {
               super(e), Object.setPrototypeOf(this, new.target.prototype);
             }
@@ -1516,7 +1516,7 @@ var wt = { exports: {} };
               super(t), this.status = e, Object.setPrototypeOf(this, new.target.prototype);
             }
           }
-          var W = function(n, e, t, r, o) {
+          var V = function(n, e, t, r, o) {
             const d = T.createXHR();
             d.open("POST", t.endpoint, !0), d.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             for (var b in t.headers)
@@ -1616,12 +1616,12 @@ var wt = { exports: {} };
                 return r[n].apply(r, t.concat(arguments));
               };
             }
-          }, V = Ct;
-          function $(n, ...e) {
+          }, $ = Ct;
+          function W(n, ...e) {
             for (var t = 0; t < e.length; t++) {
               var r = e[t];
               for (var o in r)
-                r[o] && r[o].constructor && r[o].constructor === Object ? n[o] = $(n[o] || {}, r[o]) : n[o] = r[o];
+                r[o] && r[o].constructor && r[o].constructor === Object ? n[o] = W(n[o] || {}, r[o]) : n[o] = r[o];
             }
             return n;
           }
@@ -1672,7 +1672,7 @@ var wt = { exports: {} };
               t[o] = e(r);
             }), t;
           }
-          function Ve(n, e) {
+          function $e(n, e) {
             e = e || function(o) {
               return !!o;
             };
@@ -1680,7 +1680,7 @@ var wt = { exports: {} };
               e(n[r], r, n, t) && t.push(n[r]);
             return t;
           }
-          function We(n, e) {
+          function Ve(n, e) {
             var t = {};
             return te(n, function(r, o) {
               (e && e(r, o, n, t) || r) && (t[o] = r);
@@ -1692,7 +1692,7 @@ var wt = { exports: {} };
               e.push([r, t]);
             }), e;
           }
-          function $e(n, e) {
+          function We(n, e) {
             for (var t = 0; t < n.length; t++)
               if (e(n[t], t, n))
                 return !0;
@@ -1710,9 +1710,9 @@ var wt = { exports: {} };
             });
           }
           function Et(n) {
-            var e = We(n, function(r) {
+            var e = Ve(n, function(r) {
               return r !== void 0;
-            }), t = Be(At(Lt(e)), V.method("join", "=")).join("&");
+            }), t = Be(At(Lt(e)), $.method("join", "=")).join("&");
             return t;
           }
           function xt(n) {
@@ -1780,13 +1780,13 @@ var wt = { exports: {} };
             var d = n.nextAuthCallbackID.toString();
             n.nextAuthCallbackID++;
             var b = n.getDocument(), _ = b.createElement("script");
-            n.auth_callbacks[d] = function(x) {
-              o(null, x);
+            n.auth_callbacks[d] = function(O) {
+              o(null, O);
             };
             var C = "Pusher.auth_callbacks['" + d + "']";
             _.src = t.endpoint + "?callback=" + encodeURIComponent(C) + "&" + e;
-            var E = b.getElementsByTagName("head")[0] || b.documentElement;
-            E.insertBefore(_, E.firstChild);
+            var x = b.getElementsByTagName("head")[0] || b.documentElement;
+            x.insertBefore(_, x.firstChild);
           }, Mt = Nt;
           class Dt {
             constructor(e) {
@@ -1824,8 +1824,8 @@ var wt = { exports: {} };
           }
           var Ut = function(n, e) {
             return function(t, r) {
-              var o = "http" + (e ? "s" : "") + "://", d = o + (n.host || n.options.host) + n.options.path, b = T.createJSONPRequest(d, t), _ = T.ScriptReceivers.create(function(C, E) {
-                c.remove(_), b.cleanup(), E && E.host && (n.host = E.host), r && r(C, E);
+              var o = "http" + (e ? "s" : "") + "://", d = o + (n.host || n.options.host) + n.options.path, b = T.createJSONPRequest(d, t), _ = T.ScriptReceivers.create(function(C, x) {
+                u.remove(_), b.cleanup(), x && x.host && (n.host = x.host), r && r(C, x);
               });
               b.send(_);
             };
@@ -1838,7 +1838,7 @@ var wt = { exports: {} };
             return r + "://" + o + t;
           }
           function Te(n, e) {
-            var t = "/app/" + n, r = "?protocol=" + S.PROTOCOL + "&client=js&version=" + S.VERSION + (e ? "&" + e : "");
+            var t = "/app/" + n, r = "?protocol=" + k.PROTOCOL + "&client=js&version=" + k.VERSION + (e ? "&" + e : "");
             return t + r;
           }
           var qt = {
@@ -1859,7 +1859,7 @@ var wt = { exports: {} };
               return Te(n);
             }
           };
-          class Vt {
+          class $t {
             constructor() {
               this._callbacks = {};
             }
@@ -1883,7 +1883,7 @@ var wt = { exports: {} };
             }
             removeCallback(e, t, r) {
               de(e, function(o) {
-                this._callbacks[o] = Ve(this._callbacks[o] || [], function(d) {
+                this._callbacks[o] = $e(this._callbacks[o] || [], function(d) {
                   return t && t !== d.fn || r && r !== d.context;
                 }), this._callbacks[o].length === 0 && delete this._callbacks[o];
               }, this);
@@ -1899,7 +1899,7 @@ var wt = { exports: {} };
           }
           class ne {
             constructor(e) {
-              this.callbacks = new Vt(), this.global_callbacks = [], this.failThrough = e;
+              this.callbacks = new $t(), this.global_callbacks = [], this.failThrough = e;
             }
             bind(e, t, r) {
               return this.callbacks.add(e, t, r), this;
@@ -1911,7 +1911,7 @@ var wt = { exports: {} };
               return this.callbacks.remove(e, t, r), this;
             }
             unbind_global(e) {
-              return e ? (this.global_callbacks = Ve(this.global_callbacks || [], (t) => t !== e), this) : (this.global_callbacks = [], this);
+              return e ? (this.global_callbacks = $e(this.global_callbacks || [], (t) => t !== e), this) : (this.global_callbacks = [], this);
             }
             unbind_all() {
               return this.unbind(), this.unbind_global(), this;
@@ -1927,7 +1927,7 @@ var wt = { exports: {} };
               return this;
             }
           }
-          class Wt extends ne {
+          class Vt extends ne {
             constructor(e, t, r, o, d) {
               super(), this.initialize = T.transportConnectionInitializer, this.hooks = e, this.name = t, this.priority = r, this.key = o, this.options = d, this.state = "new", this.timeline = d.timeline, this.activityTimeout = d.activityTimeout, this.id = this.timeline.generateUniqueID();
             }
@@ -1944,7 +1944,7 @@ var wt = { exports: {} };
               try {
                 this.socket = this.hooks.getSocket(e, this.options);
               } catch (t) {
-                return V.defer(() => {
+                return $.defer(() => {
                   this.onError(t), this.changeState("closed");
                 }), !1;
               }
@@ -1954,7 +1954,7 @@ var wt = { exports: {} };
               return this.socket ? (this.socket.close(), !0) : !1;
             }
             send(e) {
-              return this.state === "open" ? (V.defer(() => {
+              return this.state === "open" ? ($.defer(() => {
                 this.socket && this.socket.send(e);
               }), !0) : !1;
             }
@@ -2003,7 +2003,7 @@ var wt = { exports: {} };
               })), this.emit(e, t);
             }
             buildTimelineMessage(e) {
-              return $({ cid: this.id }, e);
+              return W({ cid: this.id }, e);
             }
           }
           class he {
@@ -2014,10 +2014,10 @@ var wt = { exports: {} };
               return this.hooks.isSupported(e);
             }
             createConnection(e, t, r, o) {
-              return new Wt(this.hooks, e, t, r, o);
+              return new Vt(this.hooks, e, t, r, o);
             }
           }
-          var $t = new he({
+          var Wt = new he({
             urls: qt,
             handlesActivityChecks: !1,
             supportsPing: !1,
@@ -2037,11 +2037,11 @@ var wt = { exports: {} };
             isInitialized: function() {
               return !0;
             }
-          }, Ge = $({
+          }, Ge = W({
             getSocket: function(n) {
               return T.HTTPFactory.createStreamingSocket(n);
             }
-          }, Xe), Je = $({
+          }, Xe), Je = W({
             getSocket: function(n) {
               return T.HTTPFactory.createPollingSocket(n);
             }
@@ -2049,8 +2049,8 @@ var wt = { exports: {} };
             isSupported: function() {
               return T.isXHRSupported();
             }
-          }, Xt = new he($({}, Ge, Ke)), Gt = new he($({}, Je, Ke)), Jt = {
-            ws: $t,
+          }, Xt = new he(W({}, Ge, Ke)), Gt = new he(W({}, Je, Ke)), Jt = {
+            ws: Wt,
             xhr_streaming: Xt,
             xhr_polling: Gt
           }, ye = Jt, Kt = new he({
@@ -2066,7 +2066,7 @@ var wt = { exports: {} };
             },
             getSocket: function(n, e) {
               return new window.SockJS(n, null, {
-                js_path: I.getPath("sockjs", {
+                js_path: R.getPath("sockjs", {
                   useTLS: e.useTLS
                 }),
                 ignore_null_origin: e.ignoreNullOrigin
@@ -2082,7 +2082,7 @@ var wt = { exports: {} };
               var e = T.isXDRSupported(n.useTLS);
               return e;
             }
-          }, Qt = new he($({}, Ge, Qe)), Yt = new he($({}, Je, Qe));
+          }, Qt = new he(W({}, Ge, Qe)), Yt = new he(W({}, Je, Qe));
           ye.xdr_streaming = Qt, ye.xdr_polling = Yt, ye.sockjs = Kt;
           var Zt = ye;
           class en extends ne {
@@ -2105,17 +2105,17 @@ var wt = { exports: {} };
               this.manager = e, this.transport = t, this.minPingDelay = r.minPingDelay, this.maxPingDelay = r.maxPingDelay, this.pingDelay = void 0;
             }
             createConnection(e, t, r, o) {
-              o = $({}, o, {
+              o = W({}, o, {
                 activityTimeout: this.pingDelay
               });
               var d = this.transport.createConnection(e, t, r, o), b = null, _ = function() {
-                d.unbind("open", _), d.bind("closed", C), b = V.now();
-              }, C = (E) => {
-                if (d.unbind("closed", C), E.code === 1002 || E.code === 1003)
+                d.unbind("open", _), d.bind("closed", C), b = $.now();
+              }, C = (x) => {
+                if (d.unbind("closed", C), x.code === 1002 || x.code === 1003)
                   this.manager.reportDeath();
-                else if (!E.wasClean && b) {
-                  var x = V.now() - b;
-                  x < 2 * this.maxPingDelay && (this.manager.reportDeath(), this.pingDelay = Math.max(x / 2, this.minPingDelay));
+                else if (!x.wasClean && b) {
+                  var O = $.now() - b;
+                  O < 2 * this.maxPingDelay && (this.manager.reportDeath(), this.pingDelay = Math.max(O / 2, this.minPingDelay));
                 }
               };
               return d.bind("open", _), d;
@@ -2284,7 +2284,7 @@ var wt = { exports: {} };
               this.transport.unbind("message", this.onMessage), this.transport.unbind("closed", this.onClosed);
             }
             finish(e, t) {
-              this.callback($({ transport: this.transport, action: e }, t));
+              this.callback(W({ transport: this.transport, action: e }, t));
             }
           }
           class on {
@@ -2404,24 +2404,24 @@ var wt = { exports: {} };
               });
             }
             return new (t || (t = Promise))(function(d, b) {
-              function _(x) {
+              function _(O) {
                 try {
-                  E(r.next(x));
+                  x(r.next(O));
                 } catch (F) {
                   b(F);
                 }
               }
-              function C(x) {
+              function C(O) {
                 try {
-                  E(r.throw(x));
+                  x(r.throw(O));
                 } catch (F) {
                   b(F);
                 }
               }
-              function E(x) {
-                x.done ? d(x.value) : o(x.value).then(_, C);
+              function x(O) {
+                O.done ? d(O.value) : o(O.value).then(_, C);
               }
-              E((r = r.apply(n, e || [])).next());
+              x((r = r.apply(n, e || [])).next());
             });
           };
           class un extends Ae {
@@ -2499,7 +2499,7 @@ var wt = { exports: {} };
               });
             }
             trigger(e, t) {
-              throw new P("Client events are not currently supported for encrypted channels");
+              throw new E("Client events are not currently supported for encrypted channels");
             }
             handleEvent(e) {
               var t = e.event, r = e.data;
@@ -2640,7 +2640,7 @@ var wt = { exports: {} };
               this.activityTimer && this.activityTimer.ensureAborted();
             }
             buildConnectionCallbacks(e) {
-              return $({}, e, {
+              return W({}, e, {
                 message: (t) => {
                   this.resetActivityCheck(), this.emit("message", t);
                 },
@@ -2659,7 +2659,7 @@ var wt = { exports: {} };
               });
             }
             buildHandshakeCallbacks(e) {
-              return $({}, e, {
+              return W({}, e, {
                 connected: (t) => {
                   this.activityTimeout = Math.min(this.options.activityTimeout, t.activityTimeout, t.connection.activityTimeout || 1 / 0), this.clearUnavailableTimer(), this.setConnection(t.connection), this.socket_id = this.connection.id, this.updateState("connected", { socket_id: this.socket_id });
                 }
@@ -2738,7 +2738,7 @@ var wt = { exports: {} };
               if (e.config.nacl)
                 return re.createEncryptedChannel(n, e, e.config.nacl);
               let t = "Tried to subscribe to a private-encrypted- channel but no nacl implementation available", r = g.buildLogSuffix("encryptedChannelSupport");
-              throw new P(`${t}. ${r}`);
+              throw new E(`${t}. ${r}`);
             } else {
               if (n.indexOf("private-") === 0)
                 return re.createPrivateChannel(n, e);
@@ -2800,11 +2800,11 @@ var wt = { exports: {} };
               this.strategies = e, this.loop = !!t.loop, this.failFast = !!t.failFast, this.timeout = t.timeout, this.timeoutLimit = t.timeoutLimit;
             }
             isSupported() {
-              return $e(this.strategies, V.method("isSupported"));
+              return We(this.strategies, $.method("isSupported"));
             }
             connect(e, t) {
-              var r = this.strategies, o = 0, d = this.timeout, b = null, _ = (C, E) => {
-                E ? t(null, E) : (o = o + 1, this.loop && (o = o % r.length), o < r.length ? (d && (d = d * 2, this.timeoutLimit && (d = Math.min(d, this.timeoutLimit))), b = this.tryStrategy(r[o], e, { timeout: d, failFast: this.failFast }, _)) : t(!0));
+              var r = this.strategies, o = 0, d = this.timeout, b = null, _ = (C, x) => {
+                x ? t(null, x) : (o = o + 1, this.loop && (o = o % r.length), o < r.length ? (d && (d = d * 2, this.timeoutLimit && (d = Math.min(d, this.timeoutLimit))), b = this.tryStrategy(r[o], e, { timeout: d, failFast: this.failFast }, _)) : t(!0));
               };
               return b = this.tryStrategy(r[o], e, { timeout: d, failFast: this.failFast }, _), {
                 abort: function() {
@@ -2836,7 +2836,7 @@ var wt = { exports: {} };
               this.strategies = e;
             }
             isSupported() {
-              return $e(this.strategies, V.method("isSupported"));
+              return We(this.strategies, $.method("isSupported"));
             }
             connect(e, t) {
               return mn(this.strategies, e, function(r, o) {
@@ -2884,7 +2884,7 @@ var wt = { exports: {} };
             }
             connect(e, t) {
               var r = this.usingTLS, o = wn(r), d = o && o.cacheSkipCount ? o.cacheSkipCount : 0, b = [this.strategy];
-              if (o && o.timestamp + this.ttl >= V.now()) {
+              if (o && o.timestamp + this.ttl >= $.now()) {
                 var _ = this.transports[o.transport];
                 _ && (["ws", "wss"].includes(o.transport) || d > 3 ? (this.timeline.info({
                   cached: !0,
@@ -2895,15 +2895,15 @@ var wt = { exports: {} };
                   failFast: !0
                 }))) : d++);
               }
-              var C = V.now(), E = b.pop().connect(e, function x(F, _e) {
-                F ? (et(r), b.length > 0 ? (C = V.now(), E = b.pop().connect(e, x)) : t(F)) : (_n(r, _e.transport.name, V.now() - C, d), t(null, _e));
+              var C = $.now(), x = b.pop().connect(e, function O(F, _e) {
+                F ? (et(r), b.length > 0 ? (C = $.now(), x = b.pop().connect(e, O)) : t(F)) : (_n(r, _e.transport.name, $.now() - C, d), t(null, _e));
               });
               return {
                 abort: function() {
-                  E.abort();
+                  x.abort();
                 },
-                forceMinPriority: function(x) {
-                  e = x, E && E.forceMinPriority(x);
+                forceMinPriority: function(O) {
+                  e = O, x && x.forceMinPriority(O);
                 }
               };
             }
@@ -2928,7 +2928,7 @@ var wt = { exports: {} };
             if (o)
               try {
                 o[Ee(n)] = ve({
-                  timestamp: V.now(),
+                  timestamp: $.now(),
                   transport: e,
                   latency: t,
                   cacheSkipCount: r
@@ -3017,14 +3017,14 @@ var wt = { exports: {} };
               loop: !0,
               timeout: 15e3,
               timeoutLimit: 6e4
-            }, E = new Ze({
+            }, x = new Ze({
               minPingDelay: 1e4,
               maxPingDelay: n.activityTimeout
-            }), x = new Ze({
+            }), O = new Ze({
               lives: 2,
               minPingDelay: 1e4,
               maxPingDelay: n.activityTimeout
-            }), F = o("ws", "ws", 3, d, E), _e = o("wss", "ws", 3, b, E), vr = o("sockjs", "sockjs", 1, _), it = o("xhr_streaming", "xhr_streaming", 1, _, x), yr = o("xdr_streaming", "xdr_streaming", 1, _, x), ot = o("xhr_polling", "xhr_polling", 1, _), br = o("xdr_polling", "xdr_polling", 1, _), at = new ue([F], C), wr = new ue([_e], C), _r = new ue([vr], C), ct = new ue([
+            }), F = o("ws", "ws", 3, d, x), _e = o("wss", "ws", 3, b, x), vr = o("sockjs", "sockjs", 1, _), it = o("xhr_streaming", "xhr_streaming", 1, _, O), yr = o("xdr_streaming", "xdr_streaming", 1, _, O), ot = o("xhr_polling", "xhr_polling", 1, _), br = o("xdr_polling", "xdr_polling", 1, _), at = new ue([F], C), wr = new ue([_e], C), _r = new ue([vr], C), ct = new ue([
               new fe(pe(it), it, yr)
             ], C), ut = new ue([
               new fe(pe(ot), ot, br)
@@ -3050,7 +3050,7 @@ var wt = { exports: {} };
             var n = this;
             n.timeline.info(n.buildTimelineMessage({
               transport: n.name + (n.options.useTLS ? "s" : "")
-            })), n.hooks.isInitialized() ? n.changeState("initialized") : n.hooks.file ? (n.changeState("initializing"), I.load(n.hooks.file, { useTLS: n.options.useTLS }, function(e, t) {
+            })), n.hooks.isInitialized() ? n.changeState("initialized") : n.hooks.file ? (n.changeState("initializing"), R.load(n.hooks.file, { useTLS: n.options.useTLS }, function(e, t) {
               n.hooks.isInitialized() ? (n.changeState("initialized"), t(!0)) : (e && n.onError(e), n.onClose(), t(!1));
             })) : n.onClose();
           }, Rn = {
@@ -3188,7 +3188,7 @@ var wt = { exports: {} };
               try {
                 this.stream.start();
               } catch (e) {
-                V.defer(() => {
+                $.defer(() => {
                   this.onError(e), this.onClose(1006, "Could not start streaming", !1);
                 });
               }
@@ -3285,15 +3285,15 @@ var wt = { exports: {} };
           rt.createXDR = function(n, e) {
             return this.createRequest(In, n, e);
           };
-          var Vn = rt, Wn = {
+          var $n = rt, Vn = {
             nextAuthCallbackID: 1,
             auth_callbacks: {},
-            ScriptReceivers: c,
+            ScriptReceivers: u,
             DependenciesReceivers: L,
             getDefaultStrategy: Cn,
             Transports: Zt,
             transportConnectionInitializer: Tn,
-            HTTPFactory: Vn,
+            HTTPFactory: $n,
             TimelineTransport: Ft,
             getXHRAPI() {
               return window.XMLHttpRequest;
@@ -3306,7 +3306,7 @@ var wt = { exports: {} };
               var e = () => {
                 this.onDocumentBody(n.ready);
               };
-              window.JSON ? e() : I.load("json2", {}, e);
+              window.JSON ? e() : R.load("json2", {}, e);
             },
             getDocument() {
               return document;
@@ -3315,7 +3315,7 @@ var wt = { exports: {} };
               return this.getDocument().location.protocol;
             },
             getAuthorizers() {
-              return { ajax: W, jsonp: Mt };
+              return { ajax: V, jsonp: Mt };
             },
             onDocumentBody(n) {
               document.body ? n() : setTimeout(() => {
@@ -3378,17 +3378,17 @@ var wt = { exports: {} };
                 return (window.crypto || window.msCrypto).getRandomValues(new Uint32Array(1))[0] / Math.pow(2, 32);
               }() * n);
             }
-          }, T = Wn, Oe;
+          }, T = Vn, Oe;
           (function(n) {
             n[n.ERROR = 3] = "ERROR", n[n.INFO = 6] = "INFO", n[n.DEBUG = 7] = "DEBUG";
           })(Oe || (Oe = {}));
           var we = Oe;
-          class $n {
+          class Wn {
             constructor(e, t, r) {
               this.key = e, this.session = t, this.events = [], this.options = r || {}, this.sent = 0, this.uniqueID = 0;
             }
             log(e, t) {
-              e <= this.options.level && (this.events.push($({}, t, { timestamp: V.now() })), this.options.limit && this.events.length > this.options.limit && this.events.shift());
+              e <= this.options.level && (this.events.push(W({}, t, { timestamp: $.now() })), this.options.limit && this.events.length > this.options.limit && this.events.shift());
             }
             error(e) {
               this.log(we.ERROR, e);
@@ -3403,7 +3403,7 @@ var wt = { exports: {} };
               return this.events.length === 0;
             }
             send(e, t) {
-              var r = $({
+              var r = W({
                 session: this.session,
                 bundle: this.sent + 1,
                 key: this.key,
@@ -3433,26 +3433,26 @@ var wt = { exports: {} };
             connect(e, t) {
               if (this.isSupported()) {
                 if (this.priority < e)
-                  return st(new k(), t);
+                  return st(new S(), t);
               } else return st(new j(), t);
               var r = !1, o = this.transport.createConnection(this.name, this.priority, this.options.key, this.options), d = null, b = function() {
                 o.unbind("initialized", b), o.connect();
               }, _ = function() {
                 d = re.createHandshake(o, function(F) {
-                  r = !0, x(), t(null, F);
+                  r = !0, O(), t(null, F);
                 });
               }, C = function(F) {
-                x(), t(F);
-              }, E = function() {
-                x();
+                O(), t(F);
+              }, x = function() {
+                O();
                 var F;
                 F = ve(o), t(new A(F));
-              }, x = function() {
-                o.unbind("initialized", b), o.unbind("open", _), o.unbind("error", C), o.unbind("closed", E);
+              }, O = function() {
+                o.unbind("initialized", b), o.unbind("open", _), o.unbind("error", C), o.unbind("closed", x);
               };
-              return o.bind("initialized", b), o.bind("open", _), o.bind("error", C), o.bind("closed", E), o.initialize(), {
+              return o.bind("initialized", b), o.bind("open", _), o.bind("error", C), o.bind("closed", x), o.initialize(), {
                 abort: () => {
-                  r || (x(), d ? d.close() : o.close());
+                  r || (O(), d ? d.close() : o.close());
                 },
                 forceMinPriority: (F) => {
                   r || this.priority < F && (d ? d.close() : o.close());
@@ -3461,7 +3461,7 @@ var wt = { exports: {} };
             }
           }
           function st(n, e) {
-            return V.defer(function() {
+            return $.defer(function() {
               e(n);
             }), {
               abort: function() {
@@ -3482,7 +3482,7 @@ var wt = { exports: {} };
               return !1;
             },
             connect: function(n, e) {
-              var t = V.defer(function() {
+              var t = $.defer(function() {
                 e(new j());
               });
               return {
@@ -3556,17 +3556,17 @@ var wt = { exports: {} };
           };
           function rr(n, e) {
             let t = {
-              activityTimeout: n.activityTimeout || S.activityTimeout,
+              activityTimeout: n.activityTimeout || k.activityTimeout,
               cluster: n.cluster,
-              httpPath: n.httpPath || S.httpPath,
-              httpPort: n.httpPort || S.httpPort,
-              httpsPort: n.httpsPort || S.httpsPort,
-              pongTimeout: n.pongTimeout || S.pongTimeout,
-              statsHost: n.statsHost || S.stats_host,
-              unavailableTimeout: n.unavailableTimeout || S.unavailableTimeout,
-              wsPath: n.wsPath || S.wsPath,
-              wsPort: n.wsPort || S.wsPort,
-              wssPort: n.wssPort || S.wssPort,
+              httpPath: n.httpPath || k.httpPath,
+              httpPort: n.httpPort || k.httpPort,
+              httpsPort: n.httpsPort || k.httpsPort,
+              pongTimeout: n.pongTimeout || k.pongTimeout,
+              statsHost: n.statsHost || k.stats_host,
+              unavailableTimeout: n.unavailableTimeout || k.unavailableTimeout,
+              wsPath: n.wsPath || k.wsPath,
+              wsPort: n.wsPort || k.wsPort,
+              wssPort: n.wssPort || k.wssPort,
               enableStats: cr(n),
               httpHost: sr(n),
               useTLS: ar(n),
@@ -3577,7 +3577,7 @@ var wt = { exports: {} };
             return "disabledTransports" in n && (t.disabledTransports = n.disabledTransports), "enabledTransports" in n && (t.enabledTransports = n.enabledTransports), "ignoreNullOrigin" in n && (t.ignoreNullOrigin = n.ignoreNullOrigin), "timelineParams" in n && (t.timelineParams = n.timelineParams), "nacl" in n && (t.nacl = n.nacl), t;
           }
           function sr(n) {
-            return n.httpHost ? n.httpHost : n.cluster ? `sockjs-${n.cluster}.pusher.com` : S.httpHost;
+            return n.httpHost ? n.httpHost : n.cluster ? `sockjs-${n.cluster}.pusher.com` : k.httpHost;
           }
           function ir(n) {
             return n.wsHost ? n.wsHost : or(n.cluster);
@@ -3592,14 +3592,14 @@ var wt = { exports: {} };
             return "enableStats" in n ? n.enableStats : "disableStats" in n ? !n.disableStats : !1;
           }
           function ur(n) {
-            const e = Object.assign(Object.assign({}, S.userAuthentication), n.userAuthentication);
+            const e = Object.assign(Object.assign({}, k.userAuthentication), n.userAuthentication);
             return "customHandler" in e && e.customHandler != null ? e.customHandler : Zn(e);
           }
           function lr(n, e) {
             let t;
-            return "channelAuthorization" in n ? t = Object.assign(Object.assign({}, S.channelAuthorization), n.channelAuthorization) : (t = {
-              transport: n.authTransport || S.authTransport,
-              endpoint: n.authEndpoint || S.authEndpoint
+            return "channelAuthorization" in n ? t = Object.assign(Object.assign({}, k.channelAuthorization), n.channelAuthorization) : (t = {
+              transport: n.authTransport || k.authTransport,
+              endpoint: n.authEndpoint || k.authEndpoint
             }, "auth" in n && ("params" in n.auth && (t.params = n.auth.params), "headers" in n.auth && (t.headers = n.auth.headers)), "authorizer" in n && (t.customHandler = nr(e, t, n.authorizer))), t;
           }
           function hr(n, e) {
@@ -3701,18 +3701,18 @@ var wt = { exports: {} };
                 B.instances[e].connect();
             }
             static getClientFeatures() {
-              return ze(We({ ws: T.Transports.ws }, function(e) {
+              return ze(Ve({ ws: T.Transports.ws }, function(e) {
                 return e.isSupported({});
               }));
             }
             constructor(e, t) {
-              mr(e), Qn(t), this.key = e, this.config = rr(t, this), this.channels = re.createChannels(), this.global_emitter = new ne(), this.sessionID = T.randomInt(1e9), this.timeline = new $n(this.key, this.sessionID, {
+              mr(e), Qn(t), this.key = e, this.config = rr(t, this), this.channels = re.createChannels(), this.global_emitter = new ne(), this.sessionID = T.randomInt(1e9), this.timeline = new Wn(this.key, this.sessionID, {
                 cluster: this.config.cluster,
                 features: B.getClientFeatures(),
                 params: this.config.timelineParams || {},
                 limit: 50,
                 level: we.INFO,
-                version: S.VERSION
+                version: k.VERSION
               }), this.config.enableStats && (this.timelineSender = re.createTimelineSender(this.timeline, {
                 host: this.config.statsHost,
                 path: "/timeline/v2/" + T.TimelineTransport.name
@@ -3824,24 +3824,24 @@ class qr {
   async rollAndCapture(f, s) {
     return console.log(`%c[Bridge] 🕵️‍♂️ Starting Render Interceptor for Actor ${f}`, "color: #00ffff; font-weight: bold;"), new Promise(async (a, i) => {
       let l = !1;
-      const c = renderTemplate, R = function(S, O) {
-        return S && typeof S == "string" && S.includes("rollcard") && (console.log(`%c[Bridge] 🎯 Intercepted Render: ${S}`, "color: #00ff00;", O), l = !0, renderTemplate = c, a({
+      const u = renderTemplate, I = function(k, P) {
+        return k && typeof k == "string" && k.includes("rollcard") && (console.log(`%c[Bridge] 🎯 Intercepted Render: ${k}`, "color: #00ff00;", P), l = !0, renderTemplate = u, a({
           success: !0,
-          total: O.resultTotal,
-          isCriticalSuccess: O.wasCritSuccess ? O.wasCritSuccess() : O.isCriticalSuccess || !1,
-          isCriticalFailure: O.wasCritFail ? O.wasCritFail() : O.isCriticalFailure || !1,
-          label: O.rollTitle,
-          rawRoll: O
+          total: P.resultTotal,
+          isCriticalSuccess: P.wasCritSuccess ? P.wasCritSuccess() : P.isCriticalSuccess || !1,
+          isCriticalFailure: P.wasCritFail ? P.wasCritFail() : P.isCriticalFailure || !1,
+          label: P.rollTitle,
+          rawRoll: P
           // <--- HERE IS YOUR FULL OBJECT
-        })), c.apply(this, arguments);
+        })), u.apply(this, arguments);
       };
-      renderTemplate = R, setTimeout(() => {
-        l || (renderTemplate = c, console.warn("[Bridge] ❌ Interceptor timed out. No rollcard rendered."), a({ success: !1, error: "Timed out waiting for render" }));
+      renderTemplate = I, setTimeout(() => {
+        l || (renderTemplate = u, console.warn("[Bridge] ❌ Interceptor timed out. No rollcard rendered."), a({ success: !1, error: "Timed out waiting for render" }));
       }, 5e3);
       try {
         await s();
       } catch {
-        renderTemplate = c, a({ success: !1, error: "Trigger failed" });
+        renderTemplate = u, a({ success: !1, error: "Trigger failed" });
       }
     });
   }
@@ -3918,17 +3918,17 @@ class qr {
       return;
     }
     this.echo && this.echo.disconnect();
-    let c;
+    let u;
     try {
-      c = new URL(f);
-    } catch (R) {
-      console.error("Invalid URL", R);
+      u = new URL(f);
+    } catch (I) {
+      console.error("Invalid URL", I);
       return;
     }
-    console.log(`Connecting to Cyberpunk Agent Relay at ${c.hostname}:${i}...`), this.echo = new jr({
+    console.log(`Connecting to Cyberpunk Agent Relay at ${u.hostname}:${i}...`), this.echo = new jr({
       broadcaster: "reverb",
       key: game.settings.get(X, "reverbKey") || "itdsiqtx8cpskowawl1p",
-      wsHost: c.hostname,
+      wsHost: u.hostname,
       wsPort: i,
       wssPort: i,
       forceTLS: l,
@@ -3966,38 +3966,46 @@ class qr {
     };
     this.hookIds.updateActor = Hooks.on("updateActor", (s, a, i, l) => {
       if (a.system) {
-        const c = {}, R = (S, O = "system.") => {
-          for (let L in S) {
-            const I = S[L];
-            I !== null && typeof I == "object" && !Array.isArray(I) && !(I instanceof foundry.utils.Color) ? R(I, `${O}${L}.`) : c[`${O}${L}`] = I;
+        const u = {}, I = (k, P = "system.") => {
+          for (let L in k) {
+            const R = k[L];
+            R !== null && typeof R == "object" && !Array.isArray(R) && !(R instanceof foundry.utils.Color) ? I(R, `${P}${L}.`) : u[`${P}${L}`] = R;
           }
         };
-        R(a.system), f(s, c);
+        I(a.system), f(s, u);
       }
     }), this.hookIds.updateItem = Hooks.on("updateItem", (s, a, i, l) => {
-      const c = s.parent;
-      if (c instanceof Actor) {
-        const R = {
-          [`items.${s.id}`]: s.toObject()
-          // Simplest is to send the whole item object for the Vue cleaner to handle
-        };
-        f(c, R);
+      const u = s.parent;
+      if (u instanceof Actor) {
+        const I = {}, k = `items.${s.id}.`;
+        if (a.system) {
+          const P = (L, R = `${k}system.`) => {
+            for (let c in L) {
+              const h = L[c];
+              h !== null && typeof h == "object" && !Array.isArray(h) && !(h instanceof foundry.utils.Color) ? P(h, `${R}${c}.`) : I[`${R}${c}`] = h;
+            }
+          };
+          P(a.system);
+        }
+        for (let P in a)
+          P !== "system" && P !== "_id" && (I[`${k}${P}`] = a[P]);
+        Object.keys(I).length > 0 && f(u, I);
       }
     }), this.hookIds.createItem = Hooks.on("createItem", (s, a, i) => {
       const l = s.parent;
       if (l instanceof Actor) {
-        const c = {
-          [`items.${s.id}`]: s.toObject()
+        const u = {
+          [`items.+${s.id}`]: s.toObject()
         };
-        f(l, c);
+        f(l, u);
       }
     }), this.hookIds.deleteItem = Hooks.on("deleteItem", (s, a, i) => {
       const l = s.parent;
       if (l instanceof Actor) {
-        const c = {
-          items: l.items.map((R) => R.toObject())
+        const u = {
+          [`items.${s.id}`]: null
         };
-        f(l, c);
+        f(l, u);
       }
     });
   }
@@ -4029,35 +4037,35 @@ class qr {
    * Handle Logic (The Tunnel Output)
    */
   async handleIncomingData(f) {
-    var R, S, O, L, I;
+    var I, k, P, L, R;
     const s = f.payload || f;
     console.log("Received Order:", s);
-    const a = s.type, i = s.actorId, l = s.tokenId, c = s.requestId;
+    const a = s.type, i = s.actorId, l = s.tokenId, u = s.requestId;
     switch (a) {
       case "UPDATE_ACTOR": {
-        const u = game.actors.get(i);
-        if (!u) {
+        const c = game.actors.get(i);
+        if (!c) {
           console.warn(`⚠️ Actor ID ${i} not found in this world.`);
           return;
         }
-        await u.update(s.changes), ui.notifications.info(`💾 Sync: ${u.name} updated.`), await this.sendResponse({ type: "CONFIRMATION", action: a, actorId: i, success: !0, requestId: c });
+        await c.update(s.changes), ui.notifications.info(`💾 Sync: ${c.name} updated.`), await this.sendResponse({ type: "CONFIRMATION", action: a, actorId: i, success: !0, requestId: u });
         break;
       }
       case "ITEM_EQUIP": {
-        const u = game.actors.get(i);
-        if (u) {
-          const h = u.items.get(s.itemId);
+        const c = game.actors.get(i);
+        if (c) {
+          const h = c.items.get(s.itemId);
           if (h) {
             const g = `items.${s.itemId}.system.equipped`;
-            await h.update({ "system.equipped": s.state }), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { [g]: s.state }, success: !0, requestId: c });
+            await h.update({ "system.equipped": s.state }), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { [g]: s.state }, success: !0, requestId: u });
           }
         }
         break;
       }
       case "INSTALL_PROGRAM": {
-        const u = game.actors.get(i);
-        if (!u) return;
-        const h = u.items.get(s.cyberdeckId), g = u.items.get(s.programId);
+        const c = game.actors.get(i);
+        if (!c) return;
+        const h = c.items.get(s.cyberdeckId), g = c.items.get(s.programId);
         if (!h || !g) return;
         const m = h.system.installedItems.usedSlots || 0, p = h.system.installedItems.slots || 0, y = g.system.size || 1;
         if (m + y > p) {
@@ -4066,60 +4074,60 @@ class qr {
         }
         const w = h.system.installedItems.list || [];
         if (w.includes(s.programId)) return;
-        const k = [...w, s.programId], A = m + y;
+        const S = [...w, s.programId], A = m + y;
         await h.update({
-          "system.installedItems.list": k,
+          "system.installedItems.list": S,
           "system.installedItems.usedSlots": A
         }), await this.sendResponse({
           type: "SHEET_DELTA",
           actorId: i,
           delta: {
-            [`items.${s.cyberdeckId}.system.installedItems.list`]: k,
+            [`items.${s.cyberdeckId}.system.installedItems.list`]: S,
             [`items.${s.cyberdeckId}.system.installedItems.usedSlots`]: A
           },
           success: !0,
-          requestId: c
+          requestId: u
         });
         break;
       }
       case "REMOVE_PROGRAM": {
-        const u = game.actors.get(i);
-        if (!u) return;
-        const h = u.items.get(s.cyberdeckId), g = u.items.get(s.programId);
+        const c = game.actors.get(i);
+        if (!c) return;
+        const h = c.items.get(s.cyberdeckId), g = c.items.get(s.programId);
         if (!h) return;
         const m = h.system.installedItems.list || [];
         if (!m.includes(s.programId)) return;
-        const p = m.filter((P) => P !== s.programId), y = g && g.system.size || 1, w = h.system.installedItems.usedSlots || 0, k = Math.max(0, w - y);
+        const p = m.filter((E) => E !== s.programId), y = g && g.system.size || 1, w = h.system.installedItems.usedSlots || 0, S = Math.max(0, w - y);
         await h.update({
           "system.installedItems.list": p,
-          "system.installedItems.usedSlots": k
+          "system.installedItems.usedSlots": S
         });
         const A = {
           [`items.${s.cyberdeckId}.system.installedItems.list`]: p,
-          [`items.${s.cyberdeckId}.system.installedItems.usedSlots`]: k
+          [`items.${s.cyberdeckId}.system.installedItems.usedSlots`]: S
         };
-        g && g.system.isRezzed && (await g.update({ "system.isRezzed": !1 }), A[`items.${s.programId}.system.isRezzed`] = !1), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: A, success: !0, requestId: c });
+        g && g.system.isRezzed && (await g.update({ "system.isRezzed": !1 }), A[`items.${s.programId}.system.isRezzed`] = !1), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: A, success: !0, requestId: u });
         break;
       }
       case "TOGGLE_REZ": {
-        const u = game.actors.get(i);
-        if (u) {
-          const h = u.items.get(s.programId);
+        const c = game.actors.get(i);
+        if (c) {
+          const h = c.items.get(s.programId);
           h && (await h.update({ "system.isRezzed": s.targetState }), await this.sendResponse({
             type: "SHEET_DELTA",
             actorId: i,
             delta: { [`items.${s.programId}.system.isRezzed`]: s.targetState },
             success: !0,
-            requestId: c
+            requestId: u
           }));
         }
         break;
       }
       case "DAMAGE_ROLL": {
-        const u = game.actors.get(i), h = u.items.get(s.weaponId);
-        if (u && h) {
+        const c = game.actors.get(i), h = c.items.get(s.weaponId);
+        if (c && h) {
           const g = async () => {
-            await u.sheet._onRoll({
+            await c.sheet._onRoll({
               "data-roll-type": "damage",
               "data-item-id": h.id,
               type: "click",
@@ -4131,7 +4139,7 @@ class qr {
           }, m = await this.rollAndCapture(i, g);
           m.success && await this.sendResponse({
             type: "ROLL_RESULT",
-            requestId: c,
+            requestId: u,
             actorId: i,
             total: m.total,
             isCriticalSuccess: m.isCriticalSuccess,
@@ -4144,10 +4152,10 @@ class qr {
         break;
       }
       case "DEATH_SAVE": {
-        const u = game.actors.get(i);
-        if (u) {
+        const c = game.actors.get(i);
+        if (c) {
           const h = async () => {
-            await u.sheet._onRoll({
+            await c.sheet._onRoll({
               "data-roll-type": "deathsave",
               "data-roll-title": "Death Save",
               type: "click",
@@ -4158,10 +4166,10 @@ class qr {
             });
           }, g = await this.rollAndCapture(i, h);
           if (g.success) {
-            const m = u.system.derivedStats.deathsave || {};
+            const m = c.system.derivedStats.deathsave || {};
             await this.sendResponse({
               type: "ROLL_RESULT",
-              requestId: c,
+              requestId: u,
               actorId: i,
               total: g.total,
               isCriticalSuccess: g.isCriticalSuccess,
@@ -4181,8 +4189,8 @@ class qr {
         break;
       }
       case "FACEDOWN_ROLL": {
-        const u = game.actors.get(i), h = async () => {
-          await u.sheet._onRoll({
+        const c = game.actors.get(i), h = async () => {
+          await c.sheet._onRoll({
             "data-roll-type": "facedown",
             "data-roll-title": "Face Down",
             type: "click",
@@ -4194,7 +4202,7 @@ class qr {
         }, g = await this.rollAndCapture(i, h);
         g.success && await this.sendResponse({
           type: "ROLL_RESULT",
-          requestId: c,
+          requestId: u,
           actorId: i,
           total: g.total,
           isCriticalSuccess: g.isCriticalSuccess,
@@ -4205,14 +4213,14 @@ class qr {
         break;
       }
       case "INITIATIVE_ROLL": {
-        const u = game.actors.get(i);
-        if (u) {
+        const c = game.actors.get(i);
+        if (c) {
           const h = async () => {
-            await u.rollInitiative();
+            await c.rollInitiative();
           }, g = await this.rollAndCapture(i, h);
           g.success && await this.sendResponse({
             type: "ROLL_RESULT",
-            requestId: c,
+            requestId: u,
             actorId: i,
             total: g.total,
             isCriticalSuccess: g.isCriticalSuccess,
@@ -4225,19 +4233,19 @@ class qr {
         break;
       }
       case "PROGRAM_ROLL": {
-        const u = game.actors.get(i);
-        if (u) {
+        const c = game.actors.get(i);
+        if (c) {
           const h = document.createElement("a");
           h.dataset.rollType = s.rollType, h.dataset.cyberdeckId = s.cyberdeckId, h.dataset.rollTitle = s.programName, h.dataset.interfaceAbility = s.programName, h.dataset.itemId = s.cyberdeckId, h.dataset.programId = s.programId, h.dataset.executionType = s.executionType;
           const g = async () => {
-            await u.sheet._onRoll({
+            await c.sheet._onRoll({
               type: "click",
               currentTarget: h
             });
           }, m = await this.rollAndCapture(i, g);
           m.success && await this.sendResponse({
             type: "ROLL_RESULT",
-            requestId: c,
+            requestId: u,
             actorId: i,
             total: m.total,
             isCriticalSuccess: m.isCriticalSuccess,
@@ -4250,9 +4258,9 @@ class qr {
         break;
       }
       case "ROLE_ROLL": {
-        const u = game.actors.get(i);
-        if (u) {
-          const h = u.items.getName(s.itemName);
+        const c = game.actors.get(i);
+        if (c) {
+          const h = c.items.getName(s.itemName);
           if (h) {
             const g = {
               "data-roll-type": "roleAbility",
@@ -4268,11 +4276,11 @@ class qr {
             };
             s.isAbility && (g["data-roll-subtype"] = "subRoleAbility", g["data-role-name"] = s.label, g.currentTarget["data-roll-subtype"] = "subRoleAbility", g.currentTarget["data-role-name"] = s.label);
             const m = async () => {
-              await u.sheet._onRoll(g);
+              await c.sheet._onRoll(g);
             }, p = await this.rollAndCapture(i, m);
             p.success && await this.sendResponse({
               type: "ROLL_RESULT",
-              requestId: c,
+              requestId: u,
               actorId: i,
               total: p.total,
               isCriticalSuccess: p.isCriticalSuccess,
@@ -4286,12 +4294,12 @@ class qr {
         break;
       }
       case "SKILL_ROLL": {
-        const u = game.actors.get(i);
-        if (u) {
-          const h = u.items.getName(s.label);
+        const c = game.actors.get(i);
+        if (c) {
+          const h = c.items.getName(s.label);
           if (h) {
             const g = async () => {
-              await u.sheet._onRoll({
+              await c.sheet._onRoll({
                 "data-roll-type": "skill",
                 "data-roll-title": s.label,
                 "data-item-id": h.id,
@@ -4305,7 +4313,7 @@ class qr {
             }, m = await this.rollAndCapture(i, g);
             m.success && await this.sendResponse({
               type: "ROLL_RESULT",
-              requestId: c,
+              requestId: u,
               actorId: i,
               total: m.total,
               isCriticalSuccess: m.isCriticalSuccess,
@@ -4319,10 +4327,10 @@ class qr {
         break;
       }
       case "STAT_ROLL": {
-        const u = game.actors.get(i);
-        if (u) {
+        const c = game.actors.get(i);
+        if (c) {
           const h = async () => {
-            await u.sheet._onRoll({
+            await c.sheet._onRoll({
               "data-roll-type": "stat",
               "data-roll-title": s.label,
               type: "click",
@@ -4334,7 +4342,7 @@ class qr {
           }, g = await this.rollAndCapture(i, h);
           g.success && await this.sendResponse({
             type: "ROLL_RESULT",
-            requestId: c,
+            requestId: u,
             actorId: i,
             total: g.total,
             isCriticalSuccess: g.isCriticalSuccess,
@@ -4347,49 +4355,49 @@ class qr {
         break;
       }
       case "DICE_ROLL": {
-        c && this.activeRequests.set(c, { actorId: i, timestamp: Date.now() });
-        const u = new Roll(s.formula);
-        await u.evaluate(), await u.toMessage({
+        u && this.activeRequests.set(u, { actorId: i, timestamp: Date.now() });
+        const c = new Roll(s.formula);
+        await c.evaluate(), await c.toMessage({
           speaker: ChatMessage.getSpeaker({ actor: game.actors.get(i) }),
           flavor: s.flavor
         }), await this.sendResponse({
           type: "ROLL_RESULT",
-          requestId: c,
+          requestId: u,
           actorId: i,
-          total: u.total,
-          isCriticalSuccess: u.isCriticalSuccess || !1,
-          isCriticalFailure: u.isCriticalFailure || !1,
+          total: c.total,
+          isCriticalSuccess: c.isCriticalSuccess || !1,
+          isCriticalFailure: c.isCriticalFailure || !1,
           label: s.flavor || "Dice Roll",
           rawRoll: {
             rollTitle: s.flavor || "Dice Roll",
-            _roll: u,
-            formula: u.formula,
-            resultTotal: u.total
+            _roll: c,
+            formula: c.formula,
+            resultTotal: c.total
           },
           success: !0
         });
         break;
       }
       case "MOVE_TOKEN": {
-        const u = canvas.tokens.get(l);
-        if (u) {
+        const c = canvas.tokens.get(l);
+        if (c) {
           let h = {};
-          s.direction === "up" ? h.y = u.document.y - canvas.grid.size : s.direction === "down" ? h.y = u.document.y + canvas.grid.size : s.direction === "left" ? h.x = u.document.x - canvas.grid.size : s.direction === "right" && (h.x = u.document.x + canvas.grid.size), await u.document.update(h), setTimeout(async () => {
-            const g = { tokenId: l, requestId: c || "move-refresh" };
+          s.direction === "up" ? h.y = c.document.y - canvas.grid.size : s.direction === "down" ? h.y = c.document.y + canvas.grid.size : s.direction === "left" ? h.x = c.document.x - canvas.grid.size : s.direction === "right" && (h.x = c.document.x + canvas.grid.size), await c.document.update(h), setTimeout(async () => {
+            const g = { tokenId: l, requestId: u || "move-refresh" };
             await this.handleIncomingData({ type: "LIST_VISIBLE_TOKENS", ...g }), Array.from(game.user.targets)[0] && s.weaponId && await this.handleIncomingData({ type: "GET_DV_INFO", ...g, weaponId: s.weaponId });
-          }, 200), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: l, success: !0, requestId: c });
+          }, 200), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: l, success: !0, requestId: u });
         }
         break;
       }
       case "RELOAD_WEAPON": {
-        const u = game.actors.get(i);
-        if (u) {
-          const h = u.items.get(s.weaponId), g = s.ammoId ? u.items.get(s.ammoId) : null, m = async () => {
+        const c = game.actors.get(i);
+        if (c) {
+          const h = c.items.get(s.weaponId), g = s.ammoId ? c.items.get(s.ammoId) : null, m = async () => {
             await h.reload();
             const p = {
               [`items.${s.weaponId}.system.magazine`]: h.system.magazine
             };
-            g && (p[`items.${g.id}.system.amount`] = g.system.amount), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: p, success: !0, requestId: c });
+            g && (p[`items.${g.id}.system.amount`] = g.system.amount), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: p, success: !0, requestId: u });
           };
           if (g) {
             let p = h.getInstalledItems("ammo");
@@ -4404,31 +4412,31 @@ class qr {
         break;
       }
       case "TARGET_TOKEN": {
-        const u = canvas.tokens.get(s.tokenId);
-        u && (u.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: s.tokenId, success: !0 }));
+        const c = canvas.tokens.get(s.tokenId);
+        c && (c.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: s.tokenId, success: !0 }));
         break;
       }
       case "UPDATE_STAT": {
-        const u = game.actors.get(i);
-        if (u) {
+        const c = game.actors.get(i);
+        if (c) {
           const h = `system.${s.label}`;
           let g;
           if (s.operation === "inc") {
             const m = h.split(".");
-            let p = u;
-            for (let k = 0; k < m.length; k++)
-              p = k === 0 ? p[m[k]] : p == null ? void 0 : p[m[k]];
+            let p = c;
+            for (let S = 0; S < m.length; S++)
+              p = S === 0 ? p[m[S]] : p == null ? void 0 : p[m[S]];
             const y = Number(p) || 0, w = Number(s.delta) || 0;
             g = y + w;
           } else
             g = Number(s.value) || 0;
-          await u.update({ [h]: g }), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { [h]: g }, tab: "stats", success: !0 });
+          await c.update({ [h]: g }), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { [h]: g }, tab: "stats", success: !0 });
         }
         break;
       }
       case "ATTACK_ROLL": {
-        const u = game.actors.get(i);
-        if (u) {
+        const c = game.actors.get(i);
+        if (c) {
           const h = s.weaponId, g = s.fireMode, m = canvas.tokens.get(s.targetId), p = "firetype-" + h, y = "cyberpunk-red-core";
           let w = "";
           switch (g) {
@@ -4439,28 +4447,28 @@ class qr {
               w = "suppressive";
               break;
             case "Aimed":
-              w = "aimed", await u.setFlag(y, "aimedLocation", "head");
+              w = "aimed", await c.setFlag(y, "aimedLocation", "head");
               break;
             default:
               w = "";
               break;
           }
-          m && m.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), w === "" ? await u.unsetFlag(y, p) : await u.setFlag(y, p, w);
-          const k = document.createElement("a");
-          k.dataset.rollType = "attack", k.dataset.itemId = h, k.dataset.rollTitle = g + " Attack";
+          m && m.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), w === "" ? await c.unsetFlag(y, p) : await c.setFlag(y, p, w);
+          const S = document.createElement("a");
+          S.dataset.rollType = "attack", S.dataset.itemId = h, S.dataset.rollTitle = g + " Attack";
           const A = async () => {
-            await u.sheet._onRoll({
+            await c.sheet._onRoll({
               preventDefault: () => {
               },
-              currentTarget: k,
+              currentTarget: S,
               type: "click"
             }, { showDialog: !1 });
           };
-          let P = null;
+          let E = null;
           if (m) {
-            const j = ((R = u.getActiveTokens()) == null ? void 0 : R[0]) || canvas.tokens.placeables.find((N) => {
+            const j = ((I = c.getActiveTokens()) == null ? void 0 : I[0]) || canvas.tokens.placeables.find((N) => {
               var H;
-              return ((H = N.actor) == null ? void 0 : H.id) === u.id;
+              return ((H = N.actor) == null ? void 0 : H.id) === c.id;
             });
             if (j) {
               const N = {
@@ -4478,7 +4486,7 @@ class qr {
                 "Medium Melee Weapon": ["VS"],
                 "Heavy Melee Weapon": ["VS"],
                 "Very Heavy Melee Weapon": ["VS"]
-              }, H = [6, 12, 25, 50, 100, 200, 400, 800], W = m.center.x - j.center.x, se = m.center.y - j.center.y, M = Math.sqrt(Math.pow(W, 2) + Math.pow(se, 2)), Q = Math.ceil(M / (((S = canvas.grid) == null ? void 0 : S.size) || 128)), Y = u.items.get(h), Z = {
+              }, H = [6, 12, 25, 50, 100, 200, 400, 800], V = m.center.x - j.center.x, se = m.center.y - j.center.y, M = Math.sqrt(Math.pow(V, 2) + Math.pow(se, 2)), Q = Math.ceil(M / (((k = canvas.grid) == null ? void 0 : k.size) || 128)), Y = c.items.get(h), Z = {
                 heavyPistol: "Pistol",
                 assaultRifle: "Assault Rifle",
                 smg: "SMG",
@@ -4492,24 +4500,24 @@ class qr {
                 mediumMelee: "Medium Melee Weapon",
                 heavyMelee: "Heavy Melee Weapon",
                 vHeavyMelee: "Very Heavy Melee Weapon"
-              }, ee = Z[(O = Y == null ? void 0 : Y.system) == null ? void 0 : O.weaponType] || Z[(L = Y == null ? void 0 : Y.system) == null ? void 0 : L.variety] || "Pistol", K = H.findIndex((oe) => Q <= oe);
+              }, ee = Z[(P = Y == null ? void 0 : Y.system) == null ? void 0 : P.weaponType] || Z[(L = Y == null ? void 0 : Y.system) == null ? void 0 : L.variety] || "Pistol", K = H.findIndex((oe) => Q <= oe);
               let ie = K !== -1 ? N[ee][K] : 99;
-              Array.isArray(N[ee]) && typeof N[ee][0] == "string" && (ie = N[ee][Math.min(K !== -1 ? K : 0, N[ee].length - 1)]), P = ie === 99 ? "Out of Range" : ie;
+              Array.isArray(N[ee]) && typeof N[ee][0] == "string" && (ie = N[ee][Math.min(K !== -1 ? K : 0, N[ee].length - 1)]), E = ie === 99 ? "Out of Range" : ie;
             }
           }
           const D = await this.rollAndCapture(i, A);
           if (D.success) {
             let j = null;
-            typeof P == "number" ? j = D.total >= P ? "Hit" : "Miss" : P === "Out of Range" && (j = "Miss"), await this.sendResponse({
+            typeof E == "number" ? j = D.total >= E ? "Hit" : "Miss" : E === "Out of Range" && (j = "Miss"), await this.sendResponse({
               type: "ROLL_RESULT",
-              requestId: c,
+              requestId: u,
               actorId: i,
               total: D.total,
               isCriticalSuccess: D.isCriticalSuccess,
               isCriticalFailure: D.isCriticalFailure,
               label: g + " Attack",
               rawRoll: D.rawRoll,
-              dv: P,
+              dv: E,
               outcome: j,
               success: !0
             });
@@ -4518,28 +4526,28 @@ class qr {
         break;
       }
       case "GET_ROLL_MODIFIERS": {
-        const u = game.actors.get(i);
-        if (!u) return;
-        const h = s.weaponId, g = h ? u.items.get(h) : null;
-        let m = "None", p = 0, y = "None", w = 0, k = 0;
+        const c = game.actors.get(i);
+        if (!c) return;
+        const h = s.weaponId, g = h ? c.items.get(h) : null;
+        let m = "None", p = 0, y = "None", w = 0, S = 0;
         if (g) {
           m = g.system.weaponSkill;
-          const M = u.items.find((Q) => Q.type === "skill" && Q.name === m);
-          p = M && Number(M.system.level) || 0, y = M && M.system.stat || "ref", w = Number((I = u.system.stats[y]) == null ? void 0 : I.value) || 0, k = Number(g.system.attackmod) || 0;
+          const M = c.items.find((Q) => Q.type === "skill" && Q.name === m);
+          p = M && Number(M.system.level) || 0, y = M && M.system.stat || "ref", w = Number((R = c.system.stats[y]) == null ? void 0 : R.value) || 0, S = Number(g.system.attackmod) || 0;
         }
         let A = 0;
-        const P = [], D = Number(u.system.derivedStats.hp.value) || 0, j = Number(u.system.derivedStats.seriouslyWounded) || 0, N = u.items.find((M) => M.name === "Stim" && M.type === "drug"), H = N && N.effects.some((M) => M.disabled === !1);
+        const E = [], D = Number(c.system.derivedStats.hp.value) || 0, j = Number(c.system.derivedStats.seriouslyWounded) || 0, N = c.items.find((M) => M.name === "Stim" && M.type === "drug"), H = N && N.effects.some((M) => M.disabled === !1);
         if (D <= 0)
-          A -= 4, P.push({ title: "Mortally Wounded", penalty: -4, description: "All actions at -4." });
+          A -= 4, E.push({ title: "Mortally Wounded", penalty: -4, description: "All actions at -4." });
         else if (D <= j) {
           const M = H ? 0 : -2;
-          A += M, P.push({
+          A += M, E.push({
             title: H ? "Seriously Wounded (Stim Active)" : "Seriously Wounded",
             penalty: M,
             description: H ? "Ignoring penalty due to Stim drug." : "All actions at -2."
           });
         }
-        u.items.filter((M) => M.type === "criticalInjury").forEach((M) => {
+        c.items.filter((M) => M.type === "criticalInjury").forEach((M) => {
           var ee;
           const Q = M.name || "Injury", Y = (((ee = M.system.description) == null ? void 0 : ee.value) || "").replace(/<[^>]*>/g, "");
           let Z = 0;
@@ -4552,28 +4560,28 @@ class qr {
             const K = String(Q).toLowerCase();
             (Y.includes("-2") || K.includes("arm") || K.includes("eye")) && (Z = -2);
           }
-          A += Z, P.push({ title: Q, description: Y, penalty: Z });
+          A += Z, E.push({ title: Q, description: Y, penalty: Z });
         });
         const se = {
-          actorName: u.name,
-          baseBonus: w + p + k,
+          actorName: c.name,
+          baseBonus: w + p + S,
           breakdown: {
             statName: y,
             statValue: w,
             skillName: m,
             skillLevel: p,
-            weaponAcc: k
+            weaponAcc: S
           },
           totalPenalty: A,
-          finalModifier: w + p + k + A,
-          injuries: P
+          finalModifier: w + p + S + A,
+          injuries: E
         };
         console.log("GET_ROLL_MODIFIERS result:", se), await this.sendResponse({ type: "ROLL_MODIFIERS_DATA", result: se });
         break;
       }
       case "GET_DV_INFO": {
-        const u = canvas.tokens.get(l), h = Array.from(game.user.targets)[0], g = s.weaponId;
-        if (u && h) {
+        const c = canvas.tokens.get(l), h = Array.from(game.user.targets)[0], g = s.weaponId;
+        if (c && h) {
           const m = {
             Pistol: [13, 15, 20, 25, 30, 30, 99, 99],
             SMG: [15, 13, 15, 20, 25, 25, 30, 99],
@@ -4589,7 +4597,7 @@ class qr {
             "Medium Melee Weapon": ["VS"],
             "Heavy Melee Weapon": ["VS"],
             "Very Heavy Melee Weapon": ["VS"]
-          }, p = [6, 12, 25, 50, 100, 200, 400, 800], y = h.center.x - u.center.x, w = h.center.y - u.center.y, k = Math.sqrt(Math.pow(y, 2) + Math.pow(w, 2)), A = Math.ceil(k / 128), P = u.actor.items.get(g), D = {
+          }, p = [6, 12, 25, 50, 100, 200, 400, 800], y = h.center.x - c.center.x, w = h.center.y - c.center.y, S = Math.sqrt(Math.pow(y, 2) + Math.pow(w, 2)), A = Math.ceil(S / 128), E = c.actor.items.get(g), D = {
             heavyPistol: "Pistol",
             assaultRifle: "Assault Rifle",
             smg: "SMG",
@@ -4603,57 +4611,57 @@ class qr {
             mediumMelee: "Medium Melee Weapon",
             heavyMelee: "Heavy Melee Weapon",
             vHeavyMelee: "Very Heavy Melee Weapon"
-          }, j = D[P.system.weaponType] || D[P.system.variety] || "Pistol", N = p.findIndex((se) => A <= se);
+          }, j = D[E.system.weaponType] || D[E.system.variety] || "Pistol", N = p.findIndex((se) => A <= se);
           let H = N !== -1 ? m[j][N] : 99;
           Array.isArray(m[j]) && typeof m[j][0] == "string" && (H = m[j][Math.min(N !== -1 ? N : 0, m[j].length - 1)]);
-          const W = {
+          const V = {
             targetName: h.name,
             distanceMeters: A,
             weaponCategory: j,
             dv: H === 99 ? "Out of Range" : H
           };
-          console.log("GET_DV_INFO result:", W), await this.sendResponse({ type: "DV_INFO_DATA", result: W, requestId: c });
+          console.log("GET_DV_INFO result:", V), await this.sendResponse({ type: "DV_INFO_DATA", result: V, requestId: u });
         }
         break;
       }
       case "LIST_VISIBLE_TOKENS": {
-        const u = canvas.tokens.get(l);
-        if (u) {
-          const h = canvas.grid.size, g = canvas.dimensions, m = u.center.x, p = u.center.y, y = canvas.tokens.placeables.filter((w) => {
-            const k = !w.document.hidden, A = w.actor && (w.actor.type === "character" || w.actor.type === "mook"), P = w.x >= g.sceneX && w.x <= g.sceneX + g.sceneWidth && w.y >= g.sceneY && w.y <= g.sceneY + g.sceneHeight;
-            return k && A && P && w.id !== u.id;
+        const c = canvas.tokens.get(l);
+        if (c) {
+          const h = canvas.grid.size, g = canvas.dimensions, m = c.center.x, p = c.center.y, y = canvas.tokens.placeables.filter((w) => {
+            const S = !w.document.hidden, A = w.actor && (w.actor.type === "character" || w.actor.type === "mook"), E = w.x >= g.sceneX && w.x <= g.sceneX + g.sceneWidth && w.y >= g.sceneY && w.y <= g.sceneY + g.sceneHeight;
+            return S && A && E && w.id !== c.id;
           }).map((w) => {
-            const k = w.center.x - m, A = w.center.y - p, D = (Math.sqrt(Math.pow(k, 2) + Math.pow(A, 2)) / h).toFixed(2);
+            const S = w.center.x - m, A = w.center.y - p, D = (Math.sqrt(Math.pow(S, 2) + Math.pow(A, 2)) / h).toFixed(2);
             return {
               name: w.name,
               id: w.id,
               distanceM: parseFloat(D),
               type: w.actor.type
             };
-          }).sort((w, k) => w.distanceM - k.distanceM);
-          console.log("LIST_VISIBLE_TOKENS result:", y), await this.sendResponse({ type: "VISIBLE_TOKENS_DATA", tokens: y, requestId: c });
+          }).sort((w, S) => w.distanceM - S.distanceM);
+          console.log("LIST_VISIBLE_TOKENS result:", y), await this.sendResponse({ type: "VISIBLE_TOKENS_DATA", tokens: y, requestId: u });
         }
         break;
       }
       case "GET_ACTOR": {
-        let u = s.actorId;
-        if (u !== null) {
-          const h = game.actors.get(u);
+        let c = s.actorId;
+        if (c !== null) {
+          const h = game.actors.get(c);
           if (h) {
-            console.log("GET_ACTOR result:", h), await this.sendResponse({ type: "ACTOR_DATA", actor: h, requestId: c });
+            console.log("GET_ACTOR result:", h), await this.sendResponse({ type: "ACTOR_DATA", actor: h, requestId: u });
             break;
           }
         }
-        await this.sendResponse({ type: "ACTOR_DATA", actor: !1, requestId: c });
+        await this.sendResponse({ type: "ACTOR_DATA", actor: !1, requestId: u });
         break;
       }
       case "GET_ACTORS": {
-        let u = canvas.tokens.placeables.filter((h) => h.actor && h.actor.hasPlayerOwner).map((h) => ({
+        let c = canvas.tokens.placeables.filter((h) => h.actor && h.actor.hasPlayerOwner).map((h) => ({
           name: h.name,
           actorId: h.actor.id,
           tokenId: h.id
         }));
-        console.log("GET_ACTORS result:", u), await this.sendResponse({ type: "ACTORS_DATA", actors: u, requestId: c });
+        console.log("GET_ACTORS result:", c), await this.sendResponse({ type: "ACTORS_DATA", actors: c, requestId: u });
         break;
       }
       default:
