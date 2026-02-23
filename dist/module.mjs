@@ -3947,7 +3947,8 @@ class zr {
       auth: {
         headers: {
           Authorization: "Bearer " + i,
-          Accept: "application/json"
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true"
         }
       }
     }), window.CyberpunkSocket = this.echo, this.echo.connector.pusher.connection.bind("connected", () => {
@@ -4032,7 +4033,8 @@ class zr {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${a}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            "ngrok-skip-browser-warning": "true"
           },
           body: JSON.stringify(h)
         });

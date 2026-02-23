@@ -225,7 +225,8 @@ class CyberpunkBridge {
                              auth: {
                                  headers: {
                                      'Authorization': 'Bearer ' + token,
-                                     'Accept': 'application/json'
+                                     'Accept': 'application/json',
+                                     'ngrok-skip-browser-warning': 'true'
                                  }
                              }
         });
@@ -383,7 +384,8 @@ class CyberpunkBridge {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
                 },
                 body: JSON.stringify(data)
             });
