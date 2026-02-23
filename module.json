@@ -2,6 +2,7 @@
   "id": "cpr-agent",
   "title": "Cyberpunk Red Agent Bridge",
   "version": "1.0.0",
+  "description": "A Websocket Bridge for the hosted Agent App",
   "compatibility": {
     "minimum": "11",
     "verified": "12"
