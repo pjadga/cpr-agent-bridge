@@ -14,12 +14,12 @@ function K(g, h) {
     throw new TypeError("Cannot call a class as a function");
 }
 function Rr(g, h) {
-  for (var i = 0; i < h.length; i++) {
-    var a = h[i];
+  for (var s = 0; s < h.length; s++) {
+    var a = h[s];
     a.enumerable = a.enumerable || !1, a.configurable = !0, "value" in a && (a.writable = !0), Object.defineProperty(g, a.key, a);
   }
 }
-function Q(g, h, i) {
+function Q(g, h, s) {
   return h && Rr(g.prototype, h), Object.defineProperty(g, "prototype", {
     writable: !1
   }), g;
@@ -27,14 +27,14 @@ function Q(g, h, i) {
 function Ae() {
   return Ae = Object.assign || function(g) {
     for (var h = 1; h < arguments.length; h++) {
-      var i = arguments[h];
-      for (var a in i)
-        Object.prototype.hasOwnProperty.call(i, a) && (g[a] = i[a]);
+      var s = arguments[h];
+      for (var a in s)
+        Object.prototype.hasOwnProperty.call(s, a) && (g[a] = s[a]);
     }
     return g;
   }, Ae.apply(this, arguments);
 }
-function se(g, h) {
+function ie(g, h) {
   if (typeof h != "function" && h !== null)
     throw new TypeError("Super expression must either be null or a function");
   g.prototype = Object.create(h && h.prototype, {
@@ -47,14 +47,14 @@ function se(g, h) {
     writable: !1
   }), h && Qe(g, h);
 }
-function De(g) {
-  return De = Object.setPrototypeOf ? Object.getPrototypeOf : function(i) {
-    return i.__proto__ || Object.getPrototypeOf(i);
-  }, De(g);
+function je(g) {
+  return je = Object.setPrototypeOf ? Object.getPrototypeOf : function(s) {
+    return s.__proto__ || Object.getPrototypeOf(s);
+  }, je(g);
 }
 function Qe(g, h) {
-  return Qe = Object.setPrototypeOf || function(a, s) {
-    return a.__proto__ = s, a;
+  return Qe = Object.setPrototypeOf || function(a, i) {
+    return a.__proto__ = i, a;
   }, Qe(g, h);
 }
 function Ir() {
@@ -82,13 +82,13 @@ function Pr(g, h) {
 function oe(g) {
   var h = Ir();
   return function() {
-    var a = De(g), s;
+    var a = je(g), i;
     if (h) {
-      var l = De(this).constructor;
-      s = Reflect.construct(a, arguments, l);
+      var l = je(this).constructor;
+      i = Reflect.construct(a, arguments, l);
     } else
-      s = a.apply(this, arguments);
-    return Pr(this, s);
+      i = a.apply(this, arguments);
+    return Pr(this, i);
   };
 }
 var Ye = /* @__PURE__ */ function() {
@@ -101,8 +101,8 @@ var Ye = /* @__PURE__ */ function() {
       /**
        * Listen for a whisper event on the channel instance.
        */
-      function(i, a) {
-        return this.listen(".client-" + i, a);
+      function(s, a) {
+        return this.listen(".client-" + s, a);
       }
     )
     /**
@@ -110,16 +110,16 @@ var Ye = /* @__PURE__ */ function() {
      */
   }, {
     key: "notification",
-    value: function(i) {
-      return this.listen(".Illuminate\\Notifications\\Events\\BroadcastNotificationCreated", i);
+    value: function(s) {
+      return this.listen(".Illuminate\\Notifications\\Events\\BroadcastNotificationCreated", s);
     }
     /**
      * Stop listening for a whisper event on the channel instance.
      */
   }, {
     key: "stopListeningForWhisper",
-    value: function(i, a) {
-      return this.stopListening(".client-" + i, a);
+    value: function(s, a) {
+      return this.stopListening(".client-" + s, a);
     }
   }]), g;
 }(), St = /* @__PURE__ */ function() {
@@ -128,16 +128,16 @@ var Ye = /* @__PURE__ */ function() {
   }
   return Q(g, [{
     key: "format",
-    value: function(i) {
-      return [".", "\\"].includes(i.charAt(0)) ? i.substring(1) : (this.namespace && (i = this.namespace + "." + i), i.replace(/\./g, "\\"));
+    value: function(s) {
+      return [".", "\\"].includes(s.charAt(0)) ? s.substring(1) : (this.namespace && (s = this.namespace + "." + s), s.replace(/\./g, "\\"));
     }
     /**
      * Set the event namespace.
      */
   }, {
     key: "setNamespace",
-    value: function(i) {
-      this.namespace = i;
+    value: function(s) {
+      this.namespace = s;
     }
   }]), g;
 }();
@@ -150,13 +150,13 @@ function Lr(g) {
   return !0;
 }
 var Ze = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i(a, s, l) {
+  ie(s, g);
+  var h = oe(s);
+  function s(a, i, l) {
     var c;
-    return K(this, i), c = h.call(this), c.name = s, c.pusher = a, c.options = l, c.eventFormatter = new St(c.options.namespace), c.subscribe(), c;
+    return K(this, s), c = h.call(this), c.name = i, c.pusher = a, c.options = l, c.eventFormatter = new St(c.options.namespace), c.subscribe(), c;
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "subscribe",
     value: function() {
       this.subscription = this.pusher.subscribe(this.name);
@@ -174,20 +174,20 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "listen",
-    value: function(s, l) {
-      return this.on(this.eventFormatter.format(s), l), this;
+    value: function(i, l) {
+      return this.on(this.eventFormatter.format(i), l), this;
     }
     /**
      * Listen for all events on the channel instance.
      */
   }, {
     key: "listenToAll",
-    value: function(s) {
+    value: function(i) {
       var l = this;
       return this.subscription.bind_global(function(c, x) {
         if (!c.startsWith("pusher:")) {
           var k = l.options.namespace.replace(/\./g, "\\"), O = c.startsWith(k) ? c.substring(k.length + 1) : "." + c;
-          s(O, x);
+          i(O, x);
         }
       }), this;
     }
@@ -196,25 +196,25 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "stopListening",
-    value: function(s, l) {
-      return l ? this.subscription.unbind(this.eventFormatter.format(s), l) : this.subscription.unbind(this.eventFormatter.format(s)), this;
+    value: function(i, l) {
+      return l ? this.subscription.unbind(this.eventFormatter.format(i), l) : this.subscription.unbind(this.eventFormatter.format(i)), this;
     }
     /**
      * Stop listening for all events on the channel instance.
      */
   }, {
     key: "stopListeningToAll",
-    value: function(s) {
-      return s ? this.subscription.unbind_global(s) : this.subscription.unbind_global(), this;
+    value: function(i) {
+      return i ? this.subscription.unbind_global(i) : this.subscription.unbind_global(), this;
     }
     /**
      * Register a callback to be called anytime a subscription succeeds.
      */
   }, {
     key: "subscribed",
-    value: function(s) {
+    value: function(i) {
       return this.on("pusher:subscription_succeeded", function() {
-        s();
+        i();
       }), this;
     }
     /**
@@ -222,9 +222,9 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "error",
-    value: function(s) {
+    value: function(i) {
       return this.on("pusher:subscription_error", function(l) {
-        s(l);
+        i(l);
       }), this;
     }
     /**
@@ -232,59 +232,59 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "on",
-    value: function(s, l) {
-      return this.subscription.bind(s, l), this;
+    value: function(i, l) {
+      return this.subscription.bind(i, l), this;
     }
-  }]), i;
+  }]), s;
 }(Ye), Ct = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "whisper",
     value: (
       /**
        * Send a whisper event to other clients in the channel.
        */
-      function(s, l) {
-        return this.pusher.channels.channels[this.name].trigger("client-".concat(s), l), this;
+      function(i, l) {
+        return this.pusher.channels.channels[this.name].trigger("client-".concat(i), l), this;
       }
     )
-  }]), i;
+  }]), s;
 }(Ze), xr = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "whisper",
     value: (
       /**
        * Send a whisper event to other clients in the channel.
        */
-      function(s, l) {
-        return this.pusher.channels.channels[this.name].trigger("client-".concat(s), l), this;
+      function(i, l) {
+        return this.pusher.channels.channels[this.name].trigger("client-".concat(i), l), this;
       }
     )
-  }]), i;
+  }]), s;
 }(Ze), Er = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "here",
     value: (
       /**
        * Register a callback to be called anytime the member list changes.
        */
-      function(s) {
+      function(i) {
         return this.on("pusher:subscription_succeeded", function(l) {
-          s(Object.keys(l.members).map(function(c) {
+          i(Object.keys(l.members).map(function(c) {
             return l.members[c];
           }));
         }), this;
@@ -295,9 +295,9 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "joining",
-    value: function(s) {
+    value: function(i) {
       return this.on("pusher:member_added", function(l) {
-        s(l.info);
+        i(l.info);
       }), this;
     }
     /**
@@ -305,28 +305,28 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "whisper",
-    value: function(s, l) {
-      return this.pusher.channels.channels[this.name].trigger("client-".concat(s), l), this;
+    value: function(i, l) {
+      return this.pusher.channels.channels[this.name].trigger("client-".concat(i), l), this;
     }
     /**
      * Listen for someone leaving the channel.
      */
   }, {
     key: "leaving",
-    value: function(s) {
+    value: function(i) {
       return this.on("pusher:member_removed", function(l) {
-        s(l.info);
+        i(l.info);
       }), this;
     }
-  }]), i;
+  }]), s;
 }(Ct), Tt = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i(a, s, l) {
+  ie(s, g);
+  var h = oe(s);
+  function s(a, i, l) {
     var c;
-    return K(this, i), c = h.call(this), c.events = {}, c.listeners = {}, c.name = s, c.socket = a, c.options = l, c.eventFormatter = new St(c.options.namespace), c.subscribe(), c;
+    return K(this, s), c = h.call(this), c.events = {}, c.listeners = {}, c.name = i, c.socket = a, c.options = l, c.eventFormatter = new St(c.options.namespace), c.subscribe(), c;
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "subscribe",
     value: function() {
       this.socket.emit("subscribe", {
@@ -350,25 +350,25 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "listen",
-    value: function(s, l) {
-      return this.on(this.eventFormatter.format(s), l), this;
+    value: function(i, l) {
+      return this.on(this.eventFormatter.format(i), l), this;
     }
     /**
      * Stop listening for an event on the channel instance.
      */
   }, {
     key: "stopListening",
-    value: function(s, l) {
-      return this.unbindEvent(this.eventFormatter.format(s), l), this;
+    value: function(i, l) {
+      return this.unbindEvent(this.eventFormatter.format(i), l), this;
     }
     /**
      * Register a callback to be called anytime a subscription succeeds.
      */
   }, {
     key: "subscribed",
-    value: function(s) {
+    value: function(i) {
       return this.on("connect", function(l) {
-        s(l);
+        i(l);
       }), this;
     }
     /**
@@ -376,7 +376,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "error",
-    value: function(s) {
+    value: function(i) {
       return this;
     }
     /**
@@ -384,13 +384,13 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "on",
-    value: function(s, l) {
+    value: function(i, l) {
       var c = this;
-      return this.listeners[s] = this.listeners[s] || [], this.events[s] || (this.events[s] = function(x, k) {
-        c.name === x && c.listeners[s] && c.listeners[s].forEach(function(O) {
+      return this.listeners[i] = this.listeners[i] || [], this.events[i] || (this.events[i] = function(x, k) {
+        c.name === x && c.listeners[i] && c.listeners[i].forEach(function(O) {
           return O(k);
         });
-      }, this.socket.on(s, this.events[s])), this.listeners[s].push(l), this;
+      }, this.socket.on(i, this.events[i])), this.listeners[i].push(l), this;
     }
     /**
      * Unbind the channel's socket from all stored event callbacks.
@@ -398,9 +398,9 @@ var Ze = /* @__PURE__ */ function(g) {
   }, {
     key: "unbind",
     value: function() {
-      var s = this;
+      var i = this;
       Object.keys(this.events).forEach(function(l) {
-        s.unbindEvent(l);
+        i.unbindEvent(l);
       });
     }
     /**
@@ -408,48 +408,48 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "unbindEvent",
-    value: function(s, l) {
-      this.listeners[s] = this.listeners[s] || [], l && (this.listeners[s] = this.listeners[s].filter(function(c) {
+    value: function(i, l) {
+      this.listeners[i] = this.listeners[i] || [], l && (this.listeners[i] = this.listeners[i].filter(function(c) {
         return c !== l;
-      })), (!l || this.listeners[s].length === 0) && (this.events[s] && (this.socket.removeListener(s, this.events[s]), delete this.events[s]), delete this.listeners[s]);
+      })), (!l || this.listeners[i].length === 0) && (this.events[i] && (this.socket.removeListener(i, this.events[i]), delete this.events[i]), delete this.listeners[i]);
     }
-  }]), i;
+  }]), s;
 }(Ye), Rt = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "whisper",
     value: (
       /**
        * Send a whisper event to other clients in the channel.
        */
-      function(s, l) {
+      function(i, l) {
         return this.socket.emit("client event", {
           channel: this.name,
-          event: "client-".concat(s),
+          event: "client-".concat(i),
           data: l
         }), this;
       }
     )
-  }]), i;
+  }]), s;
 }(Tt), Or = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "here",
     value: (
       /**
        * Register a callback to be called anytime the member list changes.
        */
-      function(s) {
+      function(i) {
         return this.on("presence:subscribed", function(l) {
-          s(l.map(function(c) {
+          i(l.map(function(c) {
             return c.user_info;
           }));
         }), this;
@@ -460,9 +460,9 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "joining",
-    value: function(s) {
+    value: function(i) {
       return this.on("presence:joining", function(l) {
-        return s(l.user_info);
+        return i(l.user_info);
       }), this;
     }
     /**
@@ -470,10 +470,10 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "whisper",
-    value: function(s, l) {
+    value: function(i, l) {
       return this.socket.emit("client event", {
         channel: this.name,
-        event: "client-".concat(s),
+        event: "client-".concat(i),
         data: l
       }), this;
     }
@@ -482,19 +482,19 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "leaving",
-    value: function(s) {
+    value: function(i) {
       return this.on("presence:leaving", function(l) {
-        return s(l.user_info);
+        return i(l.user_info);
       }), this;
     }
-  }]), i;
-}(Rt), je = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  }]), s;
+}(Rt), De = /* @__PURE__ */ function(g) {
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "subscribe",
     value: (
       /**
@@ -515,7 +515,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "listen",
-    value: function(s, l) {
+    value: function(i, l) {
       return this;
     }
     /**
@@ -523,7 +523,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "listenToAll",
-    value: function(s) {
+    value: function(i) {
       return this;
     }
     /**
@@ -531,7 +531,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "stopListening",
-    value: function(s, l) {
+    value: function(i, l) {
       return this;
     }
     /**
@@ -539,7 +539,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "subscribed",
-    value: function(s) {
+    value: function(i) {
       return this;
     }
     /**
@@ -547,7 +547,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "error",
-    value: function(s) {
+    value: function(i) {
       return this;
     }
     /**
@@ -555,57 +555,57 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "on",
-    value: function(s, l) {
+    value: function(i, l) {
       return this;
     }
-  }]), i;
+  }]), s;
 }(Ye), It = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "whisper",
     value: (
       /**
        * Send a whisper event to other clients in the channel.
        */
-      function(s, l) {
+      function(i, l) {
         return this;
       }
     )
-  }]), i;
-}(je), Nr = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  }]), s;
+}(De), Nr = /* @__PURE__ */ function(g) {
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "whisper",
     value: (
       /**
        * Send a whisper event to other clients in the channel.
        */
-      function(s, l) {
+      function(i, l) {
         return this;
       }
     )
-  }]), i;
-}(je), Mr = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
-    return K(this, i), h.apply(this, arguments);
+  }]), s;
+}(De), Mr = /* @__PURE__ */ function(g) {
+  ie(s, g);
+  var h = oe(s);
+  function s() {
+    return K(this, s), h.apply(this, arguments);
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "here",
     value: (
       /**
        * Register a callback to be called anytime the member list changes.
        */
-      function(s) {
+      function(i) {
         return this;
       }
     )
@@ -614,7 +614,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "joining",
-    value: function(s) {
+    value: function(i) {
       return this;
     }
     /**
@@ -622,7 +622,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "whisper",
-    value: function(s, l) {
+    value: function(i, l) {
       return this;
     }
     /**
@@ -630,10 +630,10 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "leaving",
-    value: function(s) {
+    value: function(i) {
       return this;
     }
-  }]), i;
+  }]), s;
 }(It), et = /* @__PURE__ */ function() {
   function g(h) {
     K(this, g), this._defaultOptions = {
@@ -655,10 +655,10 @@ var Ze = /* @__PURE__ */ function(g) {
   }
   return Q(g, [{
     key: "setOptions",
-    value: function(i) {
-      this.options = Ae(this._defaultOptions, i);
+    value: function(s) {
+      this.options = Ae(this._defaultOptions, s);
       var a = this.csrfToken();
-      return a && (this.options.auth.headers["X-CSRF-TOKEN"] = a, this.options.userAuthentication.headers["X-CSRF-TOKEN"] = a), a = this.options.bearerToken, a && (this.options.auth.headers.Authorization = "Bearer " + a, this.options.userAuthentication.headers.Authorization = "Bearer " + a), i;
+      return a && (this.options.auth.headers["X-CSRF-TOKEN"] = a, this.options.userAuthentication.headers["X-CSRF-TOKEN"] = a), a = this.options.bearerToken, a && (this.options.auth.headers.Authorization = "Bearer " + a, this.options.userAuthentication.headers.Authorization = "Bearer " + a), s;
     }
     /**
      * Extract the CSRF token from the page.
@@ -666,18 +666,18 @@ var Ze = /* @__PURE__ */ function(g) {
   }, {
     key: "csrfToken",
     value: function() {
-      var i;
-      return typeof window < "u" && window.Laravel && window.Laravel.csrfToken ? window.Laravel.csrfToken : this.options.csrfToken ? this.options.csrfToken : typeof document < "u" && typeof document.querySelector == "function" && (i = document.querySelector('meta[name="csrf-token"]')) ? i.getAttribute("content") : null;
+      var s;
+      return typeof window < "u" && window.Laravel && window.Laravel.csrfToken ? window.Laravel.csrfToken : this.options.csrfToken ? this.options.csrfToken : typeof document < "u" && typeof document.querySelector == "function" && (s = document.querySelector('meta[name="csrf-token"]')) ? s.getAttribute("content") : null;
     }
   }]), g;
 }(), kt = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
+  ie(s, g);
+  var h = oe(s);
+  function s() {
     var a;
-    return K(this, i), a = h.apply(this, arguments), a.channels = {}, a;
+    return K(this, s), a = h.apply(this, arguments), a.channels = {}, a;
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "connect",
     value: function() {
       typeof this.options.client < "u" ? this.pusher = this.options.client : this.options.Pusher ? this.pusher = new this.options.Pusher(this.options.key, this.options) : this.pusher = new Pusher(this.options.key, this.options);
@@ -695,48 +695,48 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "listen",
-    value: function(s, l, c) {
-      return this.channel(s).listen(l, c);
+    value: function(i, l, c) {
+      return this.channel(i).listen(l, c);
     }
     /**
      * Get a channel instance by name.
      */
   }, {
     key: "channel",
-    value: function(s) {
-      return this.channels[s] || (this.channels[s] = new Ze(this.pusher, s, this.options)), this.channels[s];
+    value: function(i) {
+      return this.channels[i] || (this.channels[i] = new Ze(this.pusher, i, this.options)), this.channels[i];
     }
     /**
      * Get a private channel instance by name.
      */
   }, {
     key: "privateChannel",
-    value: function(s) {
-      return this.channels["private-" + s] || (this.channels["private-" + s] = new Ct(this.pusher, "private-" + s, this.options)), this.channels["private-" + s];
+    value: function(i) {
+      return this.channels["private-" + i] || (this.channels["private-" + i] = new Ct(this.pusher, "private-" + i, this.options)), this.channels["private-" + i];
     }
     /**
      * Get a private encrypted channel instance by name.
      */
   }, {
     key: "encryptedPrivateChannel",
-    value: function(s) {
-      return this.channels["private-encrypted-" + s] || (this.channels["private-encrypted-" + s] = new xr(this.pusher, "private-encrypted-" + s, this.options)), this.channels["private-encrypted-" + s];
+    value: function(i) {
+      return this.channels["private-encrypted-" + i] || (this.channels["private-encrypted-" + i] = new xr(this.pusher, "private-encrypted-" + i, this.options)), this.channels["private-encrypted-" + i];
     }
     /**
      * Get a presence channel instance by name.
      */
   }, {
     key: "presenceChannel",
-    value: function(s) {
-      return this.channels["presence-" + s] || (this.channels["presence-" + s] = new Er(this.pusher, "presence-" + s, this.options)), this.channels["presence-" + s];
+    value: function(i) {
+      return this.channels["presence-" + i] || (this.channels["presence-" + i] = new Er(this.pusher, "presence-" + i, this.options)), this.channels["presence-" + i];
     }
     /**
      * Leave the given channel, as well as its private and presence variants.
      */
   }, {
     key: "leave",
-    value: function(s) {
-      var l = this, c = [s, "private-" + s, "private-encrypted-" + s, "presence-" + s];
+    value: function(i) {
+      var l = this, c = [i, "private-" + i, "private-encrypted-" + i, "presence-" + i];
       c.forEach(function(x, k) {
         l.leaveChannel(x);
       });
@@ -746,8 +746,8 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "leaveChannel",
-    value: function(s) {
-      this.channels[s] && (this.channels[s].unsubscribe(), delete this.channels[s]);
+    value: function(i) {
+      this.channels[i] && (this.channels[i].unsubscribe(), delete this.channels[i]);
     }
     /**
      * Get the socket ID for the connection.
@@ -765,20 +765,20 @@ var Ze = /* @__PURE__ */ function(g) {
     value: function() {
       this.pusher.disconnect();
     }
-  }]), i;
+  }]), s;
 }(et), _t = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
+  ie(s, g);
+  var h = oe(s);
+  function s() {
     var a;
-    return K(this, i), a = h.apply(this, arguments), a.channels = {}, a;
+    return K(this, s), a = h.apply(this, arguments), a.channels = {}, a;
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "connect",
     value: function() {
-      var s = this, l = this.getSocketIO();
+      var i = this, l = this.getSocketIO();
       return this.socket = l(this.options.host, this.options), this.socket.on("reconnect", function() {
-        Object.values(s.channels).forEach(function(c) {
+        Object.values(i.channels).forEach(function(c) {
           c.subscribe();
         });
       }), this.socket;
@@ -800,40 +800,40 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "listen",
-    value: function(s, l, c) {
-      return this.channel(s).listen(l, c);
+    value: function(i, l, c) {
+      return this.channel(i).listen(l, c);
     }
     /**
      * Get a channel instance by name.
      */
   }, {
     key: "channel",
-    value: function(s) {
-      return this.channels[s] || (this.channels[s] = new Tt(this.socket, s, this.options)), this.channels[s];
+    value: function(i) {
+      return this.channels[i] || (this.channels[i] = new Tt(this.socket, i, this.options)), this.channels[i];
     }
     /**
      * Get a private channel instance by name.
      */
   }, {
     key: "privateChannel",
-    value: function(s) {
-      return this.channels["private-" + s] || (this.channels["private-" + s] = new Rt(this.socket, "private-" + s, this.options)), this.channels["private-" + s];
+    value: function(i) {
+      return this.channels["private-" + i] || (this.channels["private-" + i] = new Rt(this.socket, "private-" + i, this.options)), this.channels["private-" + i];
     }
     /**
      * Get a presence channel instance by name.
      */
   }, {
     key: "presenceChannel",
-    value: function(s) {
-      return this.channels["presence-" + s] || (this.channels["presence-" + s] = new Or(this.socket, "presence-" + s, this.options)), this.channels["presence-" + s];
+    value: function(i) {
+      return this.channels["presence-" + i] || (this.channels["presence-" + i] = new Or(this.socket, "presence-" + i, this.options)), this.channels["presence-" + i];
     }
     /**
      * Leave the given channel, as well as its private and presence variants.
      */
   }, {
     key: "leave",
-    value: function(s) {
-      var l = this, c = [s, "private-" + s, "presence-" + s];
+    value: function(i) {
+      var l = this, c = [i, "private-" + i, "presence-" + i];
       c.forEach(function(x) {
         l.leaveChannel(x);
       });
@@ -843,8 +843,8 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "leaveChannel",
-    value: function(s) {
-      this.channels[s] && (this.channels[s].unsubscribe(), delete this.channels[s]);
+    value: function(i) {
+      this.channels[i] && (this.channels[i].unsubscribe(), delete this.channels[i]);
     }
     /**
      * Get the socket ID for the connection.
@@ -862,15 +862,15 @@ var Ze = /* @__PURE__ */ function(g) {
     value: function() {
       this.socket.disconnect();
     }
-  }]), i;
-}(et), Dr = /* @__PURE__ */ function(g) {
-  se(i, g);
-  var h = oe(i);
-  function i() {
+  }]), s;
+}(et), jr = /* @__PURE__ */ function(g) {
+  ie(s, g);
+  var h = oe(s);
+  function s() {
     var a;
-    return K(this, i), a = h.apply(this, arguments), a.channels = {}, a;
+    return K(this, s), a = h.apply(this, arguments), a.channels = {}, a;
   }
-  return Q(i, [{
+  return Q(s, [{
     key: "connect",
     value: function() {
     }
@@ -879,23 +879,23 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "listen",
-    value: function(s, l, c) {
-      return new je();
+    value: function(i, l, c) {
+      return new De();
     }
     /**
      * Get a channel instance by name.
      */
   }, {
     key: "channel",
-    value: function(s) {
-      return new je();
+    value: function(i) {
+      return new De();
     }
     /**
      * Get a private channel instance by name.
      */
   }, {
     key: "privateChannel",
-    value: function(s) {
+    value: function(i) {
       return new It();
     }
     /**
@@ -903,7 +903,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "encryptedPrivateChannel",
-    value: function(s) {
+    value: function(i) {
       return new Nr();
     }
     /**
@@ -911,7 +911,7 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "presenceChannel",
-    value: function(s) {
+    value: function(i) {
       return new Mr();
     }
     /**
@@ -919,14 +919,14 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "leave",
-    value: function(s) {
+    value: function(i) {
     }
     /**
      * Leave the given channel.
      */
   }, {
     key: "leaveChannel",
-    value: function(s) {
+    value: function(i) {
     }
     /**
      * Get the socket ID for the connection.
@@ -943,15 +943,15 @@ var Ze = /* @__PURE__ */ function(g) {
     key: "disconnect",
     value: function() {
     }
-  }]), i;
-}(et), jr = /* @__PURE__ */ function() {
+  }]), s;
+}(et), Dr = /* @__PURE__ */ function() {
   function g(h) {
     K(this, g), this.options = h, this.connect(), this.options.withoutInterceptors || this.registerInterceptors();
   }
   return Q(g, [{
     key: "channel",
-    value: function(i) {
-      return this.connector.channel(i);
+    value: function(s) {
+      return this.connector.channel(s);
     }
     /**
      * Create a new connection.
@@ -968,7 +968,7 @@ var Ze = /* @__PURE__ */ function(g) {
       else if (this.options.broadcaster == "socket.io")
         this.connector = new _t(this.options);
       else if (this.options.broadcaster == "null")
-        this.connector = new Dr(this.options);
+        this.connector = new jr(this.options);
       else if (typeof this.options.broadcaster == "function" && Lr(this.options.broadcaster))
         this.connector = new this.options.broadcaster(this.options);
       else
@@ -987,24 +987,24 @@ var Ze = /* @__PURE__ */ function(g) {
      */
   }, {
     key: "join",
-    value: function(i) {
-      return this.connector.presenceChannel(i);
+    value: function(s) {
+      return this.connector.presenceChannel(s);
     }
     /**
      * Leave the given channel, as well as its private and presence variants.
      */
   }, {
     key: "leave",
-    value: function(i) {
-      this.connector.leave(i);
+    value: function(s) {
+      this.connector.leave(s);
     }
     /**
      * Leave the given channel.
      */
   }, {
     key: "leaveChannel",
-    value: function(i) {
-      this.connector.leaveChannel(i);
+    value: function(s) {
+      this.connector.leaveChannel(s);
     }
     /**
      * Leave all channels.
@@ -1012,34 +1012,34 @@ var Ze = /* @__PURE__ */ function(g) {
   }, {
     key: "leaveAllChannels",
     value: function() {
-      for (var i in this.connector.channels)
-        this.leaveChannel(i);
+      for (var s in this.connector.channels)
+        this.leaveChannel(s);
     }
     /**
      * Listen for an event on a channel instance.
      */
   }, {
     key: "listen",
-    value: function(i, a, s) {
-      return this.connector.listen(i, a, s);
+    value: function(s, a, i) {
+      return this.connector.listen(s, a, i);
     }
     /**
      * Get a private channel instance by name.
      */
   }, {
     key: "private",
-    value: function(i) {
-      return this.connector.privateChannel(i);
+    value: function(s) {
+      return this.connector.privateChannel(s);
     }
     /**
      * Get a private encrypted channel instance by name.
      */
   }, {
     key: "encryptedPrivate",
-    value: function(i) {
+    value: function(s) {
       if (this.connector instanceof _t)
         throw new Error("Broadcaster ".concat(Ie(this.options.broadcaster), " ").concat(this.options.broadcaster, " does not support encrypted private channels."));
-      return this.connector.encryptedPrivateChannel(i);
+      return this.connector.encryptedPrivateChannel(s);
     }
     /**
      * Get the Socket ID for the connection.
@@ -1064,9 +1064,9 @@ var Ze = /* @__PURE__ */ function(g) {
   }, {
     key: "registerVueRequestInterceptor",
     value: function() {
-      var i = this;
-      Vue.http.interceptors.push(function(a, s) {
-        i.socketId() && a.headers.set("X-Socket-ID", i.socketId()), s();
+      var s = this;
+      Vue.http.interceptors.push(function(a, i) {
+        s.socketId() && a.headers.set("X-Socket-ID", s.socketId()), i();
       });
     }
     /**
@@ -1075,9 +1075,9 @@ var Ze = /* @__PURE__ */ function(g) {
   }, {
     key: "registerAxiosRequestInterceptor",
     value: function() {
-      var i = this;
+      var s = this;
       axios.interceptors.request.use(function(a) {
-        return i.socketId() && (a.headers["X-Socket-Id"] = i.socketId()), a;
+        return s.socketId() && (a.headers["X-Socket-Id"] = s.socketId()), a;
       });
     }
     /**
@@ -1086,9 +1086,9 @@ var Ze = /* @__PURE__ */ function(g) {
   }, {
     key: "registerjQueryAjaxSetup",
     value: function() {
-      var i = this;
-      typeof jQuery.ajax < "u" && jQuery.ajaxPrefilter(function(a, s, l) {
-        i.socketId() && l.setRequestHeader("X-Socket-Id", i.socketId());
+      var s = this;
+      typeof jQuery.ajax < "u" && jQuery.ajaxPrefilter(function(a, i, l) {
+        s.socketId() && l.setRequestHeader("X-Socket-Id", s.socketId());
       });
     }
     /**
@@ -1097,9 +1097,9 @@ var Ze = /* @__PURE__ */ function(g) {
   }, {
     key: "registerTurboRequestInterceptor",
     value: function() {
-      var i = this;
+      var s = this;
       document.addEventListener("turbo:before-fetch-request", function(a) {
-        a.detail.fetchOptions.headers["X-Socket-Id"] = i.socketId();
+        a.detail.fetchOptions.headers["X-Socket-Id"] = s.socketId();
       });
     }
   }]), g;
@@ -1116,14 +1116,14 @@ var At = { exports: {} };
  * Released under the MIT licence.
  */
 (function(g, h) {
-  (function(a, s) {
-    g.exports = s();
+  (function(a, i) {
+    g.exports = i();
   })(window, function() {
     return (
       /******/
-      function(i) {
+      function(s) {
         var a = {};
-        function s(l) {
+        function i(l) {
           if (a[l])
             return a[l].exports;
           var c = a[l] = {
@@ -1135,20 +1135,20 @@ var At = { exports: {} };
             exports: {}
             /******/
           };
-          return i[l].call(c.exports, c, c.exports, s), c.l = !0, c.exports;
+          return s[l].call(c.exports, c, c.exports, i), c.l = !0, c.exports;
         }
-        return s.m = i, s.c = a, s.d = function(l, c, x) {
-          s.o(l, c) || Object.defineProperty(l, c, { enumerable: !0, get: x });
-        }, s.r = function(l) {
+        return i.m = s, i.c = a, i.d = function(l, c, x) {
+          i.o(l, c) || Object.defineProperty(l, c, { enumerable: !0, get: x });
+        }, i.r = function(l) {
           typeof Symbol < "u" && Symbol.toStringTag && Object.defineProperty(l, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(l, "__esModule", { value: !0 });
-        }, s.t = function(l, c) {
-          if (c & 1 && (l = s(l)), c & 8 || c & 4 && typeof l == "object" && l && l.__esModule) return l;
+        }, i.t = function(l, c) {
+          if (c & 1 && (l = i(l)), c & 8 || c & 4 && typeof l == "object" && l && l.__esModule) return l;
           var x = /* @__PURE__ */ Object.create(null);
-          if (s.r(x), Object.defineProperty(x, "default", { enumerable: !0, value: l }), c & 2 && typeof l != "string") for (var k in l) s.d(x, k, (function(O) {
+          if (i.r(x), Object.defineProperty(x, "default", { enumerable: !0, value: l }), c & 2 && typeof l != "string") for (var k in l) i.d(x, k, (function(O) {
             return l[O];
           }).bind(null, k));
           return x;
-        }, s.n = function(l) {
+        }, i.n = function(l) {
           var c = l && l.__esModule ? (
             /******/
             function() {
@@ -1160,132 +1160,132 @@ var At = { exports: {} };
               return l;
             }
           );
-          return s.d(c, "a", c), c;
-        }, s.o = function(l, c) {
+          return i.d(c, "a", c), c;
+        }, i.o = function(l, c) {
           return Object.prototype.hasOwnProperty.call(l, c);
-        }, s.p = "", s(s.s = 2);
+        }, i.p = "", i(i.s = 2);
       }([
         /* 0 */
         /***/
-        function(i, a, s) {
+        function(s, a, i) {
           var l = this && this.__extends || /* @__PURE__ */ function() {
-            var _ = function(v, y) {
-              return _ = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(A, F) {
+            var S = function(v, b) {
+              return S = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(A, F) {
                 A.__proto__ = F;
               } || function(A, F) {
                 for (var X in F) F.hasOwnProperty(X) && (A[X] = F[X]);
-              }, _(v, y);
+              }, S(v, b);
             };
-            return function(v, y) {
-              _(v, y);
+            return function(v, b) {
+              S(v, b);
               function A() {
                 this.constructor = v;
               }
-              v.prototype = y === null ? Object.create(y) : (A.prototype = y.prototype, new A());
+              v.prototype = b === null ? Object.create(b) : (A.prototype = b.prototype, new A());
             };
           }();
           Object.defineProperty(a, "__esModule", { value: !0 });
           var c = 256, x = (
             /** @class */
             function() {
-              function _(v) {
+              function S(v) {
                 v === void 0 && (v = "="), this._paddingCharacter = v;
               }
-              return _.prototype.encodedLength = function(v) {
+              return S.prototype.encodedLength = function(v) {
                 return this._paddingCharacter ? (v + 2) / 3 * 4 | 0 : (v * 8 + 5) / 6 | 0;
-              }, _.prototype.encode = function(v) {
-                for (var y = "", A = 0; A < v.length - 2; A += 3) {
+              }, S.prototype.encode = function(v) {
+                for (var b = "", A = 0; A < v.length - 2; A += 3) {
                   var F = v[A] << 16 | v[A + 1] << 8 | v[A + 2];
-                  y += this._encodeByte(F >>> 3 * 6 & 63), y += this._encodeByte(F >>> 2 * 6 & 63), y += this._encodeByte(F >>> 1 * 6 & 63), y += this._encodeByte(F >>> 0 * 6 & 63);
+                  b += this._encodeByte(F >>> 3 * 6 & 63), b += this._encodeByte(F >>> 2 * 6 & 63), b += this._encodeByte(F >>> 1 * 6 & 63), b += this._encodeByte(F >>> 0 * 6 & 63);
                 }
                 var X = v.length - A;
                 if (X > 0) {
                   var F = v[A] << 16 | (X === 2 ? v[A + 1] << 8 : 0);
-                  y += this._encodeByte(F >>> 3 * 6 & 63), y += this._encodeByte(F >>> 2 * 6 & 63), X === 2 ? y += this._encodeByte(F >>> 1 * 6 & 63) : y += this._paddingCharacter || "", y += this._paddingCharacter || "";
+                  b += this._encodeByte(F >>> 3 * 6 & 63), b += this._encodeByte(F >>> 2 * 6 & 63), X === 2 ? b += this._encodeByte(F >>> 1 * 6 & 63) : b += this._paddingCharacter || "", b += this._paddingCharacter || "";
                 }
-                return y;
-              }, _.prototype.maxDecodedLength = function(v) {
+                return b;
+              }, S.prototype.maxDecodedLength = function(v) {
                 return this._paddingCharacter ? v / 4 * 3 | 0 : (v * 6 + 7) / 8 | 0;
-              }, _.prototype.decodedLength = function(v) {
+              }, S.prototype.decodedLength = function(v) {
                 return this.maxDecodedLength(v.length - this._getPaddingLength(v));
-              }, _.prototype.decode = function(v) {
+              }, S.prototype.decode = function(v) {
                 if (v.length === 0)
                   return new Uint8Array(0);
-                for (var y = this._getPaddingLength(v), A = v.length - y, F = new Uint8Array(this.maxDecodedLength(A)), X = 0, G = 0, re = 0, ce = 0, ne = 0, le = 0, he = 0; G < A - 4; G += 4)
+                for (var b = this._getPaddingLength(v), A = v.length - b, F = new Uint8Array(this.maxDecodedLength(A)), X = 0, G = 0, re = 0, ce = 0, ne = 0, le = 0, he = 0; G < A - 4; G += 4)
                   ce = this._decodeChar(v.charCodeAt(G + 0)), ne = this._decodeChar(v.charCodeAt(G + 1)), le = this._decodeChar(v.charCodeAt(G + 2)), he = this._decodeChar(v.charCodeAt(G + 3)), F[X++] = ce << 2 | ne >>> 4, F[X++] = ne << 4 | le >>> 2, F[X++] = le << 6 | he, re |= ce & c, re |= ne & c, re |= le & c, re |= he & c;
                 if (G < A - 1 && (ce = this._decodeChar(v.charCodeAt(G)), ne = this._decodeChar(v.charCodeAt(G + 1)), F[X++] = ce << 2 | ne >>> 4, re |= ce & c, re |= ne & c), G < A - 2 && (le = this._decodeChar(v.charCodeAt(G + 2)), F[X++] = ne << 4 | le >>> 2, re |= le & c), G < A - 3 && (he = this._decodeChar(v.charCodeAt(G + 3)), F[X++] = le << 6 | he, re |= he & c), re !== 0)
                   throw new Error("Base64Coder: incorrect characters for decoding");
                 return F;
-              }, _.prototype._encodeByte = function(v) {
-                var y = v;
-                return y += 65, y += 25 - v >>> 8 & 6, y += 51 - v >>> 8 & -75, y += 61 - v >>> 8 & -15, y += 62 - v >>> 8 & 3, String.fromCharCode(y);
-              }, _.prototype._decodeChar = function(v) {
-                var y = c;
-                return y += (42 - v & v - 44) >>> 8 & -c + v - 43 + 62, y += (46 - v & v - 48) >>> 8 & -c + v - 47 + 63, y += (47 - v & v - 58) >>> 8 & -c + v - 48 + 52, y += (64 - v & v - 91) >>> 8 & -c + v - 65 + 0, y += (96 - v & v - 123) >>> 8 & -c + v - 97 + 26, y;
-              }, _.prototype._getPaddingLength = function(v) {
-                var y = 0;
+              }, S.prototype._encodeByte = function(v) {
+                var b = v;
+                return b += 65, b += 25 - v >>> 8 & 6, b += 51 - v >>> 8 & -75, b += 61 - v >>> 8 & -15, b += 62 - v >>> 8 & 3, String.fromCharCode(b);
+              }, S.prototype._decodeChar = function(v) {
+                var b = c;
+                return b += (42 - v & v - 44) >>> 8 & -c + v - 43 + 62, b += (46 - v & v - 48) >>> 8 & -c + v - 47 + 63, b += (47 - v & v - 58) >>> 8 & -c + v - 48 + 52, b += (64 - v & v - 91) >>> 8 & -c + v - 65 + 0, b += (96 - v & v - 123) >>> 8 & -c + v - 97 + 26, b;
+              }, S.prototype._getPaddingLength = function(v) {
+                var b = 0;
                 if (this._paddingCharacter) {
                   for (var A = v.length - 1; A >= 0 && v[A] === this._paddingCharacter; A--)
-                    y++;
-                  if (v.length < 4 || y > 2)
+                    b++;
+                  if (v.length < 4 || b > 2)
                     throw new Error("Base64Coder: incorrect padding");
                 }
-                return y;
-              }, _;
+                return b;
+              }, S;
             }()
           );
           a.Coder = x;
           var k = new x();
-          function O(_) {
-            return k.encode(_);
+          function O(S) {
+            return k.encode(S);
           }
           a.encode = O;
-          function E(_) {
-            return k.decode(_);
+          function E(S) {
+            return k.decode(S);
           }
           a.decode = E;
           var T = (
             /** @class */
-            function(_) {
-              l(v, _);
+            function(S) {
+              l(v, S);
               function v() {
-                return _ !== null && _.apply(this, arguments) || this;
+                return S !== null && S.apply(this, arguments) || this;
               }
-              return v.prototype._encodeByte = function(y) {
-                var A = y;
-                return A += 65, A += 25 - y >>> 8 & 6, A += 51 - y >>> 8 & -75, A += 61 - y >>> 8 & -13, A += 62 - y >>> 8 & 49, String.fromCharCode(A);
-              }, v.prototype._decodeChar = function(y) {
+              return v.prototype._encodeByte = function(b) {
+                var A = b;
+                return A += 65, A += 25 - b >>> 8 & 6, A += 51 - b >>> 8 & -75, A += 61 - b >>> 8 & -13, A += 62 - b >>> 8 & 49, String.fromCharCode(A);
+              }, v.prototype._decodeChar = function(b) {
                 var A = c;
-                return A += (44 - y & y - 46) >>> 8 & -c + y - 45 + 62, A += (94 - y & y - 96) >>> 8 & -c + y - 95 + 63, A += (47 - y & y - 58) >>> 8 & -c + y - 48 + 52, A += (64 - y & y - 91) >>> 8 & -c + y - 65 + 0, A += (96 - y & y - 123) >>> 8 & -c + y - 97 + 26, A;
+                return A += (44 - b & b - 46) >>> 8 & -c + b - 45 + 62, A += (94 - b & b - 96) >>> 8 & -c + b - 95 + 63, A += (47 - b & b - 58) >>> 8 & -c + b - 48 + 52, A += (64 - b & b - 91) >>> 8 & -c + b - 65 + 0, A += (96 - b & b - 123) >>> 8 & -c + b - 97 + 26, A;
               }, v;
             }(x)
           );
           a.URLSafeCoder = T;
           var I = new T();
-          function C(_) {
-            return I.encode(_);
+          function C(S) {
+            return I.encode(S);
           }
           a.encodeURLSafe = C;
-          function D(_) {
-            return I.decode(_);
+          function j(S) {
+            return I.decode(S);
           }
-          a.decodeURLSafe = D, a.encodedLength = function(_) {
-            return k.encodedLength(_);
-          }, a.maxDecodedLength = function(_) {
-            return k.maxDecodedLength(_);
-          }, a.decodedLength = function(_) {
-            return k.decodedLength(_);
+          a.decodeURLSafe = j, a.encodedLength = function(S) {
+            return k.encodedLength(S);
+          }, a.maxDecodedLength = function(S) {
+            return k.maxDecodedLength(S);
+          }, a.decodedLength = function(S) {
+            return k.decodedLength(S);
           };
         },
         /* 1 */
         /***/
-        function(i, a, s) {
+        function(s, a, i) {
           Object.defineProperty(a, "__esModule", { value: !0 });
           var l = "utf8: invalid string", c = "utf8: invalid source encoding";
           function x(E) {
             for (var T = new Uint8Array(k(E)), I = 0, C = 0; C < E.length; C++) {
-              var D = E.charCodeAt(C);
-              D < 128 ? T[I++] = D : D < 2048 ? (T[I++] = 192 | D >> 6, T[I++] = 128 | D & 63) : D < 55296 ? (T[I++] = 224 | D >> 12, T[I++] = 128 | D >> 6 & 63, T[I++] = 128 | D & 63) : (C++, D = (D & 1023) << 10, D |= E.charCodeAt(C) & 1023, D += 65536, T[I++] = 240 | D >> 18, T[I++] = 128 | D >> 12 & 63, T[I++] = 128 | D >> 6 & 63, T[I++] = 128 | D & 63);
+              var j = E.charCodeAt(C);
+              j < 128 ? T[I++] = j : j < 2048 ? (T[I++] = 192 | j >> 6, T[I++] = 128 | j & 63) : j < 55296 ? (T[I++] = 224 | j >> 12, T[I++] = 128 | j >> 6 & 63, T[I++] = 128 | j & 63) : (C++, j = (j & 1023) << 10, j |= E.charCodeAt(C) & 1023, j += 65536, T[I++] = 240 | j >> 18, T[I++] = 128 | j >> 12 & 63, T[I++] = 128 | j >> 6 & 63, T[I++] = 128 | j & 63);
             }
             return T;
           }
@@ -1313,31 +1313,31 @@ var At = { exports: {} };
             for (var T = [], I = 0; I < E.length; I++) {
               var C = E[I];
               if (C & 128) {
-                var D = void 0;
+                var j = void 0;
                 if (C < 224) {
                   if (I >= E.length)
                     throw new Error(c);
-                  var _ = E[++I];
-                  if ((_ & 192) !== 128)
+                  var S = E[++I];
+                  if ((S & 192) !== 128)
                     throw new Error(c);
-                  C = (C & 31) << 6 | _ & 63, D = 128;
+                  C = (C & 31) << 6 | S & 63, j = 128;
                 } else if (C < 240) {
                   if (I >= E.length - 1)
                     throw new Error(c);
-                  var _ = E[++I], v = E[++I];
-                  if ((_ & 192) !== 128 || (v & 192) !== 128)
+                  var S = E[++I], v = E[++I];
+                  if ((S & 192) !== 128 || (v & 192) !== 128)
                     throw new Error(c);
-                  C = (C & 15) << 12 | (_ & 63) << 6 | v & 63, D = 2048;
+                  C = (C & 15) << 12 | (S & 63) << 6 | v & 63, j = 2048;
                 } else if (C < 248) {
                   if (I >= E.length - 2)
                     throw new Error(c);
-                  var _ = E[++I], v = E[++I], y = E[++I];
-                  if ((_ & 192) !== 128 || (v & 192) !== 128 || (y & 192) !== 128)
+                  var S = E[++I], v = E[++I], b = E[++I];
+                  if ((S & 192) !== 128 || (v & 192) !== 128 || (b & 192) !== 128)
                     throw new Error(c);
-                  C = (C & 15) << 18 | (_ & 63) << 12 | (v & 63) << 6 | y & 63, D = 65536;
+                  C = (C & 15) << 18 | (S & 63) << 12 | (v & 63) << 6 | b & 63, j = 65536;
                 } else
                   throw new Error(c);
-                if (C < D || C >= 55296 && C <= 57343)
+                if (C < j || C >= 55296 && C <= 57343)
                   throw new Error(c);
                 if (C >= 65536) {
                   if (C > 1114111)
@@ -1353,13 +1353,13 @@ var At = { exports: {} };
         },
         /* 2 */
         /***/
-        function(i, a, s) {
-          i.exports = s(3).default;
+        function(s, a, i) {
+          s.exports = i(3).default;
         },
         /* 3 */
         /***/
-        function(i, a, s) {
-          s.r(a);
+        function(s, a, i) {
+          i.r(a);
           class l {
             constructor(e, t) {
               this.lastId = 0, this.prefix = e, this.name = t;
@@ -1417,10 +1417,10 @@ var At = { exports: {} };
                   if (o.receivers.remove(m), o.loading[e]) {
                     var P = o.loading[e];
                     delete o.loading[e];
-                    for (var j = function(V) {
+                    for (var D = function(V) {
                       V || u.cleanup();
                     }, U = 0; U < P.length; U++)
-                      P[U](w, j);
+                      P[U](w, D);
                   }
                 });
                 u.send(m);
@@ -1461,22 +1461,22 @@ var At = { exports: {} };
               }
             }
           };
-          var D = { buildLogSuffix: function(n) {
+          var j = { buildLogSuffix: function(n) {
             const e = "See:", t = I.urls[n];
             if (!t)
               return "";
             let r;
             return t.fullUrl ? r = t.fullUrl : t.path && (r = I.baseUrl + t.path), r ? `${e} ${r}` : "";
-          } }, _;
+          } }, S;
           (function(n) {
             n.UserAuthentication = "user-authentication", n.ChannelAuthorization = "channel-authorization";
-          })(_ || (_ = {}));
+          })(S || (S = {}));
           class v extends Error {
             constructor(e) {
               super(e), Object.setPrototypeOf(this, new.target.prototype);
             }
           }
-          class y extends Error {
+          class b extends Error {
             constructor(e) {
               super(e), Object.setPrototypeOf(this, new.target.prototype);
             }
@@ -1539,11 +1539,11 @@ var At = { exports: {} };
                 } else {
                   let w = "";
                   switch (r) {
-                    case _.UserAuthentication:
-                      w = D.buildLogSuffix("authenticationEndpoint");
+                    case S.UserAuthentication:
+                      w = j.buildLogSuffix("authenticationEndpoint");
                       break;
-                    case _.ChannelAuthorization:
-                      w = `Clients must be authorized to join private or presence channels. ${D.buildLogSuffix("authorizationEndpoint")}`;
+                    case S.ChannelAuthorization:
+                      w = `Clients must be authorized to join private or presence channels. ${j.buildLogSuffix("authorizationEndpoint")}`;
                       break;
                   }
                   o(new ne(u.status, `Unable to retrieve auth string from ${r.toString()} endpoint - received status: ${u.status} from ${t.endpoint}. ${w}`), null);
@@ -1569,7 +1569,7 @@ var At = { exports: {} };
           }, f = window.btoa || function(n) {
             return n.replace(/[\s\S]{1,3}/g, p);
           };
-          class b {
+          class y {
             constructor(e, t, r, o) {
               this.clear = t, this.timer = e(() => {
                 this.timer && (this.timer = o(this.timer));
@@ -1582,21 +1582,21 @@ var At = { exports: {} };
               this.timer && (this.clear(this.timer), this.timer = null);
             }
           }
-          var S = b;
+          var _ = y;
           function B(n) {
             window.clearTimeout(n);
           }
           function R(n) {
             window.clearInterval(n);
           }
-          class N extends S {
+          class N extends _ {
             constructor(e, t) {
               super(setTimeout, B, e, function(r) {
                 return t(), null;
               });
             }
           }
-          class $ extends S {
+          class $ extends _ {
             constructor(e, t) {
               super(setInterval, R, e, function(r) {
                 return t(), r;
@@ -1680,7 +1680,7 @@ var At = { exports: {} };
               e(n[r], r, n, t) && t.push(n[r]);
             return t;
           }
-          function ie(n, e) {
+          function se(n, e) {
             var t = {};
             return ee(n, function(r, o) {
               (e && e(r, o, n, t) || r) && (t[o] = r);
@@ -1710,7 +1710,7 @@ var At = { exports: {} };
             });
           }
           function xt(n) {
-            var e = ie(n, function(r) {
+            var e = se(n, function(r) {
               return r !== void 0;
             }), t = ue(be(Lt(e)), M.method("join", "=")).join("&");
             return t;
@@ -1785,10 +1785,10 @@ var At = { exports: {} };
             };
             var P = "Pusher.auth_callbacks['" + u + "']";
             w.src = t.endpoint + "?callback=" + encodeURIComponent(P) + "&" + e;
-            var j = m.getElementsByTagName("head")[0] || m.documentElement;
-            j.insertBefore(w, j.firstChild);
+            var D = m.getElementsByTagName("head")[0] || m.documentElement;
+            D.insertBefore(w, D.firstChild);
           }, Mt = Nt;
-          class Dt {
+          class jt {
             constructor(e) {
               this.src = e;
             }
@@ -1808,7 +1808,7 @@ var At = { exports: {} };
               this.script && (this.script.onload = this.script.onerror = null, this.script.onreadystatechange = null), this.script && this.script.parentNode && this.script.parentNode.removeChild(this.script), this.errorScript && this.errorScript.parentNode && this.errorScript.parentNode.removeChild(this.errorScript), this.script = null, this.errorScript = null;
             }
           }
-          class jt {
+          class Dt {
             constructor(e, t) {
               this.url = e, this.data = t;
             }
@@ -1824,8 +1824,8 @@ var At = { exports: {} };
           }
           var Ut = function(n, e) {
             return function(t, r) {
-              var o = "http" + (e ? "s" : "") + "://", u = o + (n.host || n.options.host) + n.options.path, m = L.createJSONPRequest(u, t), w = L.ScriptReceivers.create(function(P, j) {
-                c.remove(w), m.cleanup(), j && j.host && (n.host = j.host), r && r(P, j);
+              var o = "http" + (e ? "s" : "") + "://", u = o + (n.host || n.options.host) + n.options.path, m = L.createJSONPRequest(u, t), w = L.ScriptReceivers.create(function(P, D) {
+                c.remove(w), m.cleanup(), D && D.host && (n.host = D.host), r && r(P, D);
               });
               m.send(w);
             };
@@ -2045,11 +2045,11 @@ var At = { exports: {} };
             getSocket: function(n) {
               return L.HTTPFactory.createPollingSocket(n);
             }
-          }, tt), it = {
+          }, tt), st = {
             isSupported: function() {
               return L.isXHRSupported();
             }
-          }, Xt = new Ce(H({}, nt, it)), Gt = new Ce(H({}, rt, it)), Jt = {
+          }, Xt = new Ce(H({}, nt, st)), Gt = new Ce(H({}, rt, st)), Jt = {
             ws: Vt,
             xhr_streaming: Xt,
             xhr_polling: Gt
@@ -2077,12 +2077,12 @@ var At = { exports: {} };
                 path: e
               }));
             }
-          }), st = {
+          }), it = {
             isSupported: function(n) {
               var e = L.isXDRSupported(n.useTLS);
               return e;
             }
-          }, Qt = new Ce(H({}, nt, st)), Yt = new Ce(H({}, rt, st));
+          }, Qt = new Ce(H({}, nt, it)), Yt = new Ce(H({}, rt, it));
           Ee.xdr_streaming = Qt, Ee.xdr_polling = Yt, Ee.sockjs = Kt;
           var Zt = Ee;
           class en extends ge {
@@ -2110,10 +2110,10 @@ var At = { exports: {} };
               });
               var u = this.transport.createConnection(e, t, r, o), m = null, w = function() {
                 u.unbind("open", w), u.bind("closed", P), m = M.now();
-              }, P = (j) => {
-                if (u.unbind("closed", P), j.code === 1002 || j.code === 1003)
+              }, P = (D) => {
+                if (u.unbind("closed", P), D.code === 1002 || D.code === 1003)
                   this.manager.reportDeath();
-                else if (!j.wasClean && m) {
+                else if (!D.wasClean && m) {
                   var U = M.now() - m;
                   U < 2 * this.maxPingDelay && (this.manager.reportDeath(), this.pingDelay = Math.max(U / 2, this.minPingDelay));
                 }
@@ -2308,7 +2308,7 @@ var At = { exports: {} };
               if (e.indexOf("client-") !== 0)
                 throw new v("Event '" + e + "' does not start with 'client-'");
               if (!this.subscribed) {
-                var r = D.buildLogSuffix("triggeringClientEvents");
+                var r = j.buildLogSuffix("triggeringClientEvents");
                 q.warn(`Client event triggered before channel 'subscription_succeeded' event . ${r}`);
               }
               return this.pusher.send_event(e, t, this.name);
@@ -2406,22 +2406,22 @@ var At = { exports: {} };
             return new (t || (t = Promise))(function(u, m) {
               function w(U) {
                 try {
-                  j(r.next(U));
+                  D(r.next(U));
                 } catch (V) {
                   m(V);
                 }
               }
               function P(U) {
                 try {
-                  j(r.throw(U));
+                  D(r.throw(U));
                 } catch (V) {
                   m(V);
                 }
               }
-              function j(U) {
+              function D(U) {
                 U.done ? u(U.value) : o(U.value).then(w, P);
               }
-              j((r = r.apply(n, e || [])).next());
+              D((r = r.apply(n, e || [])).next());
             });
           };
           class ln extends qe {
@@ -2437,7 +2437,7 @@ var At = { exports: {} };
                   } else if (yield this.pusher.user.signinDonePromise, this.pusher.user.user_data != null)
                     this.members.setMyID(this.pusher.user.user_data.id);
                   else {
-                    let m = D.buildLogSuffix("authorizationEndpoint");
+                    let m = j.buildLogSuffix("authorizationEndpoint");
                     q.error(`Invalid auth response for channel '${this.name}', expected 'channel_data' field. ${m}, or the user should be signed in.`), t("Invalid auth response");
                     return;
                   }
@@ -2479,7 +2479,7 @@ var At = { exports: {} };
               this.members.reset(), super.disconnect();
             }
           }
-          var un = s(1), Be = s(0);
+          var un = i(1), Be = i(0);
           class hn extends qe {
             constructor(e, t, r) {
               super(e, t), this.key = null, this.nacl = r;
@@ -2737,7 +2737,7 @@ var At = { exports: {} };
             if (n.indexOf("private-encrypted-") === 0) {
               if (e.config.nacl)
                 return me.createEncryptedChannel(n, e, e.config.nacl);
-              let t = "Tried to subscribe to a private-encrypted- channel but no nacl implementation available", r = D.buildLogSuffix("encryptedChannelSupport");
+              let t = "Tried to subscribe to a private-encrypted- channel but no nacl implementation available", r = j.buildLogSuffix("encryptedChannelSupport");
               throw new G(`${t}. ${r}`);
             } else {
               if (n.indexOf("private-") === 0)
@@ -2745,7 +2745,7 @@ var At = { exports: {} };
               if (n.indexOf("presence-") === 0)
                 return me.createPresenceChannel(n, e);
               if (n.indexOf("#") === 0)
-                throw new y('Cannot create a channel with name "' + n + '".');
+                throw new b('Cannot create a channel with name "' + n + '".');
               return me.createChannel(n, e);
             }
           }
@@ -2803,8 +2803,8 @@ var At = { exports: {} };
               return we(this.strategies, M.method("isSupported"));
             }
             connect(e, t) {
-              var r = this.strategies, o = 0, u = this.timeout, m = null, w = (P, j) => {
-                j ? t(null, j) : (o = o + 1, this.loop && (o = o % r.length), o < r.length ? (u && (u = u * 2, this.timeoutLimit && (u = Math.min(u, this.timeoutLimit))), m = this.tryStrategy(r[o], e, { timeout: u, failFast: this.failFast }, w)) : t(!0));
+              var r = this.strategies, o = 0, u = this.timeout, m = null, w = (P, D) => {
+                D ? t(null, D) : (o = o + 1, this.loop && (o = o % r.length), o < r.length ? (u && (u = u * 2, this.timeoutLimit && (u = Math.min(u, this.timeoutLimit))), m = this.tryStrategy(r[o], e, { timeout: u, failFast: this.failFast }, w)) : t(!0));
               };
               return m = this.tryStrategy(r[o], e, { timeout: u, failFast: this.failFast }, w), {
                 abort: function() {
@@ -2895,15 +2895,15 @@ var At = { exports: {} };
                   failFast: !0
                 }))) : u++);
               }
-              var P = M.now(), j = m.pop().connect(e, function U(V, Me) {
-                V ? (ct(r), m.length > 0 ? (P = M.now(), j = m.pop().connect(e, U)) : t(V)) : (kn(r, Me.transport.name, M.now() - P, u), t(null, Me));
+              var P = M.now(), D = m.pop().connect(e, function U(V, Me) {
+                V ? (ct(r), m.length > 0 ? (P = M.now(), D = m.pop().connect(e, U)) : t(V)) : (kn(r, Me.transport.name, M.now() - P, u), t(null, Me));
               });
               return {
                 abort: function() {
-                  j.abort();
+                  D.abort();
                 },
                 forceMinPriority: function(U) {
-                  e = U, j && j.forceMinPriority(U);
+                  e = U, D && D.forceMinPriority(U);
                 }
               };
             }
@@ -3017,14 +3017,14 @@ var At = { exports: {} };
               loop: !0,
               timeout: 15e3,
               timeoutLimit: 6e4
-            }, j = new at({
+            }, D = new at({
               minPingDelay: 1e4,
               maxPingDelay: n.activityTimeout
             }), U = new at({
               lives: 2,
               minPingDelay: 1e4,
               maxPingDelay: n.activityTimeout
-            }), V = o("ws", "ws", 3, u, j), Me = o("wss", "ws", 3, m, j), vr = o("sockjs", "sockjs", 1, w), ft = o("xhr_streaming", "xhr_streaming", 1, w, U), yr = o("xdr_streaming", "xdr_streaming", 1, w, U), pt = o("xhr_polling", "xhr_polling", 1, w), br = o("xdr_polling", "xdr_polling", 1, w), gt = new _e([V], P), wr = new _e([Me], P), kr = new _e([vr], P), mt = new _e([
+            }), V = o("ws", "ws", 3, u, D), Me = o("wss", "ws", 3, m, D), vr = o("sockjs", "sockjs", 1, w), ft = o("xhr_streaming", "xhr_streaming", 1, w, U), yr = o("xdr_streaming", "xdr_streaming", 1, w, U), pt = o("xhr_polling", "xhr_polling", 1, w), br = o("xdr_polling", "xdr_polling", 1, w), gt = new _e([V], P), wr = new _e([Me], P), kr = new _e([vr], P), mt = new _e([
               new Te(Re(ft), ft, yr)
             ], P), vt = new _e([
               new Te(Re(pt), pt, br)
@@ -3223,7 +3223,7 @@ var At = { exports: {} };
               e.push(ut(32).toString(32));
             return e.join("");
           }
-          var Dn = xn, jn = {
+          var jn = xn, Dn = {
             getReceiveURL: function(n, e) {
               return n.base + "/" + e + "/xhr_streaming" + n.queryString;
             },
@@ -3236,7 +3236,7 @@ var At = { exports: {} };
             onFinished: function(n, e) {
               n.onClose(1006, "Connection interrupted (" + e + ")", !1);
             }
-          }, Un = jn, Fn = {
+          }, Un = Dn, Fn = {
             getReceiveURL: function(n, e) {
               return n.base + "/" + e + "/xhr" + n.queryString;
             },
@@ -3273,7 +3273,7 @@ var At = { exports: {} };
               return this.createSocket(Hn, n);
             },
             createSocket(n, e) {
-              return new Dn(n, e);
+              return new jn(n, e);
             },
             createXHR(n, e) {
               return this.createRequest(qn, n, e);
@@ -3323,10 +3323,10 @@ var At = { exports: {} };
               }, 0);
             },
             createJSONPRequest(n, e) {
-              return new jt(n, e);
+              return new Dt(n, e);
             },
             createScriptRequest(n) {
-              return new Dt(n);
+              return new jt(n);
             },
             getLocalStorage() {
               try {
@@ -3443,14 +3443,14 @@ var At = { exports: {} };
                 });
               }, P = function(V) {
                 U(), t(V);
-              }, j = function() {
+              }, D = function() {
                 U();
                 var V;
                 V = xe(o), t(new X(V));
               }, U = function() {
-                o.unbind("initialized", m), o.unbind("open", w), o.unbind("error", P), o.unbind("closed", j);
+                o.unbind("initialized", m), o.unbind("open", w), o.unbind("error", P), o.unbind("closed", D);
               };
-              return o.bind("initialized", m), o.bind("open", w), o.bind("error", P), o.bind("closed", j), o.initialize(), {
+              return o.bind("initialized", m), o.bind("open", w), o.bind("error", P), o.bind("closed", D), o.initialize(), {
                 abort: () => {
                   r || (U(), u ? u.close() : o.close());
                 },
@@ -3517,7 +3517,7 @@ var At = { exports: {} };
               throw `'${n.transport}' is not a recognized auth transport`;
             return (e, t) => {
               const r = Yn(e, n);
-              L.getAuthorizers()[n.transport](L, r, n, _.UserAuthentication, t);
+              L.getAuthorizers()[n.transport](L, r, n, S.UserAuthentication, t);
             };
           };
           const er = (n, e) => {
@@ -3537,7 +3537,7 @@ var At = { exports: {} };
               throw `'${n.transport}' is not a recognized auth transport`;
             return (e, t) => {
               const r = er(e, n);
-              L.getAuthorizers()[n.transport](L, r, n, _.ChannelAuthorization, t);
+              L.getAuthorizers()[n.transport](L, r, n, S.ChannelAuthorization, t);
             };
           };
           const nr = (n, e, t) => {
@@ -3568,18 +3568,18 @@ var At = { exports: {} };
               wsPort: n.wsPort || k.wsPort,
               wssPort: n.wssPort || k.wssPort,
               enableStats: cr(n),
-              httpHost: ir(n),
+              httpHost: sr(n),
               useTLS: ar(n),
-              wsHost: sr(n),
+              wsHost: ir(n),
               userAuthenticator: lr(n),
               channelAuthorizer: hr(n, e)
             };
             return "disabledTransports" in n && (t.disabledTransports = n.disabledTransports), "enabledTransports" in n && (t.enabledTransports = n.enabledTransports), "ignoreNullOrigin" in n && (t.ignoreNullOrigin = n.ignoreNullOrigin), "timelineParams" in n && (t.timelineParams = n.timelineParams), "nacl" in n && (t.nacl = n.nacl), t;
           }
-          function ir(n) {
+          function sr(n) {
             return n.httpHost ? n.httpHost : n.cluster ? `sockjs-${n.cluster}.pusher.com` : k.httpHost;
           }
-          function sr(n) {
+          function ir(n) {
             return n.wsHost ? n.wsHost : or(n.cluster);
           }
           function or(n) {
@@ -3701,7 +3701,7 @@ var At = { exports: {} };
                 Y.instances[e].connect();
             }
             static getClientFeatures() {
-              return fe(ie({ ws: L.Transports.ws }, function(e) {
+              return fe(se({ ws: L.Transports.ws }, function(e) {
                 return e.isSupported({});
               }));
             }
@@ -3821,8 +3821,8 @@ class zr {
   /**
    * INTERCEPTOR: Wraps renderTemplate to steal the CPRRoll object before it vanishes.
    */
-  async rollAndCapture(h, i) {
-    return console.log(`%c[Bridge] 🕵️‍♂️ Starting Render Interceptor for Actor ${h}`, "color: #00ffff; font-weight: bold;"), new Promise(async (a, s) => {
+  async rollAndCapture(h, s) {
+    return console.log(`%c[Bridge] 🕵️‍♂️ Starting Render Interceptor for Actor ${h}`, "color: #00ffff; font-weight: bold;"), new Promise(async (a, i) => {
       let l = !1;
       const c = renderTemplate, x = function(k, O) {
         return k && typeof k == "string" && k.includes("rollcard") && (console.log(`%c[Bridge] 🎯 Intercepted Render: ${k}`, "color: #00ff00;", O), l = !0, renderTemplate = c, a({
@@ -3839,7 +3839,7 @@ class zr {
         l || (renderTemplate = c, console.warn("[Bridge] ❌ Interceptor timed out. No rollcard rendered."), a({ success: !1, error: "Timed out waiting for render" }));
       }, 5e3);
       try {
-        await i();
+        await s();
       } catch {
         renderTemplate = c, a({ success: !1, error: "Trigger failed" });
       }
@@ -3850,8 +3850,8 @@ class zr {
    */
   destroy() {
     this.echo && this.echo.disconnect();
-    for (let [h, i] of Object.entries(this.hookIds))
-      Hooks.off(h, i);
+    for (let [h, s] of Object.entries(this.hookIds))
+      Hooks.off(h, s);
     this._originalToMessage && (Roll.prototype.toMessage = this._originalToMessage), console.log("Cyberpunk Bridge: Destroyed and hooks removed.");
   }
   /**
@@ -3860,15 +3860,15 @@ class zr {
   registerSettings() {
     game.settings.register(te, "apiUrl", {
       name: "Relay Controller URL",
-      hint: "The base URL of your Agent (e.g., http://cyberpunk.ddev.site). Do NOT include port 8080 here.",
-      scope: "world",
+      hint: "The base URL of your Agent (e.g., https://agent.surrealdisco.co.uk). Do NOT include port 8080 here.",
+      scope: "client",
       config: !0,
       type: String,
-      default: "http://localhost",
+      default: "https://agent.surrealdisco.co.uk",
       onChange: () => this.reconnect()
     }), game.settings.register(te, "reverbHost", {
       name: "Reverb Host (override)",
-      hint: "Optional. Override the WebSocket host used for Reverb (e.g., my-tunnel.ngrok-free.dev). Leave blank to derive from Relay URL.",
+      hint: "Optional. Override the WebSocket host used for Reverb (e.g., my-tunnel.ngrok-free.dev). Leave blank to derive from Foundry URL.",
       scope: "world",
       config: !0,
       type: String,
@@ -3888,7 +3888,7 @@ class zr {
       scope: "world",
       config: !0,
       type: Boolean,
-      default: !1,
+      default: !0,
       onChange: () => this.reconnect()
     }), game.settings.register(te, "reverbKey", {
       name: "Reverb App Key",
@@ -3920,8 +3920,8 @@ class zr {
    * Connect to Laravel Reverb
    */
   connect() {
-    const h = game.settings.get(te, "apiUrl"), i = game.settings.get(te, "apiKey"), a = game.settings.get(te, "debugMode"), s = Number(game.settings.get(te, "reverbPort") || 0) || 0, l = game.settings.get(te, "reverbUseSSL"), c = (game.settings.get(te, "reverbHost") || "").trim();
-    if (!i || !h) {
+    const h = game.settings.get(te, "apiUrl"), s = game.settings.get(te, "apiKey"), a = game.settings.get(te, "debugMode"), i = Number(game.settings.get(te, "reverbPort") || 0) || 0, l = game.settings.get(te, "reverbUseSSL"), c = (game.settings.get(te, "reverbHost") || "").trim();
+    if (!s || !h) {
       ui.notifications.warn("Cyberpunk Bridge: Missing API URL or Key.");
       return;
     }
@@ -3929,12 +3929,12 @@ class zr {
     let x;
     try {
       x = new URL(h);
-    } catch (D) {
-      console.error("Invalid Relay URL", D);
+    } catch (j) {
+      console.error("Invalid Relay URL", j);
       return;
     }
-    const k = c || x.hostname, O = x.protocol === "https:", E = typeof l == "boolean" ? l : void 0, T = E ?? O, I = T ? 443 : 80, C = s > 0 ? s : I;
-    console.log(`[Bridge] Connecting to Agent Relay via Reverb host=${k} port=${C} secure=${T}`), this.echo = new jr({
+    const k = c || x.hostname, O = x.protocol === "https:", E = typeof l == "boolean" ? l : void 0, T = E ?? O, I = T ? 443 : 80, C = i > 0 ? i : I;
+    console.log(`[Bridge] Connecting to Agent Relay via Reverb host=${k} port=${C} secure=${T}`), this.echo = new Dr({
       broadcaster: "reverb",
       key: game.settings.get(te, "reverbKey") || "itdsiqtx8cpskowawl1p",
       wsHost: k,
@@ -3946,9 +3946,8 @@ class zr {
       authEndpoint: `${h.replace(/\/$/, "")}/api/broadcasting/auth`,
       auth: {
         headers: {
-          Authorization: "Bearer " + i,
-          Accept: "application/json",
-          "ngrok-skip-browser-warning": "true"
+          Authorization: "Bearer " + s,
+          Accept: "application/json"
         }
       }
     }), window.CyberpunkSocket = this.echo, this.echo.connector.pusher.connection.bind("connected", () => {
@@ -3966,15 +3965,15 @@ class zr {
     }), this.registerGlobalHooks();
   }
   registerGlobalHooks() {
-    const h = async (i, a) => {
-      this.isConnected && (!i || !["character", "mook"].includes(i.type) || (console.log(`%c[Bridge] 🔄 Syncing change for ${i.name}`, "color: #ffaa00;", a), await this.sendResponse({
+    const h = async (s, a) => {
+      this.isConnected && (!s || !["character", "mook"].includes(s.type) || (console.log(`%c[Bridge] 🔄 Syncing change for ${s.name}`, "color: #ffaa00;", a), await this.sendResponse({
         type: "SHEET_DELTA",
-        actorId: i.id,
+        actorId: s.id,
         delta: a,
         success: !0
       })));
     };
-    this.hookIds.updateActor = Hooks.on("updateActor", (i, a, s, l) => {
+    this.hookIds.updateActor = Hooks.on("updateActor", (s, a, i, l) => {
       if (a.system) {
         const c = {}, x = (k, O = "system.") => {
           for (let E in k) {
@@ -3982,12 +3981,12 @@ class zr {
             T !== null && typeof T == "object" && !Array.isArray(T) && !(T instanceof foundry.utils.Color) ? x(T, `${O}${E}.`) : c[`${O}${E}`] = T;
           }
         };
-        x(a.system), h(i, c);
+        x(a.system), h(s, c);
       }
-    }), this.hookIds.updateItem = Hooks.on("updateItem", (i, a, s, l) => {
-      const c = i.parent;
+    }), this.hookIds.updateItem = Hooks.on("updateItem", (s, a, i, l) => {
+      const c = s.parent;
       if (c instanceof Actor) {
-        const x = {}, k = `items.${i.id}.`;
+        const x = {}, k = `items.${s.id}.`;
         if (a.system) {
           const O = (E, T = `${k}system.`) => {
             for (let I in E) {
@@ -4001,19 +4000,19 @@ class zr {
           O !== "system" && O !== "_id" && (x[`${k}${O}`] = a[O]);
         Object.keys(x).length > 0 && h(c, x);
       }
-    }), this.hookIds.createItem = Hooks.on("createItem", (i, a, s) => {
-      const l = i.parent;
+    }), this.hookIds.createItem = Hooks.on("createItem", (s, a, i) => {
+      const l = s.parent;
       if (l instanceof Actor) {
         const c = {
-          [`items.+${i.id}`]: i.toObject()
+          [`items.+${s.id}`]: s.toObject()
         };
         h(l, c);
       }
-    }), this.hookIds.deleteItem = Hooks.on("deleteItem", (i, a, s) => {
-      const l = i.parent;
+    }), this.hookIds.deleteItem = Hooks.on("deleteItem", (s, a, i) => {
+      const l = s.parent;
       if (l instanceof Actor) {
         const c = {
-          [`items.${i.id}`]: null
+          [`items.${s.id}`]: null
         };
         h(l, c);
       }
@@ -4023,24 +4022,23 @@ class zr {
    * Send results back to Laravel
    */
   async sendResponse(h) {
-    let i = game.settings.get(te, "apiUrl");
+    let s = game.settings.get(te, "apiUrl");
     const a = game.settings.get(te, "apiKey");
-    if (!(!i || !a)) {
-      i.endsWith("/") && (i = i.slice(0, -1));
+    if (!(!s || !a)) {
+      s.endsWith("/") && (s = s.slice(0, -1));
       try {
-        const s = await fetch(`${i}/api/foundry/callback`, {
+        const i = await fetch(`${s}/api/foundry/callback`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${a}`,
-            Accept: "application/json",
-            "ngrok-skip-browser-warning": "true"
+            Accept: "application/json"
           },
           body: JSON.stringify(h)
         });
-        s.ok || console.error("Cyberpunk Bridge: Callback failed", s.statusText);
-      } catch (s) {
-        console.error("Cyberpunk Bridge: Error sending callback", s);
+        i.ok || console.error("Cyberpunk Bridge: Callback failed", i.statusText);
+      } catch (i) {
+        console.error("Cyberpunk Bridge: Error sending callback", i);
       }
     }
   }
@@ -4048,53 +4046,53 @@ class zr {
    * Handle Logic (The Tunnel Output)
    */
   async handleIncomingData(h) {
-    var x, k, O, E, T, I, C, D, _, v, y, A, F, X, G, re, ce, ne, le, he, Pe, ve, ye, Le;
-    const i = h.payload || h;
-    console.log("Received Order:", i);
-    const a = i.type, s = i.actorId, l = i.tokenId, c = i.requestId;
+    var x, k, O, E, T, I, C, j, S, v, b, A, F, X, G, re, ce, ne, le, he, Pe, ve, ye, Le;
+    const s = h.payload || h;
+    console.log("Received Order:", s);
+    const a = s.type, i = s.actorId, l = s.tokenId, c = s.requestId;
     switch (a) {
       case "UPDATE_ACTOR": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (!d) {
-          console.warn(`⚠️ Actor ID ${s} not found in this world.`);
+          console.warn(`⚠️ Actor ID ${i} not found in this world.`);
           return;
         }
-        await d.update(i.changes), ui.notifications.info(`💾 Sync: ${d.name} updated.`), await this.sendResponse({ type: "CONFIRMATION", action: a, actorId: s, success: !0, requestId: c });
+        await d.update(s.changes), ui.notifications.info(`💾 Sync: ${d.name} updated.`), await this.sendResponse({ type: "CONFIRMATION", action: a, actorId: i, success: !0, requestId: c });
         break;
       }
       case "ITEM_EQUIP": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
-          const p = d.items.get(i.itemId);
+          const p = d.items.get(s.itemId);
           if (p) {
-            const f = `items.${i.itemId}.system.equipped`;
-            await p.update({ "system.equipped": i.state }), await this.sendResponse({ type: "SHEET_DELTA", actorId: s, delta: { [f]: i.state }, success: !0, requestId: c });
+            const f = `items.${s.itemId}.system.equipped`;
+            await p.update({ "system.equipped": s.state }), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { [f]: s.state }, success: !0, requestId: c });
           }
         }
         break;
       }
       case "INSTALL_PROGRAM": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (!d) return;
-        const p = d.items.get(i.cyberdeckId), f = d.items.get(i.programId);
+        const p = d.items.get(s.cyberdeckId), f = d.items.get(s.programId);
         if (!p || !f) return;
-        const b = p.system.installedItems.usedSlots || 0, S = p.system.installedItems.slots || 0, B = f.system.size || 1;
-        if (b + B > S) {
+        const y = p.system.installedItems.usedSlots || 0, _ = p.system.installedItems.slots || 0, B = f.system.size || 1;
+        if (y + B > _) {
           ui.notifications.warn("Not enough memory slots on cyberdeck.");
           return;
         }
         const R = p.system.installedItems.list || [];
-        if (R.includes(i.programId)) return;
-        const N = [...R, i.programId], $ = b + B;
+        if (R.includes(s.programId)) return;
+        const N = [...R, s.programId], $ = y + B;
         await p.update({
           "system.installedItems.list": N,
           "system.installedItems.usedSlots": $
         }), await this.sendResponse({
           type: "SHEET_DELTA",
-          actorId: s,
+          actorId: i,
           delta: {
-            [`items.${i.cyberdeckId}.system.installedItems.list`]: N,
-            [`items.${i.cyberdeckId}.system.installedItems.usedSlots`]: $
+            [`items.${s.cyberdeckId}.system.installedItems.list`]: N,
+            [`items.${s.cyberdeckId}.system.installedItems.usedSlots`]: $
           },
           success: !0,
           requestId: c
@@ -4102,32 +4100,32 @@ class zr {
         break;
       }
       case "REMOVE_PROGRAM": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (!d) return;
-        const p = d.items.get(i.cyberdeckId), f = d.items.get(i.programId);
+        const p = d.items.get(s.cyberdeckId), f = d.items.get(s.programId);
         if (!p) return;
-        const b = p.system.installedItems.list || [];
-        if (!b.includes(i.programId)) return;
-        const S = b.filter((W) => W !== i.programId), B = f && f.system.size || 1, R = p.system.installedItems.usedSlots || 0, N = Math.max(0, R - B);
+        const y = p.system.installedItems.list || [];
+        if (!y.includes(s.programId)) return;
+        const _ = y.filter((W) => W !== s.programId), B = f && f.system.size || 1, R = p.system.installedItems.usedSlots || 0, N = Math.max(0, R - B);
         await p.update({
-          "system.installedItems.list": S,
+          "system.installedItems.list": _,
           "system.installedItems.usedSlots": N
         });
         const $ = {
-          [`items.${i.cyberdeckId}.system.installedItems.list`]: S,
-          [`items.${i.cyberdeckId}.system.installedItems.usedSlots`]: N
+          [`items.${s.cyberdeckId}.system.installedItems.list`]: _,
+          [`items.${s.cyberdeckId}.system.installedItems.usedSlots`]: N
         };
-        f && f.system.isRezzed && (await f.update({ "system.isRezzed": !1 }), $[`items.${i.programId}.system.isRezzed`] = !1), await this.sendResponse({ type: "SHEET_DELTA", actorId: s, delta: $, success: !0, requestId: c });
+        f && f.system.isRezzed && (await f.update({ "system.isRezzed": !1 }), $[`items.${s.programId}.system.isRezzed`] = !1), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: $, success: !0, requestId: c });
         break;
       }
       case "TOGGLE_REZ": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
-          const p = d.items.get(i.programId);
-          p && (await p.update({ "system.isRezzed": i.targetState }), await this.sendResponse({
+          const p = d.items.get(s.programId);
+          p && (await p.update({ "system.isRezzed": s.targetState }), await this.sendResponse({
             type: "SHEET_DELTA",
-            actorId: s,
-            delta: { [`items.${i.programId}.system.isRezzed`]: i.targetState },
+            actorId: i,
+            delta: { [`items.${s.programId}.system.isRezzed`]: s.targetState },
             success: !0,
             requestId: c
           }));
@@ -4135,7 +4133,7 @@ class zr {
         break;
       }
       case "DAMAGE_ROLL": {
-        const d = game.actors.get(s), p = d.items.get(i.weaponId);
+        const d = game.actors.get(i), p = d.items.get(s.weaponId);
         if (d && p) {
           const f = async () => {
             await d.sheet._onRoll({
@@ -4147,22 +4145,22 @@ class zr {
                 "data-item-id": p.id
               }
             });
-          }, b = await this.rollAndCapture(s, f);
-          b.success && await this.sendResponse({
+          }, y = await this.rollAndCapture(i, f);
+          y.success && await this.sendResponse({
             type: "ROLL_RESULT",
             requestId: c,
-            actorId: s,
-            total: b.total,
-            isCriticalSuccess: b.isCriticalSuccess,
-            isCriticalFailure: b.isCriticalFailure,
+            actorId: i,
+            total: y.total,
+            isCriticalSuccess: y.isCriticalSuccess,
+            isCriticalFailure: y.isCriticalFailure,
             label: `${p.name} (Damage)`,
             rawRoll: {
-              total: b.total,
-              isCriticalSuccess: b.isCriticalSuccess,
-              isCriticalFailure: b.isCriticalFailure,
-              label: b.label,
-              resultTotal: (x = b.rawRoll) == null ? void 0 : x.resultTotal,
-              rollTitle: (k = b.rawRoll) == null ? void 0 : k.rollTitle
+              total: y.total,
+              isCriticalSuccess: y.isCriticalSuccess,
+              isCriticalFailure: y.isCriticalFailure,
+              label: y.label,
+              resultTotal: (x = y.rawRoll) == null ? void 0 : x.resultTotal,
+              rollTitle: (k = y.rawRoll) == null ? void 0 : k.rollTitle
             },
             success: !0
           });
@@ -4170,7 +4168,7 @@ class zr {
         break;
       }
       case "DEATH_SAVE": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
           const p = async () => {
             await d.sheet._onRoll({
@@ -4182,13 +4180,13 @@ class zr {
                 "data-roll-title": "Death Save"
               }
             });
-          }, f = await this.rollAndCapture(s, p);
+          }, f = await this.rollAndCapture(i, p);
           if (f.success) {
-            const b = d.system.derivedStats.deathsave || {};
+            const y = d.system.derivedStats.deathsave || {};
             await this.sendResponse({
               type: "ROLL_RESULT",
               requestId: c,
-              actorId: s,
+              actorId: i,
               total: f.total,
               isCriticalSuccess: f.isCriticalSuccess,
               isCriticalFailure: f.isCriticalFailure,
@@ -4204,8 +4202,8 @@ class zr {
               success: !0
             }), await this.sendResponse({
               type: "SHEET_DELTA",
-              actorId: s,
-              delta: { "system.derivedStats.deathsave": b },
+              actorId: i,
+              delta: { "system.derivedStats.deathsave": y },
               tab: "stats",
               success: !0
             });
@@ -4214,7 +4212,7 @@ class zr {
         break;
       }
       case "FACEDOWN_ROLL": {
-        const d = game.actors.get(s), p = async () => {
+        const d = game.actors.get(i), p = async () => {
           await d.sheet._onRoll({
             "data-roll-type": "facedown",
             "data-roll-title": "Face Down",
@@ -4224,11 +4222,11 @@ class zr {
               "data-roll-title": "Face Down"
             }
           });
-        }, f = await this.rollAndCapture(s, p);
+        }, f = await this.rollAndCapture(i, p);
         f.success && await this.sendResponse({
           type: "ROLL_RESULT",
           requestId: c,
-          actorId: s,
+          actorId: i,
           total: f.total,
           isCriticalSuccess: f.isCriticalSuccess,
           isCriticalFailure: f.isCriticalFailure,
@@ -4245,15 +4243,15 @@ class zr {
         break;
       }
       case "INITIATIVE_ROLL": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
           const p = async () => {
             await d.rollInitiative();
-          }, f = await this.rollAndCapture(s, p);
+          }, f = await this.rollAndCapture(i, p);
           f.success && await this.sendResponse({
             type: "ROLL_RESULT",
             requestId: c,
-            actorId: s,
+            actorId: i,
             total: f.total,
             isCriticalSuccess: f.isCriticalSuccess,
             isCriticalFailure: f.isCriticalFailure,
@@ -4264,7 +4262,7 @@ class zr {
               isCriticalFailure: f.isCriticalFailure,
               label: f.label,
               resultTotal: (C = f.rawRoll) == null ? void 0 : C.resultTotal,
-              rollTitle: (D = f.rawRoll) == null ? void 0 : D.rollTitle
+              rollTitle: (j = f.rawRoll) == null ? void 0 : j.rollTitle
             },
             success: !0
           });
@@ -4272,31 +4270,31 @@ class zr {
         break;
       }
       case "PROGRAM_ROLL": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
           const p = document.createElement("a");
-          p.dataset.rollType = i.rollType, p.dataset.cyberdeckId = i.cyberdeckId, p.dataset.rollTitle = i.programName, p.dataset.interfaceAbility = i.programName, p.dataset.itemId = i.cyberdeckId, p.dataset.programId = i.programId, p.dataset.executionType = i.executionType;
+          p.dataset.rollType = s.rollType, p.dataset.cyberdeckId = s.cyberdeckId, p.dataset.rollTitle = s.programName, p.dataset.interfaceAbility = s.programName, p.dataset.itemId = s.cyberdeckId, p.dataset.programId = s.programId, p.dataset.executionType = s.executionType;
           const f = async () => {
             await d.sheet._onRoll({
               type: "click",
               currentTarget: p
             });
-          }, b = await this.rollAndCapture(s, f);
-          b.success && await this.sendResponse({
+          }, y = await this.rollAndCapture(i, f);
+          y.success && await this.sendResponse({
             type: "ROLL_RESULT",
             requestId: c,
-            actorId: s,
-            total: b.total,
-            isCriticalSuccess: b.isCriticalSuccess,
-            isCriticalFailure: b.isCriticalFailure,
-            label: i.programName,
+            actorId: i,
+            total: y.total,
+            isCriticalSuccess: y.isCriticalSuccess,
+            isCriticalFailure: y.isCriticalFailure,
+            label: s.programName,
             rawRoll: {
-              total: b.total,
-              isCriticalSuccess: b.isCriticalSuccess,
-              isCriticalFailure: b.isCriticalFailure,
-              label: b.label,
-              resultTotal: (_ = b.rawRoll) == null ? void 0 : _.resultTotal,
-              rollTitle: (v = b.rawRoll) == null ? void 0 : v.rollTitle
+              total: y.total,
+              isCriticalSuccess: y.isCriticalSuccess,
+              isCriticalFailure: y.isCriticalFailure,
+              label: y.label,
+              resultTotal: (S = y.rawRoll) == null ? void 0 : S.resultTotal,
+              rollTitle: (v = y.rawRoll) == null ? void 0 : v.rollTitle
             },
             success: !0
           });
@@ -4304,41 +4302,41 @@ class zr {
         break;
       }
       case "ROLE_ROLL": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
-          const p = d.items.getName(i.itemName);
+          const p = d.items.getName(s.itemName);
           if (p) {
             const f = {
               "data-roll-type": "roleAbility",
-              "data-roll-title": i.label,
+              "data-roll-title": s.label,
               "data-item-id": p.id,
               type: "click",
               currentTarget: {
                 "data-roll-type": "roleAbility",
-                "data-roll-title": i.label,
+                "data-roll-title": s.label,
                 "data-item-id": p.id,
-                "data-item-subtype": i.label
+                "data-item-subtype": s.label
               }
             };
-            i.isAbility && (f["data-roll-subtype"] = "subRoleAbility", f["data-role-name"] = i.label, f.currentTarget["data-roll-subtype"] = "subRoleAbility", f.currentTarget["data-role-name"] = i.label);
-            const b = async () => {
+            s.isAbility && (f["data-roll-subtype"] = "subRoleAbility", f["data-role-name"] = s.label, f.currentTarget["data-roll-subtype"] = "subRoleAbility", f.currentTarget["data-role-name"] = s.label);
+            const y = async () => {
               await d.sheet._onRoll(f);
-            }, S = await this.rollAndCapture(s, b);
-            S.success && await this.sendResponse({
+            }, _ = await this.rollAndCapture(i, y);
+            _.success && await this.sendResponse({
               type: "ROLL_RESULT",
               requestId: c,
-              actorId: s,
-              total: S.total,
-              isCriticalSuccess: S.isCriticalSuccess,
-              isCriticalFailure: S.isCriticalFailure,
-              label: i.label,
+              actorId: i,
+              total: _.total,
+              isCriticalSuccess: _.isCriticalSuccess,
+              isCriticalFailure: _.isCriticalFailure,
+              label: s.label,
               rawRoll: {
-                total: S.total,
-                isCriticalSuccess: S.isCriticalSuccess,
-                isCriticalFailure: S.isCriticalFailure,
-                label: S.label,
-                resultTotal: (y = S.rawRoll) == null ? void 0 : y.resultTotal,
-                rollTitle: (A = S.rawRoll) == null ? void 0 : A.rollTitle
+                total: _.total,
+                isCriticalSuccess: _.isCriticalSuccess,
+                isCriticalFailure: _.isCriticalFailure,
+                label: _.label,
+                resultTotal: (b = _.rawRoll) == null ? void 0 : b.resultTotal,
+                rollTitle: (A = _.rawRoll) == null ? void 0 : A.rollTitle
               },
               success: !0
             });
@@ -4347,38 +4345,38 @@ class zr {
         break;
       }
       case "SKILL_ROLL": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
-          const p = d.items.getName(i.label);
+          const p = d.items.getName(s.label);
           if (p) {
             const f = async () => {
               await d.sheet._onRoll({
                 "data-roll-type": "skill",
-                "data-roll-title": i.label,
+                "data-roll-title": s.label,
                 "data-item-id": p.id,
                 type: "click",
                 currentTarget: {
                   "data-roll-type": "skill",
-                  "data-roll-title": i.label,
+                  "data-roll-title": s.label,
                   "data-item-id": p.id
                 }
               });
-            }, b = await this.rollAndCapture(s, f);
-            b.success && await this.sendResponse({
+            }, y = await this.rollAndCapture(i, f);
+            y.success && await this.sendResponse({
               type: "ROLL_RESULT",
               requestId: c,
-              actorId: s,
-              total: b.total,
-              isCriticalSuccess: b.isCriticalSuccess,
-              isCriticalFailure: b.isCriticalFailure,
-              label: i.label,
+              actorId: i,
+              total: y.total,
+              isCriticalSuccess: y.isCriticalSuccess,
+              isCriticalFailure: y.isCriticalFailure,
+              label: s.label,
               rawRoll: {
-                total: b.total,
-                isCriticalSuccess: b.isCriticalSuccess,
-                isCriticalFailure: b.isCriticalFailure,
-                label: b.label,
-                resultTotal: (F = b.rawRoll) == null ? void 0 : F.resultTotal,
-                rollTitle: (X = b.rawRoll) == null ? void 0 : X.rollTitle
+                total: y.total,
+                isCriticalSuccess: y.isCriticalSuccess,
+                isCriticalFailure: y.isCriticalFailure,
+                label: y.label,
+                resultTotal: (F = y.rawRoll) == null ? void 0 : F.resultTotal,
+                rollTitle: (X = y.rawRoll) == null ? void 0 : X.rollTitle
               },
               success: !0
             });
@@ -4387,27 +4385,27 @@ class zr {
         break;
       }
       case "STAT_ROLL": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
           const p = async () => {
             await d.sheet._onRoll({
               "data-roll-type": "stat",
-              "data-roll-title": i.label,
+              "data-roll-title": s.label,
               type: "click",
               currentTarget: {
                 "data-roll-type": "stat",
-                "data-roll-title": i.label
+                "data-roll-title": s.label
               }
             });
-          }, f = await this.rollAndCapture(s, p);
+          }, f = await this.rollAndCapture(i, p);
           f.success && await this.sendResponse({
             type: "ROLL_RESULT",
             requestId: c,
-            actorId: s,
+            actorId: i,
             total: f.total,
             isCriticalSuccess: f.isCriticalSuccess,
             isCriticalFailure: f.isCriticalFailure,
-            label: i.label,
+            label: s.label,
             rawRoll: {
               total: f.total,
               isCriticalSuccess: f.isCriticalSuccess,
@@ -4422,21 +4420,21 @@ class zr {
         break;
       }
       case "DICE_ROLL": {
-        c && this.activeRequests.set(c, { actorId: s, timestamp: Date.now() });
-        const d = new Roll(i.formula);
+        c && this.activeRequests.set(c, { actorId: i, timestamp: Date.now() });
+        const d = new Roll(s.formula);
         await d.evaluate(), await d.toMessage({
-          speaker: ChatMessage.getSpeaker({ actor: game.actors.get(s) }),
-          flavor: i.flavor
+          speaker: ChatMessage.getSpeaker({ actor: game.actors.get(i) }),
+          flavor: s.flavor
         }), await this.sendResponse({
           type: "ROLL_RESULT",
           requestId: c,
-          actorId: s,
+          actorId: i,
           total: d.total,
           isCriticalSuccess: d.isCriticalSuccess || !1,
           isCriticalFailure: d.isCriticalFailure || !1,
-          label: i.flavor || "Dice Roll",
+          label: s.flavor || "Dice Roll",
           rawRoll: {
-            rollTitle: i.flavor || "Dice Roll",
+            rollTitle: s.flavor || "Dice Roll",
             _roll: d,
             formula: d.formula,
             resultTotal: d.total
@@ -4449,72 +4447,72 @@ class zr {
         const d = canvas.tokens.get(l);
         if (d) {
           let p = {};
-          i.direction === "up" ? p.y = d.document.y - canvas.grid.size : i.direction === "down" ? p.y = d.document.y + canvas.grid.size : i.direction === "left" ? p.x = d.document.x - canvas.grid.size : i.direction === "right" && (p.x = d.document.x + canvas.grid.size), await d.document.update(p), setTimeout(async () => {
+          s.direction === "up" ? p.y = d.document.y - canvas.grid.size : s.direction === "down" ? p.y = d.document.y + canvas.grid.size : s.direction === "left" ? p.x = d.document.x - canvas.grid.size : s.direction === "right" && (p.x = d.document.x + canvas.grid.size), await d.document.update(p), setTimeout(async () => {
             const f = { tokenId: l, requestId: c || "move-refresh" };
-            await this.handleIncomingData({ type: "LIST_VISIBLE_TOKENS", ...f }), Array.from(game.user.targets)[0] && i.weaponId && await this.handleIncomingData({ type: "GET_DV_INFO", ...f, weaponId: i.weaponId });
+            await this.handleIncomingData({ type: "LIST_VISIBLE_TOKENS", ...f }), Array.from(game.user.targets)[0] && s.weaponId && await this.handleIncomingData({ type: "GET_DV_INFO", ...f, weaponId: s.weaponId });
           }, 200), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: l, success: !0, requestId: c });
         }
         break;
       }
       case "RELOAD_WEAPON": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
-          const p = d.items.get(i.weaponId), f = i.ammoId ? d.items.get(i.ammoId) : null, b = async () => {
+          const p = d.items.get(s.weaponId), f = s.ammoId ? d.items.get(s.ammoId) : null, y = async () => {
             await p.reload();
-            const S = {
-              [`items.${i.weaponId}.system.magazine`]: {
+            const _ = {
+              [`items.${s.weaponId}.system.magazine`]: {
                 value: p.system.magazine.value,
                 max: p.system.magazine.max
               },
-              [`items.${i.weaponId}.system.installedItems`]: {
+              [`items.${s.weaponId}.system.installedItems`]: {
                 list: [...p.system.installedItems.list],
                 slots: p.system.installedItems.slots,
                 usedSlots: p.system.installedItems.usedSlots
               }
             };
-            f && (S[`items.${f.id}.system.amount`] = f.system.amount), d.items.filter((R) => R.type === "ammo").forEach((R) => {
-              S[`items.${R.id}.system.amount`] = R.system.amount;
-            }), await this.sendResponse({ type: "SHEET_DELTA", actorId: s, delta: S, success: !0, requestId: c });
+            f && (_[`items.${f.id}.system.amount`] = f.system.amount), d.items.filter((R) => R.type === "ammo").forEach((R) => {
+              _[`items.${R.id}.system.amount`] = R.system.amount;
+            }), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: _, success: !0, requestId: c });
           };
           if (f) {
-            let S = p.getInstalledItems("ammo");
-            S && S.length > 0 && p.uninstallItems(S), setTimeout(function() {
+            let _ = p.getInstalledItems("ammo");
+            _ && _.length > 0 && p.uninstallItems(_), setTimeout(function() {
               p.installItems([f]);
             }, 500), setTimeout(async () => {
-              await b();
+              await y();
             }, 1500);
           } else
-            await b();
+            await y();
         }
         break;
       }
       case "TARGET_TOKEN": {
-        const d = canvas.tokens.get(i.tokenId);
-        d && (d.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: i.tokenId, success: !0 }));
+        const d = canvas.tokens.get(s.tokenId);
+        d && (d.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: s.tokenId, success: !0 }));
         break;
       }
       case "UPDATE_STAT": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
-          const p = `system.${i.label}`;
+          const p = `system.${s.label}`;
           let f;
-          if (i.operation === "inc") {
-            const b = p.split(".");
-            let S = d;
-            for (let N = 0; N < b.length; N++)
-              S = N === 0 ? S[b[N]] : S == null ? void 0 : S[b[N]];
-            const B = Number(S) || 0, R = Number(i.delta) || 0;
+          if (s.operation === "inc") {
+            const y = p.split(".");
+            let _ = d;
+            for (let N = 0; N < y.length; N++)
+              _ = N === 0 ? _[y[N]] : _ == null ? void 0 : _[y[N]];
+            const B = Number(_) || 0, R = Number(s.delta) || 0;
             f = B + R;
           } else
-            f = typeof i.value == "string" ? i.value : Number(i.value) || 0;
-          await d.update({ [p]: f }), await this.sendResponse({ type: "SHEET_DELTA", actorId: s, delta: { [p]: f }, tab: "stats", success: !0 });
+            f = typeof s.value == "string" ? s.value : Number(s.value) || 0;
+          await d.update({ [p]: f }), await this.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { [p]: f }, tab: "stats", success: !0 });
         }
         break;
       }
       case "ATTACK_ROLL": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (d) {
-          const p = i.weaponId, f = i.fireMode, b = canvas.tokens.get(i.targetId), S = "firetype-" + p, B = "cyberpunk-red-core";
+          const p = s.weaponId, f = s.fireMode, y = canvas.tokens.get(s.targetId), _ = "firetype-" + p, B = "cyberpunk-red-core";
           let R = "";
           switch (f) {
             case "Auto":
@@ -4530,7 +4528,7 @@ class zr {
               R = "";
               break;
           }
-          b && b.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), R === "" ? await d.unsetFlag(B, S) : await d.setFlag(B, S, R);
+          y && y.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), R === "" ? await d.unsetFlag(B, _) : await d.setFlag(B, _, R);
           const N = document.createElement("a");
           N.dataset.rollType = "attack", N.dataset.itemId = p, N.dataset.rollTitle = f + " Attack";
           const $ = async () => {
@@ -4542,7 +4540,7 @@ class zr {
             }, { showDialog: !0 });
           };
           let W = null;
-          if (b) {
+          if (y) {
             const H = ((ce = d.getActiveTokens()) == null ? void 0 : ce[0]) || canvas.tokens.placeables.find((J) => {
               var Z;
               return ((Z = J.actor) == null ? void 0 : Z.id) === d.id;
@@ -4563,7 +4561,7 @@ class zr {
                 "Medium Melee Weapon": ["VS"],
                 "Heavy Melee Weapon": ["VS"],
                 "Very Heavy Melee Weapon": ["VS"]
-              }, Z = [6, 12, 25, 50, 100, 200, 400, 800], ee = b.center.x - H.center.x, fe = b.center.y - H.center.y, z = Math.sqrt(Math.pow(ee, 2) + Math.pow(fe, 2)), ae = Math.ceil(z / (((ne = canvas.grid) == null ? void 0 : ne.size) || 128)), ue = d.items.get(p), pe = {
+              }, Z = [6, 12, 25, 50, 100, 200, 400, 800], ee = y.center.x - H.center.x, fe = y.center.y - H.center.y, z = Math.sqrt(Math.pow(ee, 2) + Math.pow(fe, 2)), ae = Math.ceil(z / (((ne = canvas.grid) == null ? void 0 : ne.size) || 128)), ue = d.items.get(p), pe = {
                 heavyPistol: "Pistol",
                 assaultRifle: "Assault Rifle",
                 smg: "SMG",
@@ -4577,18 +4575,18 @@ class zr {
                 mediumMelee: "Medium Melee Weapon",
                 heavyMelee: "Heavy Melee Weapon",
                 vHeavyMelee: "Very Heavy Melee Weapon"
-              }, de = pe[(le = ue == null ? void 0 : ue.system) == null ? void 0 : le.weaponType] || pe[(he = ue == null ? void 0 : ue.system) == null ? void 0 : he.variety] || "Pistol", ie = Z.findIndex((we) => ae <= we);
-              let be = ie !== -1 ? J[de][ie] : 99;
-              Array.isArray(J[de]) && typeof J[de][0] == "string" && (be = J[de][Math.min(ie !== -1 ? ie : 0, J[de].length - 1)]), W = be === 99 ? "Out of Range" : be;
+              }, de = pe[(le = ue == null ? void 0 : ue.system) == null ? void 0 : le.weaponType] || pe[(he = ue == null ? void 0 : ue.system) == null ? void 0 : he.variety] || "Pistol", se = Z.findIndex((we) => ae <= we);
+              let be = se !== -1 ? J[de][se] : 99;
+              Array.isArray(J[de]) && typeof J[de][0] == "string" && (be = J[de][Math.min(se !== -1 ? se : 0, J[de].length - 1)]), W = be === 99 ? "Out of Range" : be;
             }
           }
-          const M = await this.rollAndCapture(s, $);
+          const M = await this.rollAndCapture(i, $);
           if (M.success) {
             let H = null;
             typeof W == "number" ? H = M.total >= W ? "Hit" : "Miss" : W === "Out of Range" && (H = "Miss"), await this.sendResponse({
               type: "ROLL_RESULT",
               requestId: c,
-              actorId: s,
+              actorId: i,
               total: M.total,
               isCriticalSuccess: M.isCriticalSuccess,
               isCriticalFailure: M.isCriticalFailure,
@@ -4610,14 +4608,14 @@ class zr {
         break;
       }
       case "GET_ROLL_MODIFIERS": {
-        const d = game.actors.get(s);
+        const d = game.actors.get(i);
         if (!d) return;
-        const p = i.weaponId, f = p ? d.items.get(p) : null;
-        let b = "None", S = 0, B = "None", R = 0, N = 0;
+        const p = s.weaponId, f = p ? d.items.get(p) : null;
+        let y = "None", _ = 0, B = "None", R = 0, N = 0;
         if (f) {
-          b = f.system.weaponSkill;
-          const z = d.items.find((ae) => ae.type === "skill" && ae.name === b);
-          S = z && Number(z.system.level) || 0, B = z && z.system.stat || "ref", R = Number((ye = d.system.stats[B]) == null ? void 0 : ye.value) || 0, N = Number(f.system.attackmod) || 0;
+          y = f.system.weaponSkill;
+          const z = d.items.find((ae) => ae.type === "skill" && ae.name === y);
+          _ = z && Number(z.system.level) || 0, B = z && z.system.stat || "ref", R = Number((ye = d.system.stats[B]) == null ? void 0 : ye.value) || 0, N = Number(f.system.attackmod) || 0;
         }
         let $ = 0;
         const W = [], M = Number(d.system.derivedStats.hp.value) || 0, H = Number(d.system.derivedStats.seriouslyWounded) || 0, J = d.items.find((z) => z.name === "Stim" && z.type === "drug"), Z = J && J.effects.some((z) => z.disabled === !1);
@@ -4635,38 +4633,38 @@ class zr {
           var de;
           const ae = z.name || "Injury", ue = (((de = z.system.description) == null ? void 0 : de.value) || "").replace(/<[^>]*>/g, "");
           let pe = 0;
-          if (z.effects && z.effects.length > 0 && z.effects.forEach((ie) => {
-            !ie.disabled && ie.changes && ie.changes.forEach((be) => {
+          if (z.effects && z.effects.length > 0 && z.effects.forEach((se) => {
+            !se.disabled && se.changes && se.changes.forEach((be) => {
               const we = parseInt(be.value);
               isNaN(we) || (pe += we);
             });
           }), pe === 0) {
-            const ie = String(ae).toLowerCase();
-            (ue.includes("-2") || ie.includes("arm") || ie.includes("eye")) && (pe = -2);
+            const se = String(ae).toLowerCase();
+            (ue.includes("-2") || se.includes("arm") || se.includes("eye")) && (pe = -2);
           }
           $ += pe, W.push({ title: ae, description: ue, penalty: pe });
         });
         const fe = {
           actorName: d.name,
-          baseBonus: R + S + N,
+          baseBonus: R + _ + N,
           breakdown: {
             statName: B,
             statValue: R,
-            skillName: b,
-            skillLevel: S,
+            skillName: y,
+            skillLevel: _,
             weaponAcc: N
           },
           totalPenalty: $,
-          finalModifier: R + S + N + $,
+          finalModifier: R + _ + N + $,
           injuries: W
         };
         console.log("GET_ROLL_MODIFIERS result:", fe), await this.sendResponse({ type: "ROLL_MODIFIERS_DATA", result: fe });
         break;
       }
       case "GET_DV_INFO": {
-        const d = canvas.tokens.get(i.tokenId), p = i.targetTokenId || ((Le = Array.from(game.user.targets)[0]) == null ? void 0 : Le.id), f = canvas.tokens.get(p), b = i.weaponId;
+        const d = canvas.tokens.get(s.tokenId), p = s.targetTokenId || ((Le = Array.from(game.user.targets)[0]) == null ? void 0 : Le.id), f = canvas.tokens.get(p), y = s.weaponId;
         if (d && f) {
-          const S = {
+          const _ = {
             Pistol: [13, 15, 20, 25, 30, 30, 99, 99],
             SMG: [15, 13, 15, 20, 25, 25, 30, 99],
             "Shotgun (Slug)": [13, 15, 20, 25, 30, 35, 99, 99],
@@ -4681,7 +4679,7 @@ class zr {
             "Medium Melee Weapon": ["VS"],
             "Heavy Melee Weapon": ["VS"],
             "Very Heavy Melee Weapon": ["VS"]
-          }, B = [6, 12, 25, 50, 100, 200, 400, 800], R = f.center.x - d.center.x, N = f.center.y - d.center.y, $ = Math.sqrt(Math.pow(R, 2) + Math.pow(N, 2)), W = Math.ceil($ / 128), M = d.actor.items.get(b), H = {
+          }, B = [6, 12, 25, 50, 100, 200, 400, 800], R = f.center.x - d.center.x, N = f.center.y - d.center.y, $ = Math.sqrt(Math.pow(R, 2) + Math.pow(N, 2)), W = Math.ceil($ / 128), M = d.actor.items.get(y), H = {
             heavyPistol: "Pistol",
             assaultRifle: "Assault Rifle",
             smg: "SMG",
@@ -4696,8 +4694,8 @@ class zr {
             heavyMelee: "Heavy Melee Weapon",
             vHeavyMelee: "Very Heavy Melee Weapon"
           }, J = H[M.system.weaponType] || H[M.system.variety] || "Pistol", Z = B.findIndex((z) => W <= z);
-          let ee = Z !== -1 ? S[J][Z] : 99;
-          Array.isArray(S[J]) && typeof S[J][0] == "string" && (ee = S[J][Math.min(Z !== -1 ? Z : 0, S[J].length - 1)]);
+          let ee = Z !== -1 ? _[J][Z] : 99;
+          Array.isArray(_[J]) && typeof _[J][0] == "string" && (ee = _[J][Math.min(Z !== -1 ? Z : 0, _[J].length - 1)]);
           const fe = {
             targetName: f.name,
             distanceMeters: W,
@@ -4711,11 +4709,11 @@ class zr {
       case "LIST_VISIBLE_TOKENS": {
         const d = canvas.tokens.get(l);
         if (d) {
-          const p = canvas.grid.size, f = canvas.dimensions, b = d.center.x, S = d.center.y, B = canvas.tokens.placeables.filter((R) => {
+          const p = canvas.grid.size, f = canvas.dimensions, y = d.center.x, _ = d.center.y, B = canvas.tokens.placeables.filter((R) => {
             const N = !R.document.hidden, $ = R.actor && (R.actor.type === "character" || R.actor.type === "mook"), W = R.x >= f.sceneX && R.x <= f.sceneX + f.sceneWidth && R.y >= f.sceneY && R.y <= f.sceneY + f.sceneHeight;
             return N && $ && W && R.id !== d.id;
           }).map((R) => {
-            const N = R.center.x - b, $ = R.center.y - S, M = (Math.sqrt(Math.pow(N, 2) + Math.pow($, 2)) / p).toFixed(2);
+            const N = R.center.x - y, $ = R.center.y - _, M = (Math.sqrt(Math.pow(N, 2) + Math.pow($, 2)) / p).toFixed(2);
             return {
               name: R.name,
               id: R.id,
@@ -4728,11 +4726,26 @@ class zr {
         break;
       }
       case "GET_ACTOR": {
-        let d = i.actorId;
+        let d = s.actorId;
         if (d !== null) {
           const p = game.actors.get(d);
           if (p) {
-            console.log("GET_ACTOR result:", p), await this.sendResponse({ type: "ACTOR_DATA", actor: p, requestId: c });
+            const f = p.toObject(), y = {
+              _id: p.id,
+              name: p.name,
+              type: p.type,
+              img: f.img,
+              system: f.system,
+              items: (f.items || []).map((_) => ({
+                _id: _._id,
+                name: _.name,
+                type: _.type,
+                img: _.img,
+                system: _.system
+              })),
+              flags: f.flags && f.flags["cyberpunk-red-core"] ? { "cyberpunk-red-core": f.flags["cyberpunk-red-core"] } : {}
+            };
+            await this.sendResponse({ type: "ACTOR_DATA", actor: y, requestId: c });
             break;
           }
         }

@@ -99,17 +99,17 @@ class CyberpunkBridge {
     registerSettings() {
         game.settings.register(MODULE_ID, 'apiUrl', {
             name: 'Relay Controller URL',
-            hint: 'The base URL of your Agent (e.g., http://cyberpunk.ddev.site). Do NOT include port 8080 here.',
-                               scope: 'world',
+            hint: 'The base URL of your Agent (e.g., https://agent.surrealdisco.co.uk). Do NOT include port 8080 here.',
+                               scope: 'client',
                                config: true,
                                type: String,
-                               default: 'http://localhost',
+                               default: 'https://agent.surrealdisco.co.uk',
                                    onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'reverbHost', {
             name: 'Reverb Host (override)',
-                               hint: 'Optional. Override the WebSocket host used for Reverb (e.g., my-tunnel.ngrok-free.dev). Leave blank to derive from Relay URL.',
+                               hint: 'Optional. Override the WebSocket host used for Reverb (e.g., my-tunnel.ngrok-free.dev). Leave blank to derive from Foundry URL.',
                                scope: 'world',
                                config: true,
                                type: String,
@@ -133,7 +133,7 @@ class CyberpunkBridge {
                                scope: 'world',
                                config: true,
                                type: Boolean,
-                               default: false,
+                               default: true,
                                    onChange: () => this.reconnect()
         });
 
@@ -225,8 +225,7 @@ class CyberpunkBridge {
                              auth: {
                                  headers: {
                                      'Authorization': 'Bearer ' + token,
-                                     'Accept': 'application/json',
-                                     'ngrok-skip-browser-warning': 'true'
+                                     'Accept': 'application/json'
                                  }
                              }
         });
@@ -384,8 +383,7 @@ class CyberpunkBridge {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
-                    'ngrok-skip-browser-warning': 'true'
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
@@ -1366,8 +1364,23 @@ class CyberpunkBridge {
                 if (actorId !== null) {
                     const actor = game.actors.get(actorId);
                     if (actor) {
-                        console.log("GET_ACTOR result:", actor);
-                        await this.sendResponse({ type: 'ACTOR_DATA', actor: actor, requestId });
+                        const obj = actor.toObject();
+                        const slim = {
+                            _id: actor.id,
+                            name: actor.name,
+                            type: actor.type,
+                            img: obj.img,
+                            system: obj.system,
+                            items: (obj.items || []).map(i => ({
+                                _id: i._id,
+                                name: i.name,
+                                type: i.type,
+                                img: i.img,
+                                system: i.system
+                            })),
+                            flags: obj.flags && obj.flags['cyberpunk-red-core'] ? { 'cyberpunk-red-core': obj.flags['cyberpunk-red-core'] } : {}
+                        };
+                        await this.sendResponse({ type: 'ACTOR_DATA', actor: slim, requestId });
                         break;
                     }
                 }
