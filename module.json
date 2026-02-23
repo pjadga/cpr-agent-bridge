@@ -1,5 +1,5 @@
 {
-  "id": "cpr-agent",
+  "id": "cyberpunk-red-agent-bridge",
   "title": "Cyberpunk Red Agent Bridge",
   "version": "1.0.0",
   "description": "A Websocket Bridge for the hosted Agent App",
