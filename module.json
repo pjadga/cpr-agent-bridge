@@ -1,11 +1,19 @@
 {
-  "id": "cyberpunk-red-agent-bridge",
-  "title": "Cyberpunk Red Agent Bridge",
+  "id": "cpr-agent",
+  "title": "CPR Agent",
   "version": "1.0.0",
-  "description": "A Websocket Bridge for the hosted Agent App",
   "compatibility": {
-    "minimum": "11",
+    "minimum": "12",
     "verified": "12"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "cyberpunk-red-core",
+        "type": "system",
+        "compatibility": {}
+      }
+    ]
   },
   "authors": [
     {
@@ -14,6 +22,7 @@
     }
   ],
   "esmodules": ["dist/module.mjs"],
+  "description": "Cyberpunk Red Agent Bridge",
   "url": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge",
   "manifest": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/module.json",
   "license": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/LICENSE.md"
