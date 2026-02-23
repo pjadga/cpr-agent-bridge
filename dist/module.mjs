@@ -3822,10 +3822,10 @@ class zr {
    * INTERCEPTOR: Wraps renderTemplate to steal the CPRRoll object before it vanishes.
    */
   async rollAndCapture(h, s) {
-    return console.log(`%c[Bridge] 🕵️‍♂️ Starting Render Interceptor for Actor ${h}`, "color: #00ffff; font-weight: bold;"), new Promise(async (a, i) => {
+    return console.log(`%c[Bridge] ‍Starting Render Interceptor for Actor ${h}`, "color: #00ffff; font-weight: bold;"), new Promise(async (a, i) => {
       let l = !1;
       const c = renderTemplate, x = function(k, O) {
-        return k && typeof k == "string" && k.includes("rollcard") && (console.log(`%c[Bridge] 🎯 Intercepted Render: ${k}`, "color: #00ff00;", O), l = !0, renderTemplate = c, a({
+        return k && typeof k == "string" && k.includes("rollcard") && (console.log(`%c[Bridge] Intercepted Render: ${k}`, "color: #00ff00;", O), l = !0, renderTemplate = c, a({
           success: !0,
           total: O.resultTotal,
           isCriticalSuccess: O.wasCritSuccess ? O.wasCritSuccess() : O.isCriticalSuccess || !1,
