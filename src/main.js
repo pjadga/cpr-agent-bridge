@@ -100,7 +100,7 @@ class CyberpunkBridge {
         game.settings.register(MODULE_ID, 'apiUrl', {
             name: 'Relay Controller URL',
             hint: 'The base URL of your Agent (e.g., https://agent.surrealdisco.co.uk). Do NOT include port 8080 here.',
-                               scope: 'client',
+                               scope: 'world',
                                config: true,
                                type: String,
                                default: 'https://agent.surrealdisco.co.uk',
@@ -150,7 +150,7 @@ class CyberpunkBridge {
         game.settings.register(MODULE_ID, 'apiKey', {
             name: 'API Key (Sanctum Token)',
                                hint: 'Generate this in your Cyberpunk Agent dashboard.',
-                               scope: 'world', // or 'client' if each player has their own
+                               scope: 'client', // or 'client' if each player has their own
                                config: true,
                                type: String,
                                default: '',

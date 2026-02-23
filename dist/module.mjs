@@ -3861,7 +3861,7 @@ class zr {
     game.settings.register(te, "apiUrl", {
       name: "Relay Controller URL",
       hint: "The base URL of your Agent (e.g., https://agent.surrealdisco.co.uk). Do NOT include port 8080 here.",
-      scope: "client",
+      scope: "world",
       config: !0,
       type: String,
       default: "https://agent.surrealdisco.co.uk",
@@ -3901,7 +3901,7 @@ class zr {
     }), game.settings.register(te, "apiKey", {
       name: "API Key (Sanctum Token)",
       hint: "Generate this in your Cyberpunk Agent dashboard.",
-      scope: "world",
+      scope: "client",
       // or 'client' if each player has their own
       config: !0,
       type: String,
