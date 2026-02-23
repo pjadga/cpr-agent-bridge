@@ -18,7 +18,7 @@ class CyberpunkBridge {
      * INTERCEPTOR: Wraps renderTemplate to steal the CPRRoll object before it vanishes.
      */
     async rollAndCapture(actorId, triggerFunction) {
-        console.log(`%c[Bridge] 🕵️‍♂️ Starting Render Interceptor for Actor ${actorId}`, "color: #00ffff; font-weight: bold;");
+        console.log(`%c[Bridge] ‍Starting Render Interceptor for Actor ${actorId}`, "color: #00ffff; font-weight: bold;");
 
         return new Promise(async (resolve, reject) => {
             let rollFound = false;
@@ -30,7 +30,7 @@ class CyberpunkBridge {
             const spyRender = function(path, data) {
                 // Check if this is a CPR Roll Card
                 if (path && typeof path === 'string' && path.includes('rollcard')) {
-                    console.log(`%c[Bridge] 🎯 Intercepted Render: ${path}`, "color: #00ff00;", data);
+                    console.log(`%c[Bridge] Intercepted Render: ${path}`, "color: #00ff00;", data);
 
                     // Verify it belongs to our actor (optional, but good safety)
                     // Most CPR roll objects have an 'actor' or 'alias' property, or we assume timing is correct
