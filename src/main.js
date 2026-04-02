@@ -9,6 +9,15 @@ const MODULE_ID = 'cpr-agent';
 // ==================================================================
 // CUSTOM GM MENU: CHARACTER ASSIGNMENT
 // ==================================================================
+
+/**
+ * Truncates a string to show first and last N characters with ellipsis
+ */
+function truncateAgentLink(link, chars = 6) {
+    if (!link || link.length <= chars * 2 + 3) return link;
+    return `${link.substring(0, chars)}...${link.substring(link.length - chars)}`;
+}
+
 class CharacterAssignmentMenu extends FormApplication {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
@@ -21,39 +30,46 @@ class CharacterAssignmentMenu extends FormApplication {
 
     async _renderInner(data) {
         let html = `
-            <div>
-                <p>Assign playable characters to players who have linked their API keys.</p>
-                <table style="width: 100%; text-align: left; margin-bottom: 10px;">
-                    <tr>
-                        <th>Player</th>
-                        <th>API Status</th>
-                        <th>Agent Link</th>
-                        <th>Assigned Character</th>
-                    </tr>`;
+        <div>
+        <p>Assign playable characters to players who have linked their API keys.</p>
+        <table style="width: 100%; text-align: left; margin-bottom: 10px;">
+        <tr>
+        <th>Player</th>
+        <th>API Status</th>
+        <th>Agent Link</th>
+        <th>Assigned Character</th>
+        <th style="width: 50px;"></th>
+        </tr>`;
 
         for (let u of data.users) {
+            const truncatedLink = truncateAgentLink(u.agentLink);
             html += `<tr><td style="padding: 5px 0;"><strong>${u.name}</strong></td>`;
             if (u.hasKey) {
                 html += `<td style="color: #00ff00;">✔ Linked</td>`;
-                html += `<td><small><code>${u.agentLink || 'Pending...'}</code></small></td>`;
+                html += `<td><small><code title="${u.agentLink || ''}">${truncatedLink || 'Pending...'}</code></small></td>`;
                 html += `<td><select class="character-select" data-userid="${u.id}" style="width: 100%;">
-                         <option value="">- None -</option>`;
+                <option value="">- None -</option>`;
                 for (let c of data.characters) {
                     const selected = c.id === u.characterId ? 'selected' : '';
                     html += `<option value="${c.id}" ${selected}>${c.name}</option>`;
                 }
                 html += `</select></td>`;
+                html += `<td><button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
             } else {
                 html += `<td style="color: #ff0000;">❌ Missing</td>
-                         <td><small>-</small></td>
-                         <td><select disabled style="width: 100%;"><option>- Key Missing -</option></select></td>`;
+                <td><small>-</small></td>
+                <td><select disabled style="width: 100%;"><option>- Key Missing -</option></select></td>
+                <td><button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
             }
             html += `</tr>`;
         }
 
         html += `</table>
-                 <button type="button" id="save-agent-assignments"><i class="fas fa-save"></i> Save Assignments</button>
-                 </div>`;
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button type="button" id="save-agent-assignments"><i class="fas fa-save"></i> Save Assignments</button>
+        <button type="button" id="refresh-all-users"><i class="fas fa-sync-alt"></i> Refresh All Users</button>
+        </div>
+        </div>`;
         return $(html);
     }
 
@@ -63,8 +79,8 @@ class CharacterAssignmentMenu extends FormApplication {
             name: u.name,
             isGM: u.isGM,
             hasKey: !!u.getFlag(MODULE_ID, 'hasApiKey'),
-            agentLink: u.getFlag(MODULE_ID, 'agent-link'),
-            characterId: u.character?.id || ""
+                                           agentLink: u.getFlag(MODULE_ID, 'agent-link'),
+                                           characterId: u.character?.id || ""
         }));
 
         const characters = game.actors.filter(a => a.type === 'character').map(a => ({
@@ -128,6 +144,35 @@ class CharacterAssignmentMenu extends FormApplication {
 
             this.close(); // Close the window manually after saving
         });
+
+        // Handle individual user refresh
+        html.find('.refresh-user').click(async (event) => {
+            event.preventDefault();
+            const userId = event.currentTarget.dataset.userid;
+            const user = game.users.get(userId);
+
+            if (user) {
+                // Clear the agent-link flag so it can be re-synced
+                await user.unsetFlag(MODULE_ID, 'agent-link');
+                await user.unsetFlag(MODULE_ID, 'hasApiKey');
+
+                ui.notifications.info(`Cyberpunk Bridge: Cleared cached data for ${user.name}. They will need to re-sync.`);
+                this.render(true); // Re-render the menu to show updated state
+            }
+        });
+
+        // Handle refresh all users
+        html.find('#refresh-all-users').click(async (event) => {
+            event.preventDefault();
+
+            for (let user of game.users) {
+                await user.unsetFlag(MODULE_ID, 'agent-link');
+                await user.unsetFlag(MODULE_ID, 'hasApiKey');
+            }
+
+            ui.notifications.info(`Cyberpunk Bridge: Cleared cached data for all users. They will need to re-sync.`);
+            this.render(true); // Re-render the menu to show updated state
+        });
     }
 }
 // ==================================================================
@@ -160,9 +205,9 @@ class CyberpunkBridge {
                         success: true,
                         total: data.resultTotal,
                         isCriticalSuccess: data.wasCritSuccess ? data.wasCritSuccess() : (data.isCriticalSuccess || false),
-                        isCriticalFailure: data.wasCritFail ? data.wasCritFail() : (data.isCriticalFailure || false),
-                        label: data.rollTitle,
-                        rawRoll: data
+                            isCriticalFailure: data.wasCritFail ? data.wasCritFail() : (data.isCriticalFailure || false),
+                            label: data.rollTitle,
+                            rawRoll: data
                     });
                 }
                 return originalRender.apply(this, arguments);
@@ -216,23 +261,23 @@ class CyberpunkBridge {
         game.settings.register(MODULE_ID, 'apiUrl', {
             name: 'Agent URL',
             hint: 'The base URL of your Agent (e.g., https://agent.surrealdisco.co.uk).',
-            scope: 'world', // URL is usually the same for everyone
-            config: true,
-            type: String,
-            default: 'https://agent.surrealdisco.co.uk',
-            onChange: () => {
-                if (game.user.isGM) this.reconnect();
-                this.syncPlayerLink();
-            }
+                               scope: 'world', // URL is usually the same for everyone
+                               config: true,
+                               type: String,
+                               default: 'https://agent.surrealdisco.co.uk',
+                                   onChange: () => {
+                                       if (game.user.isGM) this.reconnect();
+                                       this.syncPlayerLink();
+                                   }
         });
 
         game.settings.register(MODULE_ID, 'reverbHost', {
             name: 'Reverb Host (override)',
-            scope: 'world',
-            config: true,
-            type: String,
-            default: '',
-            onChange: () => this.reconnect()
+                               scope: 'world',
+                               config: true,
+                               type: String,
+                               default: '',
+                                   onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'reverbPort', {
@@ -240,17 +285,17 @@ class CyberpunkBridge {
             scope: 'world',
             config: true,
             type: Number,
-            default: 0,
-            onChange: () => this.reconnect()
+                               default: 0,
+                                   onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'reverbUseSSL', {
             name: 'Reverb Use SSL (wss)',
-            scope: 'world',
-            config: true,
-            type: Boolean,
-            default: true,
-            onChange: () => this.reconnect()
+                               scope: 'world',
+                               config: true,
+                               type: Boolean,
+                               default: true,
+                                   onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'reverbKey', {
@@ -258,23 +303,23 @@ class CyberpunkBridge {
             scope: 'world',
             config: true,
             type: String,
-            default: 'itdsiqtx8cpskowawl1p',
-            onChange: () => this.reconnect()
+                               default: 'itdsiqtx8cpskowawl1p',
+                                   onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'apiKey', {
             name: 'API Key (Sanctum Token)',
-            hint: 'Generate this in your Cyberpunk Agent dashboard.',
-            scope: 'client', // Vital for player uniqueness
-            config: true,
-            type: String,
-            default: '',
-            onChange: async (val) => {
-                // Update the public flag so the GM Menu instantly knows they added a key
-                await game.user.setFlag(MODULE_ID, 'hasApiKey', !!val);
-                if (game.user.isGM) this.reconnect();
-                this.syncPlayerLink();
-            }
+                               hint: 'Generate this in your Cyberpunk Agent dashboard.',
+                               scope: 'client', // Vital for player uniqueness
+                               config: true,
+                               type: String,
+                               default: '',
+                                   onChange: async (val) => {
+                                       // Update the public flag so the GM Menu instantly knows they added a key
+                                       await game.user.setFlag(MODULE_ID, 'hasApiKey', !!val);
+                                       if (game.user.isGM) this.reconnect();
+                                       this.syncPlayerLink();
+                                   }
         });
 
         game.settings.register(MODULE_ID, 'channelId', {
@@ -283,10 +328,10 @@ class CyberpunkBridge {
             scope: 'world',
             config: true,
             type: String,
-            default: '',
-            onChange: () => {
-                if (game.user.isGM) this.reconnect();
-            }
+                               default: '',
+                                   onChange: () => {
+                                       if (game.user.isGM) this.reconnect();
+                                   }
         });
 
         game.settings.register(MODULE_ID, 'debugMode', {
@@ -294,7 +339,7 @@ class CyberpunkBridge {
             scope: 'client',
             config: true,
             type: Boolean,
-            default: false
+                               default: false
         });
     }
 
@@ -326,20 +371,20 @@ class CyberpunkBridge {
         this.echo = new Echo({
             broadcaster: 'reverb',
             key: game.settings.get(MODULE_ID, 'reverbKey') || 'itdsiqtx8cpskowawl1p',
-            wsHost: wsHost,
-            wsPort: wsPort,
-            wssPort: wsPort,
-            forceTLS: useTLS,
-            enabledTransports: ['ws', 'wss'],
-            disableStats: true,
-            authEndpoint: `${apiUrl.replace(/\/$/, '')}/api/broadcasting/auth`,
+                             wsHost: wsHost,
+                             wsPort: wsPort,
+                             wssPort: wsPort,
+                             forceTLS: useTLS,
+                                 enabledTransports: ['ws', 'wss'],
+                                 disableStats: true,
+                                 authEndpoint: `${apiUrl.replace(/\/$/, '')}/api/broadcasting/auth`,
 
-            auth: {
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Accept': 'application/json'
-                }
-            }
+                             auth: {
+                                 headers: {
+                                     'Authorization': 'Bearer ' + token,
+                                     'Accept': 'application/json'
+                                 }
+                             }
         });
 
         window.CyberpunkSocket = this.echo;
@@ -350,11 +395,11 @@ class CyberpunkBridge {
             if(debug) console.log("Cyberpunk Bridge: Connection Established");
         });
 
-        this.echo.connector.pusher.connection.bind('disconnected', () => {
-            this.isConnected = false;
-        });
+            this.echo.connector.pusher.connection.bind('disconnected', () => {
+                this.isConnected = false;
+            });
 
-        this.listen();
+            this.listen();
     }
 
     listen() {
@@ -363,9 +408,9 @@ class CyberpunkBridge {
 
         // Only the GM listens for World Updates
         this.echo.private(channelName)
-            .listen('.GameUpdate', (e) => {
-                this.handleIncomingData(e);
-            });
+        .listen('.GameUpdate', (e) => {
+            this.handleIncomingData(e);
+        });
 
         this.registerGlobalHooks();
     }
@@ -392,20 +437,33 @@ class CyberpunkBridge {
 
         const broadcastToLaravel = async () => {
             const char = game.user.character;
-            if (debug) console.log(`[Bridge] syncPlayerLink: Broadcasting character link for ${char?.name || 'None'}...`);
+            const currentAgentLink = game.user.getFlag(MODULE_ID, 'agent-link');
+
+            if (debug) {
+                console.log(`[Bridge] syncPlayerLink: Broadcasting character link for ${char?.name || 'None'}...`);
+                console.log(`[Bridge] syncPlayerLink: Foundry User ID: ${game.user.id}, Name: ${game.user.name}, isGM: ${game.user.isGM}`);
+                console.log(`[Bridge] syncPlayerLink: Current stored agent-link: ${currentAgentLink || '(none)'}`);
+            }
 
             try {
                 const response = await this.sendResponse({
                     type: 'LINK_PLAYER_CHARACTER',
                     character: char ? { id: char.id, name: char.name } : null,
                     actorName: char ? char.name : null,
-                    agentLink: game.user.getFlag(MODULE_ID, 'agent-link') || game.user.id,
+                    agentLink: currentAgentLink || game.user.id,
+                    foundryUserId: game.user.id,
+                    foundryUserName: game.user.name,
                     isGM: game.user.isGM
                 });
 
+                if (debug) {
+                    console.log(`[Bridge] syncPlayerLink: Laravel response:`, response);
+                }
+
                 if (response && response.agent_link) {
-                    if (game.user.getFlag(MODULE_ID, 'agent-link') !== response.agent_link) {
+                    if (currentAgentLink !== response.agent_link) {
                         console.log(`%c[Bridge] Link established! Agent Link: ${response.agent_link}`, "color: #00ff00; font-weight: bold;");
+                        console.log(`%c[Bridge] Laravel User ID: ${response.user_id || '(not provided)'}`, "color: #00ff00;");
                         await game.user.setFlag(MODULE_ID, 'agent-link', response.agent_link);
                         ui.notifications?.info(`Agent: Account linked successfully.`);
                     }
@@ -565,17 +623,17 @@ class CyberpunkBridge {
         this.sendResponse({
             type: 'ROLL_RESULT',
             agentLink: user ? user.getFlag(MODULE_ID, 'agent-link') : null,
-            playerName: message.alias,
-            total: roll.total,
-            formula: roll.formula,
-            label: message.flavor || 'Dice Roll',
-            rawRoll: {
-                total: roll.total,
-                formula: roll.formula,
-                rollTitle: message.flavor || 'Dice Roll',
-                _roll: roll.toJSON()
-            },
-            success: true
+                          playerName: message.alias,
+                          total: roll.total,
+                          formula: roll.formula,
+                              label: message.flavor || 'Dice Roll',
+                              rawRoll: {
+                                  total: roll.total,
+                                  formula: roll.formula,
+                                      rollTitle: message.flavor || 'Dice Roll',
+                                      _roll: roll.toJSON()
+                              },
+                              success: true
         });
     }
 
@@ -847,15 +905,15 @@ class CyberpunkBridge {
                             isCriticalSuccess: result.isCriticalSuccess,
                             isCriticalFailure: result.isCriticalFailure,
                             label: `${weapon.name} (Damage)`,
-                            rawRoll: {
-                                total: result.total,
-                                isCriticalSuccess: result.isCriticalSuccess,
-                                isCriticalFailure: result.isCriticalFailure,
-                                label: result.label,
-                                resultTotal: result.rawRoll?.resultTotal,
-                                rollTitle: result.rawRoll?.rollTitle
-                            },
-                            success: true
+                                                rawRoll: {
+                                                    total: result.total,
+                                                    isCriticalSuccess: result.isCriticalSuccess,
+                                                    isCriticalFailure: result.isCriticalFailure,
+                                                    label: result.label,
+                                                    resultTotal: result.rawRoll?.resultTotal,
+                                                    rollTitle: result.rawRoll?.rollTitle
+                                                },
+                                                success: true
                         });
                     }
                 }
@@ -1182,7 +1240,7 @@ class CyberpunkBridge {
                 await roll.evaluate();
                 await roll.toMessage({
                     speaker: ChatMessage.getSpeaker({actor: game.actors.get(actorId)}),
-                    flavor: data.flavor
+                                     flavor: data.flavor
                 });
                 await this.sendResponse({
                     type: 'ROLL_RESULT',
@@ -1196,7 +1254,7 @@ class CyberpunkBridge {
                         rollTitle: data.flavor || 'Dice Roll',
                         _roll: roll,
                         formula: roll.formula,
-                        resultTotal: roll.total
+                            resultTotal: roll.total
                     },
                     success: true
                 });
@@ -1355,8 +1413,8 @@ class CyberpunkBridge {
                     const trigger = async () => {
                         await actor.sheet._onRoll({
                             preventDefault: () => {},
-                            currentTarget: dummyBtn,
-                            type: 'click'
+                                                  currentTarget: dummyBtn,
+                                                  type: 'click'
                         }, { showDialog: true });
                     };
 
@@ -1484,8 +1542,8 @@ class CyberpunkBridge {
                     totalPenalty += penaltyValue;
                     effectList.push({
                         title: stimEnabled ? 'Seriously Wounded (Stim Active)' : 'Seriously Wounded',
-                        penalty: penaltyValue,
-                        description: stimEnabled ? 'Ignoring penalty due to Stim drug.' : 'All actions at -2.'
+                                    penalty: penaltyValue,
+                                    description: stimEnabled ? 'Ignoring penalty due to Stim drug.' : 'All actions at -2.'
                     });
                 }
 
@@ -1622,26 +1680,26 @@ class CyberpunkBridge {
                     const jimY = jim.center.y;
 
                     nearbyTokens = canvas.tokens.placeables
-                        .filter(t => {
-                            const isVisible = !t.document.hidden;
-                            const isActorType = t.actor && (t.actor.type === 'character' || t.actor.type === 'mook');
-                            const isOnMap = t.x >= d.sceneX && t.x <= (d.sceneX + d.sceneWidth) &&
-                                t.y >= d.sceneY && t.y <= (d.sceneY + d.sceneHeight);
-                            return isVisible && isActorType && isOnMap && t.id !== jim.id;
-                        })
-                        .map(t => {
-                            const distX = t.center.x - jimX;
-                            const distY = t.center.y - jimY;
-                            const distancePx = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
-                            const distanceMeters = (distancePx / PIXELS_PER_METER).toFixed(2);
-                            return {
-                                name: t.name,
-                                id: t.id,
-                                distanceM: parseFloat(distanceMeters),
-                                type: t.actor.type
-                            };
-                        })
-                        .sort((a, b) => a.distanceM - b.distanceM);
+                    .filter(t => {
+                        const isVisible = !t.document.hidden;
+                        const isActorType = t.actor && (t.actor.type === 'character' || t.actor.type === 'mook');
+                        const isOnMap = t.x >= d.sceneX && t.x <= (d.sceneX + d.sceneWidth) &&
+                        t.y >= d.sceneY && t.y <= (d.sceneY + d.sceneHeight);
+                        return isVisible && isActorType && isOnMap && t.id !== jim.id;
+                    })
+                    .map(t => {
+                        const distX = t.center.x - jimX;
+                        const distY = t.center.y - jimY;
+                        const distancePx = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+                        const distanceMeters = (distancePx / PIXELS_PER_METER).toFixed(2);
+                        return {
+                            name: t.name,
+                            id: t.id,
+                            distanceM: parseFloat(distanceMeters),
+                         type: t.actor.type
+                        };
+                    })
+                    .sort((a, b) => a.distanceM - b.distanceM);
                 } else {
                     console.warn(`LIST_VISIBLE_TOKENS: Token ID ${tokenId} not found.`);
                 }
@@ -1656,8 +1714,8 @@ class CyberpunkBridge {
 
                 if (userIdentifier) {
                     targetUser = game.users.find(u => u.getFlag(MODULE_ID, 'agent-link') === userIdentifier)
-                        || game.users.get(userIdentifier)
-                        || (userIdentifier === game.user.id ? game.user : null);
+                    || game.users.get(userIdentifier)
+                    || (userIdentifier === game.user.id ? game.user : null);
                 }
 
                 if (!targetUser) targetUser = game.user;
@@ -1704,8 +1762,8 @@ class CyberpunkBridge {
                 if (userIdentifier) {
                     // Try to find the user by their agent-link flag
                     targetUser = game.users.find(u => u.getFlag(MODULE_ID, 'agent-link') === userIdentifier)
-                        || game.users.get(userIdentifier) // Fallback to ID
-                        || (userIdentifier === game.user.id ? game.user : null);
+                    || game.users.get(userIdentifier) // Fallback to ID
+                    || (userIdentifier === game.user.id ? game.user : null);
                 }
 
                 if (!targetUser) targetUser = game.user;
@@ -1716,40 +1774,40 @@ class CyberpunkBridge {
                 if (targetUser.isGM) {
                     // GM sees ALL characters and mooks in the world
                     actors = game.actors
-                        .filter(a => a.type === 'character' || a.type === 'mook')
-                        .map(a => {
-                            // Find the primary owner (player) if any
-                            const ownerId = Object.entries(a.ownership || {}).find(([id, level]) => {
-                                const u = game.users.get(id);
-                                return u && !u.isGM && level >= 3;
-                            })?.[0];
+                    .filter(a => a.type === 'character' || a.type === 'mook')
+                    .map(a => {
+                        // Find the primary owner (player) if any
+                        const ownerId = Object.entries(a.ownership || {}).find(([id, level]) => {
+                            const u = game.users.get(id);
+                            return u && !u.isGM && level >= 3;
+                        })?.[0];
 
-                            return {
-                                name: a.name,
-                                actorId: a.id,
-                                tokenId: null,
-                                agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || (ownerId || targetUser.getFlag(MODULE_ID, 'agent-link') || targetUser.id)
-                            };
-                        });
+                        return {
+                            name: a.name,
+                            actorId: a.id,
+                            tokenId: null,
+                            agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || (ownerId || targetUser.getFlag(MODULE_ID, 'agent-link') || targetUser.id)
+                        };
+                    });
                 } else {
                     // Players see tokens they own on the canvas
                     actors = canvas.tokens.placeables
-                        .filter(t => t.actor && (t.actor.type === 'character' || t.actor.type === 'mook'))
-                        .filter(t => t.actor.testUserPermission(targetUser, "OWNER"))
-                        .map(t => {
-                            // Find the primary owner (player)
-                            const ownerId = Object.entries(t.actor.ownership || {}).find(([id, level]) => {
-                                const u = game.users.get(id);
-                                return u && !u.isGM && level >= 3;
-                            })?.[0];
+                    .filter(t => t.actor && (t.actor.type === 'character' || t.actor.type === 'mook'))
+                    .filter(t => t.actor.testUserPermission(targetUser, "OWNER"))
+                    .map(t => {
+                        // Find the primary owner (player)
+                        const ownerId = Object.entries(t.actor.ownership || {}).find(([id, level]) => {
+                            const u = game.users.get(id);
+                            return u && !u.isGM && level >= 3;
+                        })?.[0];
 
-                            return {
-                                name: t.name,
-                                actorId: t.actor.id,
-                                tokenId: t.id,
-                                agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || ownerId || null
-                            };
-                        });
+                        return {
+                            name: t.name,
+                            actorId: t.actor.id,
+                            tokenId: t.id,
+                            agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || ownerId || null
+                        };
+                    });
 
                     // If they have an assigned character, always include it
                     if (targetUser.character) {
