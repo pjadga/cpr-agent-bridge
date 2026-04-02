@@ -105,12 +105,14 @@ release:
       Download the zip file below and extract it to your Foundry VTT modules folder.
     assets:
       links:
-        # Point these URLs permanently to the Generic Package Registry
         - name: "${PACKAGE_NAME}-${BUILD_VERSION}.zip"
           url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/${PACKAGE_NAME}-${BUILD_VERSION}.zip"
+          filepath: "/${PACKAGE_NAME}-${BUILD_VERSION}.zip"
           link_type: package
         - name: "${PACKAGE_NAME}.zip"
           url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/${PACKAGE_NAME}.zip"
+          # THIS is the crucial part that unlocks the permalink:
+          filepath: "/${PACKAGE_NAME}.zip" 
           link_type: package
   rules:
     - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+$/
