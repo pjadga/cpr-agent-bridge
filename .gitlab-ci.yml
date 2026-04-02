@@ -1,11 +1,14 @@
 stages:
   - build
+  - upload
   - release
 
 variables:
   PACKAGE_NAME: "cpr-agent"
 
-# Build the module zip file
+# ============================================
+# Build Stage
+# ============================================
 build:
   stage: build
   image: alpine:latest
@@ -15,15 +18,15 @@ build:
     # Extract version from module.json
     - VERSION=$(jq -r '.version' module.json)
     - echo "Building version $VERSION"
+    
+    # Save the VERSION variable to a .env file so subsequent jobs can use it!
+    - echo "BUILD_VERSION=$VERSION" >> build.env
 
     # Create a clean build directory
     - mkdir -p build/${PACKAGE_NAME}
 
-    # Copy required files to build directory
-    - cp -r dist build/${PACKAGE_NAME}/
-    - cp module.json build/${PACKAGE_NAME}/
-    - cp README.md build/${PACKAGE_NAME}/
-    - cp LICENSE.md build/${PACKAGE_NAME}/
+    # Copy required files to build directory (simplified copy command)
+    - cp -r dist module.json README.md LICENSE.md build/${PACKAGE_NAME}/
 
     # Create versioned zip file
     - cd build
@@ -40,28 +43,51 @@ build:
     name: "${PACKAGE_NAME}-${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}"
     paths:
       - "*.zip"
+    reports:
+      dotenv: build.env # Exposes BUILD_VERSION to the next jobs
     expire_in: 1 week
   rules:
-    # Run on tags (releases)
     - if: $CI_COMMIT_TAG
-    # Run on main branch
     - if: $CI_COMMIT_BRANCH == "main"
-    # Allow manual runs on other branches
     - if: $CI_COMMIT_BRANCH
       when: manual
       allow_failure: true
 
-# Create a GitLab release when a tag is pushed
-release:
-  stage: release
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
+# ============================================
+# Upload Stage (Permanent Storage)
+# ============================================
+upload-package:
+  stage: upload
+  image: curlimages/curl:latest
   needs:
     - job: build
       artifacts: true
   script:
-    - apk add --no-cache jq
-    - VERSION=$(jq -r '.version' module.json)
-    - echo "Creating release for version $VERSION"
+    # We can now just use $BUILD_VERSION directly!
+    - echo "Uploading version $BUILD_VERSION to package registry"
+    - |
+      curl --fail --show-error --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+           --upload-file ${PACKAGE_NAME}-${BUILD_VERSION}.zip \
+           "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/${PACKAGE_NAME}-${BUILD_VERSION}.zip"
+    - |
+      curl --fail --show-error --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+           --upload-file ${PACKAGE_NAME}.zip \
+           "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/${PACKAGE_NAME}.zip"
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+$/
+
+# ============================================
+# Release Stage
+# ============================================
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: build      # Need build.env for $BUILD_VERSION
+      artifacts: true 
+    - job: upload-package # Wait for upload to finish first
+  script:
+    - echo "Creating release for version $BUILD_VERSION"
   release:
     tag_name: $CI_COMMIT_TAG
     name: "Release $CI_COMMIT_TAG"
@@ -72,43 +98,19 @@ release:
 
       **Manifest URL:**
       ```
-      https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/module.json
+      [https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/module.json](https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/module.json)
       ```
 
       **Direct Download:**
       Download the zip file below and extract it to your Foundry VTT modules folder.
     assets:
       links:
-        - name: "${PACKAGE_NAME}-${CI_COMMIT_TAG}.zip"
-          url: "${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/file/${PACKAGE_NAME}-${CI_COMMIT_TAG}.zip"
-          filepath: "/${PACKAGE_NAME}-${CI_COMMIT_TAG}.zip"
+        # Point these URLs permanently to the Generic Package Registry
+        - name: "${PACKAGE_NAME}-${BUILD_VERSION}.zip"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/${PACKAGE_NAME}-${BUILD_VERSION}.zip"
           link_type: package
         - name: "${PACKAGE_NAME}.zip"
-          url: "${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/file/${PACKAGE_NAME}.zip"
-          filepath: "/${PACKAGE_NAME}.zip"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/${PACKAGE_NAME}.zip"
           link_type: package
   rules:
-    # Only run on version tags (e.g., v1.0.0, 1.0.0)
-    - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+$/
-
-# Optional: Upload zip to package registry for permanent storage
-upload-package:
-  stage: release
-  image: curlimages/curl:latest
-  needs:
-    - job: build
-      artifacts: true
-  script:
-    - VERSION=$(cat module.json | grep '"version"' | sed 's/.*"version".*"\([^"]*\)".*/\1/')
-    - echo "Uploading version $VERSION to package registry"
-    - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-           --upload-file ${PACKAGE_NAME}-${VERSION}.zip \
-           "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${VERSION}/${PACKAGE_NAME}-${VERSION}.zip"
-    - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-           --upload-file ${PACKAGE_NAME}.zip \
-           "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${VERSION}/${PACKAGE_NAME}.zip"
-  rules:
-    # Only run on version tags
     - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+$/
