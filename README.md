@@ -1,6 +1,6 @@
 # Cyberpunk Red Agent Bridge
 
-A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agent web application, enabling real-time character synchronization, remote dice rolling, and AI-assisted gameplay.
+A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agent web application, enabling real-time character synchronization, remote dice rolling, token movement and management.
 
 ## Table of Contents
 
