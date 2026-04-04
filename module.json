@@ -24,7 +24,7 @@
   "esmodules": ["dist/module.mjs"],
   "description": "Cyberpunk Red Agent Bridge",
   "url": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge",
-  "download": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/cpr-agent.zip",
+  "download": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/package_files/287745016/download",
   "manifest": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/module.json",
   "license": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/LICENSE.md"
 }
