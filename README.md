@@ -20,15 +20,18 @@ A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agen
 
 ## Requirements
 
-- **Foundry VTT**: Version 12 or higher
+- **Foundry VTT**: Version 12
 - **Game System**: [Cyberpunk Red Core](https://foundryvtt.com/packages/cyberpunk-red-core) system
-- **Agent Account**: An account on the Cyberpunk Agent platform (default: https://agent.surrealdisco.co.uk)
+- **Agent Account**: An account on the Cyberpunk Agent platform (default: https://agent.surrealdisco.co.uk) the current hosting is free, but if you want to self host there is the source code on my [Gitlab repo](https://gitlab.com/surrealtech/cyberpunk-red-agent) 
 
 ---
 
 ## Installation
 
-### Method 1: Install via Manifest URL (Recommended)
+### Best Method
+1. Use the Foundry VTT Add-on Modules and search for the module "Cyberpunk Red Agent Bridge"!
+
+### Method B: Install via Manifest URL (Recommended)
 
 1. Open Foundry VTT and navigate to the **Add-on Modules** tab
 2. Click **Install Module**
@@ -39,7 +42,7 @@ A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agen
 4. Click **Install**
 5. Wait for the installation to complete
 
-### Method 2: Manual Installation
+### Method C: Manual Installation
 
 1. Download the `cpr-agent.zip` file from the [GitLab repository](https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge)
 2. Extract the contents to your Foundry VTT modules folder:
@@ -49,6 +52,7 @@ A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agen
 3. Ensure the extracted folder is named `cpr-agent`
 4. Restart Foundry VTT
 
+
 ---
 
 ## Setup Guide
@@ -56,7 +60,7 @@ A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agen
 ### Step 1: Enable the Module
 
 1. Launch your Cyberpunk Red world in Foundry VTT
-2. Go to **Settings** → **Manage Modules**
+2. Go to **Settings** -> **Manage Modules**
 3. Find **Cyberpunk Red Agent Bridge** in the list
 4. Check the box to enable it
 5. Click **Save Module Settings**
@@ -65,7 +69,7 @@ A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agen
 
 As the Game Master, you need to configure the connection settings:
 
-1. Go to **Settings** → **Module Settings**
+1. Go to **Settings** -> **Module Settings**
 2. Find the **Cyberpunk Red Agent Bridge** section
 3. Configure the following settings:
 
@@ -73,7 +77,7 @@ As the Game Master, you need to configure the connection settings:
 |---------|-------------|---------|
 | **Agent URL** | The base URL of your Agent server | `https://agent.surrealdisco.co.uk` |
 | **Channel ID** | A unique identifier for your game group (must match your Agent dashboard) | *(empty)* |
-| **API Key** | Your personal Sanctum token from the Agent dashboard | *(empty)* |
+| **API Key** | Your personal API token from the Agent dashboard | *(empty)* |
 | **Reverb Host** | Override for WebSocket host (leave blank to auto-detect) | *(empty)* |
 | **Reverb Port** | WebSocket port (0 = auto-detect based on SSL) | `0` |
 | **Reverb Use SSL** | Enable secure WebSocket connection (wss) | `true` |
@@ -81,6 +85,8 @@ As the Game Master, you need to configure the connection settings:
 | **Debug Mode** | Enable verbose console logging for troubleshooting | `false` |
 
 4. Click **Save Changes**
+
+The reverb options are mainly there if you self-host the Agent app and need to setup custom tunnels and proxies.
 
 ### Step 3: Player Setup
 
@@ -92,12 +98,12 @@ Each player needs to link their Agent account:
 
 2. **Generate an API Key**:
    - Go to your Agent dashboard
-   - Navigate to the API Keys or Settings section
-   - Generate a new Sanctum token/API key
-   - Copy the key (you'll only see it once!)
+   - Navigate to Config (bottom right)
+   - Generate a new API key
+   - Copy the key
 
 3. **Configure Foundry**:
-   - In Foundry VTT, go to **Settings** → **Module Settings**
+   - In Foundry VTT, go to **Settings** -> **Module Settings**
    - Find **Cyberpunk Red Agent Bridge**
    - Paste your API key into the **API Key (Sanctum Token)** field
    - Save your settings
@@ -105,12 +111,13 @@ Each player needs to link their Agent account:
 4. **Verify Connection**:
    - You should see a notification: *"Cyberpunk Bridge: Online"*
    - Your account will be linked and you'll see: *"Agent: Account linked successfully."*
+   - Once you're GM has assigned you a character, you'll be able to save them from the dropdown in Agent/Config.
 
 ### Step 4: Assign Characters to Players (GM Only)
 
 Once players have linked their API keys, you can assign characters:
 
-1. Go to **Settings** → **Module Settings**
+1. Go to **Settings** -> **Module Settings**
 2. Find **Cyberpunk Red Agent Bridge**
 3. Click **Manage Characters** under "Player Assignments"
 4. In the assignment menu, you'll see:
@@ -126,24 +133,11 @@ The assignments will sync to the Agent platform, allowing players to interact wi
 
 ---
 
-## Configuration Options
-
-### World Settings (GM Only)
-
-| Setting | Scope | Description |
-|---------|-------|-------------|
-| Agent URL | World | Base URL of the Agent server |
-| Channel ID | World | Unique channel name for your game group |
-| Reverb Host | World | WebSocket host override |
-| Reverb Port | World | WebSocket port (0 = auto) |
-| Reverb Use SSL | World | Use secure WebSocket (wss://) |
-| Reverb App Key | World | Application key for Reverb |
-
 ### Client Settings (Per Player)
 
 | Setting | Scope | Description |
 |---------|-------|-------------|
-| API Key | Client | Personal Sanctum token from Agent dashboard |
+| API Key | Client | Personal API token from Agent dashboard |
 | Debug Mode | Client | Enable detailed console logging |
 
 ---
@@ -200,7 +194,7 @@ Once configured, the Agent Bridge enables:
 
 ## License
 
-See [LICENSE.md](LICENSE.md) for details.
+See [LICENSE.md](https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/blob/main/LICENSE.md) for details.
 
 ---
 
