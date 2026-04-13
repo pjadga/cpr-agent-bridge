@@ -22,7 +22,7 @@ A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agen
 
 - **Foundry VTT**: Version 12
 - **Game System**: [Cyberpunk Red Core](https://foundryvtt.com/packages/cyberpunk-red-core) system
-- **Agent Account**: An account on the Cyberpunk Agent platform (default: https://agent.surrealdisco.co.uk) the current hosting is free, but if you want to self host there is the source code on my [Gitlab repo](https://gitlab.com/surrealtech/cyberpunk-red-agent) 
+- **Agent Account**: An account on the Cyberpunk Agent platform (default: https://agent.surrealdisco.co.uk) the current hosting is free, but if you want to self host there is the source code on my [Gitlab repo](https://gitlab.com/surrealtech/cyberpunk-red-agent)
 
 ---
 
@@ -146,10 +146,10 @@ The assignments will sync to the Agent platform, allowing players to interact wi
 
 ### "Cyberpunk Bridge: Online" notification doesn't appear
 
-1. **Check your API Key**: Ensure you've entered a valid API key in the module settings
-2. **Verify the Agent URL**: Make sure the URL is correct and accessible
-3. **Check your browser console** (F12): Look for error messages
-4. **Enable Debug Mode**: Turn on debug mode in settings to see detailed connection logs
+- **Check your API Key**: Ensure you've entered a valid API key in the module settings
+- **Verify the Agent URL**: Make sure the URL is correct and accessible
+- **Check your browser console** (F12): Look for error messages
+- **Enable Debug Mode**: Turn on debug mode in settings to see detailed connection logs
 
 ### Players show "❌ Missing" in the assignment menu
 
@@ -159,22 +159,27 @@ The assignments will sync to the Agent platform, allowing players to interact wi
 
 ### Connection drops or is unstable
 
-1. Check your network connection
-2. Verify the Reverb settings match your server configuration
-3. If using a custom server, ensure WebSocket ports are open
-4. Try toggling the SSL setting if you're having connection issues
+- Check your network connection
+- Verify the Reverb settings match your server configuration
+- If using a custom server, ensure WebSocket ports are open
+- Try toggling the SSL setting if you're having connection issues
 
 ### Rolls aren't being captured
 
-1. Ensure the GM is connected (the GM acts as the bridge for roll capture)
-2. Check that the character is properly assigned to the player
-3. Verify both the player and GM have valid API keys configured
+- Ensure the GM is connected (the GM acts as the bridge for roll capture)
+- Check that the character is properly assigned to the player
+- Verify both the player and GM have valid API keys configured
 
 ### "Agent Link" shows "Pending..."
 
 - The player's account hasn't fully synced yet
 - Ask the player to save their settings again
 - Use the **Refresh All Users** button in the assignment menu
+
+### Rolls are not updating stats or item information
+
+- The Agent ID is likely out of update (It is possible to have a link across many games)
+- Use the Refresh button next to the user that is not receiving the synchronisation
 
 ---
 
