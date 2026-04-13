@@ -65,13 +65,13 @@ A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agen
 4. Check the box to enable it
 5. Click **Save Module Settings**
 
-### Step 2: Configure World Settings (GM Only)
+### Step 2: Configure Settings (GM Only)
 
-As the Game Master, you need to configure the connection settings:
+By default, the out of the box settings should work with the live Agent app as that is what it's designed for.
+However, should you need to change any of them, here's a table to help with what they do:
 
 1. Go to **Settings** -> **Module Settings**
 2. Find the **Cyberpunk Red Agent Bridge** section
-3. Configure the following settings:
 
 | Setting | Description | Default |
 |---------|-------------|---------|
@@ -84,9 +84,10 @@ As the Game Master, you need to configure the connection settings:
 | **Reverb App Key** | The Reverb application key | `itdsiqtx8cpskowawl1p` |
 | **Debug Mode** | Enable verbose console logging for troubleshooting | `false` |
 
-4. Click **Save Changes**
+3. Click **Save Changes**
 
 The reverb options are mainly there if you self-host the Agent app and need to setup custom tunnels and proxies.
+The Debug option is there so you can see what is being sent and received between the Agent app. Good for troubleshooting if you are self-hosting.
 
 ### Step 3: Player Setup
 
