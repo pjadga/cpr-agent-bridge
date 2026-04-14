@@ -184,10 +184,10 @@ var lt = /* @__PURE__ */ function(y) {
     key: "listenToAll",
     value: function(i) {
       var l = this;
-      return this.subscription.bind_global(function(h, p) {
+      return this.subscription.bind_global(function(h, f) {
         if (!h.startsWith("pusher:")) {
           var _ = l.options.namespace.replace(/\./g, "\\"), N = h.startsWith(_) ? h.substring(_.length + 1) : "." + h;
-          i(N, p);
+          i(N, f);
         }
       }), this;
     }
@@ -386,8 +386,8 @@ var lt = /* @__PURE__ */ function(y) {
     key: "on",
     value: function(i, l) {
       var h = this;
-      return this.listeners[i] = this.listeners[i] || [], this.events[i] || (this.events[i] = function(p, _) {
-        h.name === p && h.listeners[i] && h.listeners[i].forEach(function(N) {
+      return this.listeners[i] = this.listeners[i] || [], this.events[i] || (this.events[i] = function(f, _) {
+        h.name === f && h.listeners[i] && h.listeners[i].forEach(function(N) {
           return N(_);
         });
       }, this.socket.on(i, this.events[i])), this.listeners[i].push(l), this;
@@ -737,8 +737,8 @@ var lt = /* @__PURE__ */ function(y) {
     key: "leave",
     value: function(i) {
       var l = this, h = [i, "private-" + i, "private-encrypted-" + i, "presence-" + i];
-      h.forEach(function(p, _) {
-        l.leaveChannel(p);
+      h.forEach(function(f, _) {
+        l.leaveChannel(f);
       });
     }
     /**
@@ -834,8 +834,8 @@ var lt = /* @__PURE__ */ function(y) {
     key: "leave",
     value: function(i) {
       var l = this, h = [i, "private-" + i, "presence-" + i];
-      h.forEach(function(p) {
-        l.leaveChannel(p);
+      h.forEach(function(f) {
+        l.leaveChannel(f);
       });
     }
     /**
@@ -1137,17 +1137,17 @@ var jt = { exports: {} };
           };
           return r[l].call(h.exports, h, h.exports, i), h.l = !0, h.exports;
         }
-        return i.m = r, i.c = a, i.d = function(l, h, p) {
-          i.o(l, h) || Object.defineProperty(l, h, { enumerable: !0, get: p });
+        return i.m = r, i.c = a, i.d = function(l, h, f) {
+          i.o(l, h) || Object.defineProperty(l, h, { enumerable: !0, get: f });
         }, i.r = function(l) {
           typeof Symbol < "u" && Symbol.toStringTag && Object.defineProperty(l, Symbol.toStringTag, { value: "Module" }), Object.defineProperty(l, "__esModule", { value: !0 });
         }, i.t = function(l, h) {
           if (h & 1 && (l = i(l)), h & 8 || h & 4 && typeof l == "object" && l && l.__esModule) return l;
-          var p = /* @__PURE__ */ Object.create(null);
-          if (i.r(p), Object.defineProperty(p, "default", { enumerable: !0, value: l }), h & 2 && typeof l != "string") for (var _ in l) i.d(p, _, (function(N) {
+          var f = /* @__PURE__ */ Object.create(null);
+          if (i.r(f), Object.defineProperty(f, "default", { enumerable: !0, value: l }), h & 2 && typeof l != "string") for (var _ in l) i.d(f, _, (function(N) {
             return l[N];
           }).bind(null, _));
-          return p;
+          return f;
         }, i.n = function(l) {
           var h = l && l.__esModule ? (
             /******/
@@ -1185,7 +1185,7 @@ var jt = { exports: {} };
             };
           }();
           Object.defineProperty(a, "__esModule", { value: !0 });
-          var h = 256, p = (
+          var h = 256, f = (
             /** @class */
             function() {
               function R(b) {
@@ -1234,8 +1234,8 @@ var jt = { exports: {} };
               }, R;
             }()
           );
-          a.Coder = p;
-          var _ = new p();
+          a.Coder = f;
+          var _ = new f();
           function N(R) {
             return _.encode(R);
           }
@@ -1258,7 +1258,7 @@ var jt = { exports: {} };
                 var x = h;
                 return x += (44 - w & w - 46) >>> 8 & -h + w - 45 + 62, x += (94 - w & w - 96) >>> 8 & -h + w - 95 + 63, x += (47 - w & w - 58) >>> 8 & -h + w - 48 + 52, x += (64 - w & w - 91) >>> 8 & -h + w - 65 + 0, x += (96 - w & w - 123) >>> 8 & -h + w - 97 + 26, x;
               }, b;
-            }(p)
+            }(f)
           );
           a.URLSafeCoder = I;
           var P = new I();
@@ -1282,14 +1282,14 @@ var jt = { exports: {} };
         function(r, a, i) {
           Object.defineProperty(a, "__esModule", { value: !0 });
           var l = "utf8: invalid string", h = "utf8: invalid source encoding";
-          function p(T) {
+          function f(T) {
             for (var I = new Uint8Array(_(T)), P = 0, A = 0; A < T.length; A++) {
               var D = T.charCodeAt(A);
               D < 128 ? I[P++] = D : D < 2048 ? (I[P++] = 192 | D >> 6, I[P++] = 128 | D & 63) : D < 55296 ? (I[P++] = 224 | D >> 12, I[P++] = 128 | D >> 6 & 63, I[P++] = 128 | D & 63) : (A++, D = (D & 1023) << 10, D |= T.charCodeAt(A) & 1023, D += 65536, I[P++] = 240 | D >> 18, I[P++] = 128 | D >> 12 & 63, I[P++] = 128 | D >> 6 & 63, I[P++] = 128 | D & 63);
             }
             return I;
           }
-          a.encode = p;
+          a.encode = f;
           function _(T) {
             for (var I = 0, P = 0; P < T.length; P++) {
               var A = T.charCodeAt(P);
@@ -1375,7 +1375,7 @@ var jt = { exports: {} };
               delete this[e.number];
             }
           }
-          var h = new l("_pusher_script_", "Pusher.ScriptReceivers"), p = {
+          var h = new l("_pusher_script_", "Pusher.ScriptReceivers"), f = {
             VERSION: "8.4.0",
             PROTOCOL: 7,
             wsPort: 80,
@@ -1402,7 +1402,7 @@ var jt = { exports: {} };
             cdn_http: "http://js.pusher.com",
             cdn_https: "https://js.pusher.com",
             dependency_suffix: ""
-          }, _ = p;
+          }, _ = f;
           class N {
             constructor(e) {
               this.options = e, this.receivers = e.receivers || h, this.loading = {};
@@ -1617,15 +1617,15 @@ var jt = { exports: {} };
               };
             }
           }, u = He;
-          function g(n, ...e) {
+          function p(n, ...e) {
             for (var t = 0; t < e.length; t++) {
               var s = e[t];
               for (var o in s)
-                s[o] && s[o].constructor && s[o].constructor === Object ? n[o] = g(n[o] || {}, s[o]) : n[o] = s[o];
+                s[o] && s[o].constructor && s[o].constructor === Object ? n[o] = p(n[o] || {}, s[o]) : n[o] = s[o];
             }
             return n;
           }
-          function f() {
+          function g() {
             for (var n = ["Pusher"], e = 0; e < arguments.length; e++)
               typeof arguments[e] == "string" ? n.push(arguments[e]) : n.push(se(arguments[e]));
             return n.join(" : ");
@@ -1771,7 +1771,7 @@ var jt = { exports: {} };
               window.console && window.console.error ? window.console.error(e) : this.globalLogWarn(e);
             }
             log(e, ...t) {
-              var s = f.apply(this, arguments);
+              var s = g.apply(this, arguments);
               rt.log ? rt.log(s) : rt.logToConsole && e.bind(this)(s);
             }
           }
@@ -2003,7 +2003,7 @@ var jt = { exports: {} };
               })), this.emit(e, t);
             }
             buildTimelineMessage(e) {
-              return g({ cid: this.id }, e);
+              return p({ cid: this.id }, e);
             }
           }
           class Te {
@@ -2037,11 +2037,11 @@ var jt = { exports: {} };
             isInitialized: function() {
               return !0;
             }
-          }, dt = g({
+          }, dt = p({
             getSocket: function(n) {
               return O.HTTPFactory.createStreamingSocket(n);
             }
-          }, ht), ft = g({
+          }, ht), ft = p({
             getSocket: function(n) {
               return O.HTTPFactory.createPollingSocket(n);
             }
@@ -2049,7 +2049,7 @@ var jt = { exports: {} };
             isSupported: function() {
               return O.isXHRSupported();
             }
-          }, Kt = new Te(g({}, dt, pt)), Jt = new Te(g({}, ft, pt)), Qt = {
+          }, Kt = new Te(p({}, dt, pt)), Jt = new Te(p({}, ft, pt)), Qt = {
             ws: Xt,
             xhr_streaming: Kt,
             xhr_polling: Jt
@@ -2082,7 +2082,7 @@ var jt = { exports: {} };
               var e = O.isXDRSupported(n.useTLS);
               return e;
             }
-          }, Zt = new Te(g({}, dt, gt)), en = new Te(g({}, ft, gt));
+          }, Zt = new Te(p({}, dt, gt)), en = new Te(p({}, ft, gt));
           Be.xdr_streaming = Zt, Be.xdr_polling = en, Be.sockjs = Yt;
           var tn = Be;
           class nn extends pe {
@@ -2105,7 +2105,7 @@ var jt = { exports: {} };
               this.manager = e, this.transport = t, this.minPingDelay = s.minPingDelay, this.maxPingDelay = s.maxPingDelay, this.pingDelay = void 0;
             }
             createConnection(e, t, s, o) {
-              o = g({}, o, {
+              o = p({}, o, {
                 activityTimeout: this.pingDelay
               });
               var d = this.transport.createConnection(e, t, s, o), v = null, S = function() {
@@ -2284,7 +2284,7 @@ var jt = { exports: {} };
               this.transport.unbind("message", this.onMessage), this.transport.unbind("closed", this.onClosed);
             }
             finish(e, t) {
-              this.callback(g({ transport: this.transport, action: e }, t));
+              this.callback(p({ transport: this.transport, action: e }, t));
             }
           }
           class cn {
@@ -2640,7 +2640,7 @@ var jt = { exports: {} };
               this.activityTimer && this.activityTimer.ensureAborted();
             }
             buildConnectionCallbacks(e) {
-              return g({}, e, {
+              return p({}, e, {
                 message: (t) => {
                   this.resetActivityCheck(), this.emit("message", t);
                 },
@@ -2659,7 +2659,7 @@ var jt = { exports: {} };
               });
             }
             buildHandshakeCallbacks(e) {
-              return g({}, e, {
+              return p({}, e, {
                 connected: (t) => {
                   this.activityTimeout = Math.min(this.options.activityTimeout, t.activityTimeout, t.connection.activityTimeout || 1 / 0), this.clearUnavailableTimer(), this.setConnection(t.connection), this.socket_id = this.connection.id, this.updateState("connected", { socket_id: this.socket_id });
                 }
@@ -3388,7 +3388,7 @@ var jt = { exports: {} };
               this.key = e, this.session = t, this.events = [], this.options = s || {}, this.sent = 0, this.uniqueID = 0;
             }
             log(e, t) {
-              e <= this.options.level && (this.events.push(g({}, t, { timestamp: u.now() })), this.options.limit && this.events.length > this.options.limit && this.events.shift());
+              e <= this.options.level && (this.events.push(p({}, t, { timestamp: u.now() })), this.options.limit && this.events.length > this.options.limit && this.events.shift());
             }
             error(e) {
               this.log(ze.ERROR, e);
@@ -3403,7 +3403,7 @@ var jt = { exports: {} };
               return this.events.length === 0;
             }
             send(e, t) {
-              var s = g({
+              var s = p({
                 session: this.session,
                 bundle: this.sent + 1,
                 key: this.key,
@@ -3887,7 +3887,7 @@ class $r extends FormApplication {
       const i = [];
       if (c.find(".character-select").each((l, h) => {
         var T;
-        const p = h.dataset.userid, _ = h.value, N = game.users.get(p);
+        const f = h.dataset.userid, _ = h.value, N = game.users.get(f);
         if (N) {
           const I = _ === "" || _ === "null" ? null : _;
           (((T = N.character) == null ? void 0 : T.id) || null) !== I && (i.push({ _id: N.id, character: I }), a++);
@@ -3895,10 +3895,10 @@ class $r extends FormApplication {
       }), i.length > 0) {
         await User.updateDocuments(i), ui.notifications.info(`Cyberpunk Bridge: Updated ${a} player assignments!`);
         for (let l of i) {
-          const h = game.users.get(l._id), p = h == null ? void 0 : h.getFlag(L, "agent-link");
+          const h = game.users.get(l._id), f = h == null ? void 0 : h.getFlag(L, "agent-link");
           await window.cyberpunkBridge.sendResponse({
             type: "GM_LINK_PLAYER_CHARACTER",
-            agentLink: p || l._id,
+            agentLink: f || l._id,
             // Use agent-link as primary ID for Laravel
             character: l.character,
             isGM: h.isGM
@@ -3927,8 +3927,8 @@ class Gr {
   async rollAndCapture(c, r, a = null) {
     return console.log(`%c[Bridge] Starting Render Interceptor for Actor ${c}`, "color: #00ffff; font-weight: bold;"), this._isCapturingRoll = !0, game.settings.get("core", "rollMode"), a && await game.settings.set("core", "rollMode", a), new Promise(async (i, l) => {
       let h = !1;
-      const p = renderTemplate, _ = function(N, T) {
-        return N && typeof N == "string" && N.includes("rollcard") && (console.log(`%c[Bridge] Intercepted Render: ${N}`, "color: #00ff00;", T), h = !0, renderTemplate = p, i({
+      const f = renderTemplate, _ = function(N, T) {
+        return N && typeof N == "string" && N.includes("rollcard") && (console.log(`%c[Bridge] Intercepted Render: ${N}`, "color: #00ff00;", T), h = !0, renderTemplate = f, i({
           success: !0,
           total: T.resultTotal,
           isCriticalSuccess: T.wasCritSuccess ? T.wasCritSuccess() : T.isCriticalSuccess || !1,
@@ -3936,15 +3936,15 @@ class Gr {
           label: T.rollTitle,
           rollMode: a || game.settings.get("core", "rollMode"),
           rawRoll: T
-        })), p.apply(this, arguments);
+        })), f.apply(this, arguments);
       };
       renderTemplate = _, setTimeout(async () => {
-        h || (renderTemplate = p, console.warn("[Bridge] ❌ Interceptor timed out. No rollcard rendered."), i({ success: !1, error: "Timed out waiting for render" }));
+        h || (renderTemplate = f, console.warn("[Bridge] ❌ Interceptor timed out. No rollcard rendered."), i({ success: !1, error: "Timed out waiting for render" }));
       }, 5e3);
       try {
         await r();
       } catch {
-        renderTemplate = p, i({ success: !1, error: "Trigger failed" });
+        renderTemplate = f, i({ success: !1, error: "Trigger failed" });
       }
     });
   }
@@ -4035,13 +4035,13 @@ class Gr {
     const c = game.settings.get(L, "apiUrl"), r = game.settings.get(L, "apiKey"), a = game.settings.get(L, "debugMode"), i = Number(game.settings.get(L, "reverbPort") || 0) || 0, l = game.settings.get(L, "reverbUseSSL"), h = (game.settings.get(L, "reverbHost") || "").trim();
     if (!r || !c) return;
     this.echo && this.echo.disconnect();
-    let p;
+    let f;
     try {
-      p = new URL(c);
+      f = new URL(c);
     } catch {
       return;
     }
-    const _ = h || p.hostname, N = p.protocol === "https:", T = typeof l == "boolean" ? l : void 0, I = T ?? N, P = I ? 443 : 80, A = i > 0 ? i : P;
+    const _ = h || f.hostname, N = f.protocol === "https:", T = typeof l == "boolean" ? l : void 0, I = T ?? N, P = I ? 443 : 80, A = i > 0 ? i : P;
     this.echo = new Ur({
       broadcaster: "reverb",
       key: game.settings.get(L, "reverbKey") || "itdsiqtx8cpskowawl1p",
@@ -4085,7 +4085,7 @@ class Gr {
       const i = game.user.character, l = game.user.getFlag(L, "agent-link");
       r && (console.log(`[Bridge] syncPlayerLink: Broadcasting character link for ${(i == null ? void 0 : i.name) || "None"}...`), console.log(`[Bridge] syncPlayerLink: Foundry User ID: ${game.user.id}, Name: ${game.user.name}, isGM: ${game.user.isGM}`), console.log(`[Bridge] syncPlayerLink: Current stored agent-link: ${l || "(none)"}`));
       try {
-        const p = await this.sendResponse({
+        const f = await this.sendResponse({
           type: "LINK_PLAYER_CHARACTER",
           character: i ? { id: i.id, name: i.name } : null,
           actorName: i ? i.name : null,
@@ -4094,9 +4094,9 @@ class Gr {
           foundryUserName: game.user.name,
           isGM: game.user.isGM
         });
-        r && console.log("[Bridge] syncPlayerLink: Laravel response:", p), p && p.agent_link ? l !== p.agent_link && (console.log(`%c[Bridge] Link established! Agent Link: ${p.agent_link}`, "color: #00ff00; font-weight: bold;"), console.log(`%c[Bridge] Laravel User ID: ${p.user_id || "(not provided)"}`, "color: #00ff00;"), await game.user.setFlag(L, "agent-link", p.agent_link), (h = ui.notifications) == null || h.info("Agent: Account linked successfully.")) : console.warn("[Bridge] syncPlayerLink: API responded but no agent_link was returned.", p);
-      } catch (p) {
-        console.error("[Bridge] syncPlayerLink: Failed to broadcast link to Laravel.", p);
+        r && console.log("[Bridge] syncPlayerLink: Laravel response:", f), f && f.agent_link ? l !== f.agent_link && (console.log(`%c[Bridge] Link established! Agent Link: ${f.agent_link}`, "color: #00ff00; font-weight: bold;"), console.log(`%c[Bridge] Laravel User ID: ${f.user_id || "(not provided)"}`, "color: #00ff00;"), await game.user.setFlag(L, "agent-link", f.agent_link), (h = ui.notifications) == null || h.info("Agent: Account linked successfully.")) : console.warn("[Bridge] syncPlayerLink: API responded but no agent_link was returned.", f);
+      } catch (f) {
+        console.error("[Bridge] syncPlayerLink: Failed to broadcast link to Laravel.", f);
       }
     };
     await a(), this.hookIds.updateUser || (this.hookIds.updateUser = Hooks.on("updateUser", (i, l) => {
@@ -4116,30 +4116,30 @@ class Gr {
     };
     this.hookIds.updateActor = Hooks.on("updateActor", (r, a, i, l) => {
       if (a.system) {
-        const h = {}, p = (_, N = "system.") => {
+        const h = {}, f = (_, N = "system.") => {
           for (let T in _) {
             const I = _[T];
-            I !== null && typeof I == "object" && !Array.isArray(I) && !(I instanceof foundry.utils.Color) ? p(I, `${N}${T}.`) : h[`${N}${T}`] = I;
+            I !== null && typeof I == "object" && !Array.isArray(I) && !(I instanceof foundry.utils.Color) ? f(I, `${N}${T}.`) : h[`${N}${T}`] = I;
           }
         };
-        p(a.system), c(r, h);
+        f(a.system), c(r, h);
       }
     }), this.hookIds.updateItem = Hooks.on("updateItem", (r, a, i, l) => {
       const h = r.parent;
       if (h instanceof Actor) {
-        const p = {}, _ = `items.${r.id}.`;
+        const f = {}, _ = `items.${r.id}.`;
         if (a.system) {
           const N = (T, I = `${_}system.`) => {
             for (let P in T) {
               const A = T[P];
-              A !== null && typeof A == "object" && !Array.isArray(A) && !(A instanceof foundry.utils.Color) ? N(A, `${I}${P}.`) : p[`${I}${P}`] = A;
+              A !== null && typeof A == "object" && !Array.isArray(A) && !(A instanceof foundry.utils.Color) ? N(A, `${I}${P}.`) : f[`${I}${P}`] = A;
             }
           };
           N(a.system);
         }
         for (let N in a)
-          N !== "system" && N !== "_id" && (p[`${_}${N}`] = a[N]);
-        Object.keys(p).length > 0 && c(h, p);
+          N !== "system" && N !== "_id" && (f[`${_}${N}`] = a[N]);
+        Object.keys(f).length > 0 && c(h, f);
       }
     }), this.hookIds.createItem = Hooks.on("createItem", (r, a, i) => {
       const l = r.parent;
@@ -4238,62 +4238,76 @@ class Gr {
     console.log(`%c[Bridge] Incoming Call: ${a}`, "color: #00ffff; font-weight: bold;", r);
     const i = r.requestId, l = r.agent_link || r.agentLink;
     i && l && (this.requestAgentLinks.set(i, l), setTimeout(() => this.requestAgentLinks.delete(i), 3e4));
-    const h = game.user.getFlag(L, "agent-link"), p = r.actorId, _ = (P = game.user.character) == null ? void 0 : P.id, N = game.settings.get(L, "debugMode");
-    N && console.log(`[Bridge] handleIncomingData: requestId=${i}, agentLink=${l}, myAgentLink=${h}, actorId=${p}, myCharacterId=${_}`);
+    const h = game.user.getFlag(L, "agent-link"), f = r.actorId, _ = (P = game.user.character) == null ? void 0 : P.id, N = game.settings.get(L, "debugMode");
+    N && console.log(`[Bridge] handleIncomingData: requestId=${i}, agentLink=${l}, myAgentLink=${h}, actorId=${f}, myCharacterId=${_}`);
     let T = !1;
-    if (game.user.isGM || h && (i === h || l === h) ? T = !0 : !h && i && p && _ === p && (console.log(`[Bridge] Discovery: Matching incoming request to character ${p}`), T = !0), !T) {
+    if (game.user.isGM || h && (i === h || l === h) ? T = !0 : !h && i && f && _ === f && (console.log(`[Bridge] Discovery: Matching incoming request to character ${f}`), T = !0), !T) {
       N && console.log("[Bridge] handleIncomingData: Message ignored (not for me).");
       return;
     }
-    !game.user.isGM && l && h !== l && (i === l || p && _ === p) && (console.log(`%c[Bridge] Setting agent-link flag: ${l}`, "color: #00ff00; font-weight: bold;"), await game.user.setFlag(L, "agent-link", l), (A = ui.notifications) == null || A.info("Agent: Account linked!"));
+    !game.user.isGM && l && h !== l && (i === l || f && _ === f) && (console.log(`%c[Bridge] Setting agent-link flag: ${l}`, "color: #00ff00; font-weight: bold;"), await game.user.setFlag(L, "agent-link", l), (A = ui.notifications) == null || A.info("Agent: Account linked!"));
     let I = r.tokenId;
-    if (!I && p) {
-      const u = canvas.tokens.placeables.find((g) => {
-        var f;
-        return ((f = g.actor) == null ? void 0 : f.id) === p;
+    if (!I && f) {
+      const u = canvas.tokens.placeables.find((p) => {
+        var g;
+        return ((g = p.actor) == null ? void 0 : g.id) === f;
       });
       u && (I = u.id);
     }
     switch (a) {
       case "UPDATE_ACTOR": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (!u) {
-          console.warn(`⚠️ Actor ID ${p} not found in this world.`);
+          console.warn(`⚠️ Actor ID ${f} not found in this world.`);
           return;
         }
-        await u.update(r.changes), ui.notifications.info(`💾 Sync: ${u.name} updated.`), await this.sendResponse({ type: "CONFIRMATION", action: a, actorId: p, success: !0, requestId: i });
+        await u.update(r.changes), ui.notifications.info(`💾 Sync: ${u.name} updated.`), await this.sendResponse({ type: "CONFIRMATION", action: a, actorId: f, success: !0, requestId: i });
+        break;
+      }
+      case "CONSUME_ITEM": {
+        const u = game.actors.get(f);
+        if (!u) {
+          console.warn(`Actor ID ${f} not found in this world.`);
+          return;
+        }
+        const p = u.items.get(r.itemId);
+        if (!p) {
+          console.warn(`Item ID ${r.itemId} not found on actor ${u.name}.`);
+          return;
+        }
+        await p.snort(), ui.notifications.info(`Sync: ${p.name} consumed.`), await this.sendResponse({ type: "CONFIRMATION", action: a, actorId: f, success: !0, requestId: i });
         break;
       }
       case "ITEM_EQUIP": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = u.items.get(r.itemId);
-          if (g) {
-            const f = `items.${r.itemId}.system.equipped`;
-            await g.update({ "system.equipped": r.state }), await this.sendResponse({ type: "SHEET_DELTA", actorId: p, delta: { [f]: r.state }, success: !0, requestId: i });
+          const p = u.items.get(r.itemId);
+          if (p) {
+            const g = `items.${r.itemId}.system.equipped`;
+            await p.update({ "system.equipped": r.state }), await this.sendResponse({ type: "SHEET_DELTA", actorId: f, delta: { [g]: r.state }, success: !0, requestId: i });
           }
         }
         break;
       }
       case "INSTALL_PROGRAM": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (!u) return;
-        const g = u.items.get(r.cyberdeckId), f = u.items.get(r.programId);
-        if (!g || !f) return;
-        const m = g.system.installedItems.usedSlots || 0, k = g.system.installedItems.slots || 0, U = f.system.size || 1;
+        const p = u.items.get(r.cyberdeckId), g = u.items.get(r.programId);
+        if (!p || !g) return;
+        const m = p.system.installedItems.usedSlots || 0, k = p.system.installedItems.slots || 0, U = g.system.size || 1;
         if (m + U > k) {
           ui.notifications.warn("Not enough memory slots on cyberdeck.");
           return;
         }
-        const C = g.system.installedItems.list || [];
+        const C = p.system.installedItems.list || [];
         if (C.includes(r.programId)) return;
         const M = [...C, r.programId], q = m + U;
-        await g.update({
+        await p.update({
           "system.installedItems.list": M,
           "system.installedItems.usedSlots": q
         }), await this.sendResponse({
           type: "SHEET_DELTA",
-          actorId: p,
+          actorId: f,
           delta: {
             [`items.${r.cyberdeckId}.system.installedItems.list`]: M,
             [`items.${r.cyberdeckId}.system.installedItems.usedSlots`]: q
@@ -4304,14 +4318,14 @@ class Gr {
         break;
       }
       case "REMOVE_PROGRAM": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (!u) return;
-        const g = u.items.get(r.cyberdeckId), f = u.items.get(r.programId);
-        if (!g) return;
-        const m = g.system.installedItems.list || [];
+        const p = u.items.get(r.cyberdeckId), g = u.items.get(r.programId);
+        if (!p) return;
+        const m = p.system.installedItems.list || [];
         if (!m.includes(r.programId)) return;
-        const k = m.filter((z) => z !== r.programId), U = f && f.system.size || 1, C = g.system.installedItems.usedSlots || 0, M = Math.max(0, C - U);
-        await g.update({
+        const k = m.filter((z) => z !== r.programId), U = g && g.system.size || 1, C = p.system.installedItems.usedSlots || 0, M = Math.max(0, C - U);
+        await p.update({
           "system.installedItems.list": k,
           "system.installedItems.usedSlots": M
         });
@@ -4319,16 +4333,16 @@ class Gr {
           [`items.${r.cyberdeckId}.system.installedItems.list`]: k,
           [`items.${r.cyberdeckId}.system.installedItems.usedSlots`]: M
         };
-        f && f.system.isRezzed && (await f.update({ "system.isRezzed": !1 }), q[`items.${r.programId}.system.isRezzed`] = !1), await this.sendResponse({ type: "SHEET_DELTA", actorId: p, delta: q, success: !0, requestId: i });
+        g && g.system.isRezzed && (await g.update({ "system.isRezzed": !1 }), q[`items.${r.programId}.system.isRezzed`] = !1), await this.sendResponse({ type: "SHEET_DELTA", actorId: f, delta: q, success: !0, requestId: i });
         break;
       }
       case "TOGGLE_REZ": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = u.items.get(r.programId);
-          g && (await g.update({ "system.isRezzed": r.targetState }), await this.sendResponse({
+          const p = u.items.get(r.programId);
+          p && (await p.update({ "system.isRezzed": r.targetState }), await this.sendResponse({
             type: "SHEET_DELTA",
-            actorId: p,
+            actorId: f,
             delta: { [`items.${r.programId}.system.isRezzed`]: r.targetState },
             success: !0,
             requestId: i
@@ -4337,28 +4351,28 @@ class Gr {
         break;
       }
       case "DAMAGE_ROLL": {
-        const u = game.actors.get(p), g = u.items.get(r.weaponId);
-        if (u && g) {
-          const f = async () => {
+        const u = game.actors.get(f), p = u.items.get(r.weaponId);
+        if (u && p) {
+          const g = async () => {
             await u.sheet._onRoll({
               "data-roll-type": "damage",
-              "data-item-id": g.id,
+              "data-item-id": p.id,
               type: "click",
               currentTarget: {
                 "data-roll-type": "damage",
-                "data-item-id": g.id
+                "data-item-id": p.id
               }
             });
-          }, m = await this.rollAndCapture(p, f, r.rollMode);
+          }, m = await this.rollAndCapture(f, g, r.rollMode);
           m.success && await this.sendResponse({
             type: "ROLL_RESULT",
             rollMode: m.rollMode,
             requestId: i,
-            actorId: p,
+            actorId: f,
             total: m.total,
             isCriticalSuccess: m.isCriticalSuccess,
             isCriticalFailure: m.isCriticalFailure,
-            label: `${g.name} (Damage)`,
+            label: `${p.name} (Damage)`,
             rawRoll: {
               total: m.total,
               isCriticalSuccess: m.isCriticalSuccess,
@@ -4373,9 +4387,9 @@ class Gr {
         break;
       }
       case "DEATH_SAVE": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = async () => {
+          const p = async () => {
             await u.sheet._onRoll({
               "data-roll-type": "deathsave",
               "data-roll-title": "Death Save",
@@ -4385,30 +4399,30 @@ class Gr {
                 "data-roll-title": "Death Save"
               }
             });
-          }, f = await this.rollAndCapture(p, g, r.rollMode);
-          if (f.success) {
+          }, g = await this.rollAndCapture(f, p, r.rollMode);
+          if (g.success) {
             const m = u.system.derivedStats.deathsave || {};
             await this.sendResponse({
               type: "ROLL_RESULT",
-              rollMode: f.rollMode,
+              rollMode: g.rollMode,
               requestId: i,
-              actorId: p,
-              total: f.total,
-              isCriticalSuccess: f.isCriticalSuccess,
-              isCriticalFailure: f.isCriticalFailure,
+              actorId: f,
+              total: g.total,
+              isCriticalSuccess: g.isCriticalSuccess,
+              isCriticalFailure: g.isCriticalFailure,
               label: "Death Save",
               rawRoll: {
-                total: f.total,
-                isCriticalSuccess: f.isCriticalSuccess,
-                isCriticalFailure: f.isCriticalFailure,
-                label: f.label,
-                resultTotal: (b = f.rawRoll) == null ? void 0 : b.resultTotal,
-                rollTitle: (w = f.rawRoll) == null ? void 0 : w.rollTitle
+                total: g.total,
+                isCriticalSuccess: g.isCriticalSuccess,
+                isCriticalFailure: g.isCriticalFailure,
+                label: g.label,
+                resultTotal: (b = g.rawRoll) == null ? void 0 : b.resultTotal,
+                rollTitle: (w = g.rawRoll) == null ? void 0 : w.rollTitle
               },
               success: !0
             }), await this.sendResponse({
               type: "SHEET_DELTA",
-              actorId: p,
+              actorId: f,
               delta: { "system.derivedStats.deathsave": m },
               tab: "stats",
               success: !0
@@ -4418,7 +4432,7 @@ class Gr {
         break;
       }
       case "FACEDOWN_ROLL": {
-        const u = game.actors.get(p), g = async () => {
+        const u = game.actors.get(f), p = async () => {
           await u.sheet._onRoll({
             "data-roll-type": "facedown",
             "data-roll-title": "Face Down",
@@ -4428,49 +4442,49 @@ class Gr {
               "data-roll-title": "Face Down"
             }
           });
-        }, f = await this.rollAndCapture(p, g, r.rollMode);
-        f.success && await this.sendResponse({
+        }, g = await this.rollAndCapture(f, p, r.rollMode);
+        g.success && await this.sendResponse({
           type: "ROLL_RESULT",
-          rollMode: f.rollMode,
+          rollMode: g.rollMode,
           requestId: i,
-          actorId: p,
-          total: f.total,
-          isCriticalSuccess: f.isCriticalSuccess,
-          isCriticalFailure: f.isCriticalFailure,
+          actorId: f,
+          total: g.total,
+          isCriticalSuccess: g.isCriticalSuccess,
+          isCriticalFailure: g.isCriticalFailure,
           rawRoll: {
-            total: f.total,
-            isCriticalSuccess: f.isCriticalSuccess,
-            isCriticalFailure: f.isCriticalFailure,
-            label: f.label,
-            resultTotal: (x = f.rawRoll) == null ? void 0 : x.resultTotal,
-            rollTitle: (B = f.rawRoll) == null ? void 0 : B.rollTitle
+            total: g.total,
+            isCriticalSuccess: g.isCriticalSuccess,
+            isCriticalFailure: g.isCriticalFailure,
+            label: g.label,
+            resultTotal: (x = g.rawRoll) == null ? void 0 : x.resultTotal,
+            rollTitle: (B = g.rawRoll) == null ? void 0 : B.rollTitle
           },
           success: !0
         });
         break;
       }
       case "INITIATIVE_ROLL": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = async () => {
+          const p = async () => {
             await u.rollInitiative();
-          }, f = await this.rollAndCapture(p, g, r.rollMode);
-          f.success && await this.sendResponse({
+          }, g = await this.rollAndCapture(f, p, r.rollMode);
+          g.success && await this.sendResponse({
             type: "ROLL_RESULT",
-            rollMode: f.rollMode,
+            rollMode: g.rollMode,
             requestId: i,
-            actorId: p,
-            total: f.total,
-            isCriticalSuccess: f.isCriticalSuccess,
-            isCriticalFailure: f.isCriticalFailure,
+            actorId: f,
+            total: g.total,
+            isCriticalSuccess: g.isCriticalSuccess,
+            isCriticalFailure: g.isCriticalFailure,
             label: "Initiative",
             rawRoll: {
-              total: f.total,
-              isCriticalSuccess: f.isCriticalSuccess,
-              isCriticalFailure: f.isCriticalFailure,
-              label: f.label,
-              resultTotal: (K = f.rawRoll) == null ? void 0 : K.resultTotal,
-              rollTitle: (J = f.rawRoll) == null ? void 0 : J.rollTitle
+              total: g.total,
+              isCriticalSuccess: g.isCriticalSuccess,
+              isCriticalFailure: g.isCriticalFailure,
+              label: g.label,
+              resultTotal: (K = g.rawRoll) == null ? void 0 : K.resultTotal,
+              rollTitle: (J = g.rawRoll) == null ? void 0 : J.rollTitle
             },
             success: !0
           });
@@ -4478,21 +4492,21 @@ class Gr {
         break;
       }
       case "PROGRAM_ROLL": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = document.createElement("a");
-          g.dataset.rollType = r.rollType, g.dataset.cyberdeckId = r.cyberdeckId, g.dataset.rollTitle = r.programName, g.dataset.interfaceAbility = r.programName, g.dataset.itemId = r.cyberdeckId, g.dataset.programId = r.programId, g.dataset.executionType = r.executionType;
-          const f = async () => {
+          const p = document.createElement("a");
+          p.dataset.rollType = r.rollType, p.dataset.cyberdeckId = r.cyberdeckId, p.dataset.rollTitle = r.programName, p.dataset.interfaceAbility = r.programName, p.dataset.itemId = r.cyberdeckId, p.dataset.programId = r.programId, p.dataset.executionType = r.executionType;
+          const g = async () => {
             await u.sheet._onRoll({
               type: "click",
-              currentTarget: g
+              currentTarget: p
             });
-          }, m = await this.rollAndCapture(p, f, r.rollMode);
+          }, m = await this.rollAndCapture(f, g, r.rollMode);
           m.success && await this.sendResponse({
             type: "ROLL_RESULT",
             rollMode: m.rollMode,
             requestId: i,
-            actorId: p,
+            actorId: f,
             total: m.total,
             isCriticalSuccess: m.isCriticalSuccess,
             isCriticalFailure: m.isCriticalFailure,
@@ -4511,31 +4525,31 @@ class Gr {
         break;
       }
       case "ROLE_ROLL": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = u.items.getName(r.itemName);
-          if (g) {
-            const f = {
+          const p = u.items.getName(r.itemName);
+          if (p) {
+            const g = {
               "data-roll-type": "roleAbility",
               "data-roll-title": r.label,
-              "data-item-id": g.id,
+              "data-item-id": p.id,
               type: "click",
               currentTarget: {
                 "data-roll-type": "roleAbility",
                 "data-roll-title": r.label,
-                "data-item-id": g.id,
+                "data-item-id": p.id,
                 "data-item-subtype": r.label
               }
             };
-            r.isAbility && (f["data-roll-subtype"] = "subRoleAbility", f["data-role-name"] = r.label, f.currentTarget["data-roll-subtype"] = "subRoleAbility", f.currentTarget["data-role-name"] = r.label);
+            r.isAbility && (g["data-roll-subtype"] = "subRoleAbility", g["data-role-name"] = r.label, g.currentTarget["data-roll-subtype"] = "subRoleAbility", g.currentTarget["data-role-name"] = r.label);
             const m = async () => {
-              await u.sheet._onRoll(f);
-            }, k = await this.rollAndCapture(p, m, r.rollMode);
+              await u.sheet._onRoll(g);
+            }, k = await this.rollAndCapture(f, m, r.rollMode);
             k.success && await this.sendResponse({
               type: "ROLL_RESULT",
               rollMode: k.rollMode,
               requestId: i,
-              actorId: p,
+              actorId: f,
               total: k.total,
               isCriticalSuccess: k.isCriticalSuccess,
               isCriticalFailure: k.isCriticalFailure,
@@ -4555,28 +4569,28 @@ class Gr {
         break;
       }
       case "SKILL_ROLL": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = u.items.getName(r.label);
-          if (g) {
-            const f = async () => {
+          const p = u.items.getName(r.label);
+          if (p) {
+            const g = async () => {
               await u.sheet._onRoll({
                 "data-roll-type": "skill",
                 "data-roll-title": r.label,
-                "data-item-id": g.id,
+                "data-item-id": p.id,
                 type: "click",
                 currentTarget: {
                   "data-roll-type": "skill",
                   "data-roll-title": r.label,
-                  "data-item-id": g.id
+                  "data-item-id": p.id
                 }
               });
-            }, m = await this.rollAndCapture(p, f, r.rollMode);
+            }, m = await this.rollAndCapture(f, g, r.rollMode);
             m.success && await this.sendResponse({
               type: "ROLL_RESULT",
               rollMode: m.rollMode,
               requestId: i,
-              actorId: p,
+              actorId: f,
               total: m.total,
               isCriticalSuccess: m.isCriticalSuccess,
               isCriticalFailure: m.isCriticalFailure,
@@ -4596,9 +4610,9 @@ class Gr {
         break;
       }
       case "STAT_ROLL": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = async () => {
+          const p = async () => {
             await u.sheet._onRoll({
               "data-roll-type": "stat",
               "data-roll-title": r.label,
@@ -4608,23 +4622,23 @@ class Gr {
                 "data-roll-title": r.label
               }
             });
-          }, f = await this.rollAndCapture(p, g, r.rollMode);
-          f.success && await this.sendResponse({
+          }, g = await this.rollAndCapture(f, p, r.rollMode);
+          g.success && await this.sendResponse({
             type: "ROLL_RESULT",
-            rollMode: f.rollMode,
+            rollMode: g.rollMode,
             requestId: i,
-            actorId: p,
-            total: f.total,
-            isCriticalSuccess: f.isCriticalSuccess,
-            isCriticalFailure: f.isCriticalFailure,
+            actorId: f,
+            total: g.total,
+            isCriticalSuccess: g.isCriticalSuccess,
+            isCriticalFailure: g.isCriticalFailure,
             label: r.label,
             rawRoll: {
-              total: f.total,
-              isCriticalSuccess: f.isCriticalSuccess,
-              isCriticalFailure: f.isCriticalFailure,
-              label: f.label,
-              resultTotal: (me = f.rawRoll) == null ? void 0 : me.resultTotal,
-              rollTitle: (ve = f.rawRoll) == null ? void 0 : ve.rollTitle
+              total: g.total,
+              isCriticalSuccess: g.isCriticalSuccess,
+              isCriticalFailure: g.isCriticalFailure,
+              label: g.label,
+              resultTotal: (me = g.rawRoll) == null ? void 0 : me.resultTotal,
+              rollTitle: (ve = g.rawRoll) == null ? void 0 : ve.rollTitle
             },
             success: !0
           });
@@ -4632,17 +4646,17 @@ class Gr {
         break;
       }
       case "DICE_ROLL": {
-        i && this.activeRequests.set(i, { actorId: p, timestamp: Date.now() });
+        i && this.activeRequests.set(i, { actorId: f, timestamp: Date.now() });
         const u = new Roll(r.formula);
         await u.evaluate(), await u.toMessage({
-          speaker: ChatMessage.getSpeaker({ actor: game.actors.get(p) }),
+          speaker: ChatMessage.getSpeaker({ actor: game.actors.get(f) }),
           flavor: r.flavor,
           rollMode: r.rollMode || game.settings.get("core", "rollMode")
         }), await this.sendResponse({
           type: "ROLL_RESULT",
           rollMode: r.rollMode || game.settings.get("core", "rollMode"),
           requestId: i,
-          actorId: p,
+          actorId: f,
           total: u.total,
           isCriticalSuccess: u.isCriticalSuccess || !1,
           isCriticalFailure: u.isCriticalFailure || !1,
@@ -4660,36 +4674,36 @@ class Gr {
       case "MOVE_TOKEN": {
         const u = canvas.tokens.get(I);
         if (u) {
-          let g = {};
-          r.direction === "up" ? g.y = u.document.y - canvas.grid.size : r.direction === "down" ? g.y = u.document.y + canvas.grid.size : r.direction === "left" ? g.x = u.document.x - canvas.grid.size : r.direction === "right" && (g.x = u.document.x + canvas.grid.size), await u.document.update(g), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: I, success: !0, requestId: i });
+          let p = {};
+          r.direction === "up" ? p.y = u.document.y - canvas.grid.size : r.direction === "down" ? p.y = u.document.y + canvas.grid.size : r.direction === "left" ? p.x = u.document.x - canvas.grid.size : r.direction === "right" && (p.x = u.document.x + canvas.grid.size), await u.document.update(p), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: I, success: !0, requestId: i });
         } else
           console.warn(`MOVE_TOKEN: Token ID ${I} not found.`), await this.sendResponse({ type: "CONFIRMATION", action: a, tokenId: I, success: !1, message: "Token not found", requestId: i });
         break;
       }
       case "RELOAD_WEAPON": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = u.items.get(r.weaponId), f = r.ammoId ? u.items.get(r.ammoId) : null, m = async () => {
-            await g.reload();
+          const p = u.items.get(r.weaponId), g = r.ammoId ? u.items.get(r.ammoId) : null, m = async () => {
+            await p.reload();
             const k = {
               [`items.${r.weaponId}.system.magazine`]: {
-                value: g.system.magazine.value,
-                max: g.system.magazine.max
+                value: p.system.magazine.value,
+                max: p.system.magazine.max
               },
               [`items.${r.weaponId}.system.installedItems`]: {
-                list: [...g.system.installedItems.list],
-                slots: g.system.installedItems.slots,
-                usedSlots: g.system.installedItems.usedSlots
+                list: [...p.system.installedItems.list],
+                slots: p.system.installedItems.slots,
+                usedSlots: p.system.installedItems.usedSlots
               }
             };
-            f && (k[`items.${f.id}.system.amount`] = f.system.amount), u.items.filter((C) => C.type === "ammo").forEach((C) => {
+            g && (k[`items.${g.id}.system.amount`] = g.system.amount), u.items.filter((C) => C.type === "ammo").forEach((C) => {
               k[`items.${C.id}.system.amount`] = C.system.amount;
-            }), await this.sendResponse({ type: "SHEET_DELTA", actorId: p, delta: k, success: !0, requestId: i });
+            }), await this.sendResponse({ type: "SHEET_DELTA", actorId: f, delta: k, success: !0, requestId: i });
           };
-          if (f) {
-            let k = g.getInstalledItems("ammo");
-            k && k.length > 0 && g.uninstallItems(k), setTimeout(function() {
-              g.installItems([f]);
+          if (g) {
+            let k = p.getInstalledItems("ammo");
+            k && k.length > 0 && p.uninstallItems(k), setTimeout(function() {
+              p.installItems([g]);
             }, 500), setTimeout(async () => {
               await m();
             }, 1500);
@@ -4704,29 +4718,29 @@ class Gr {
         break;
       }
       case "UPDATE_STAT": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = `system.${r.label}`;
-          let f;
+          const p = `system.${r.label}`;
+          let g;
           if (r.operation === "inc") {
-            const m = g.split(".");
+            const m = p.split(".");
             let k = u;
             for (let M = 0; M < m.length; M++)
               k = M === 0 ? k[m[M]] : k == null ? void 0 : k[m[M]];
             const U = Number(k) || 0, C = Number(r.delta) || 0;
-            f = U + C;
+            g = U + C;
           } else
-            f = typeof r.value == "string" ? r.value : Number(r.value) || 0;
-          await u.update({ [g]: f }), await this.sendResponse({ type: "SHEET_DELTA", actorId: p, delta: { [g]: f }, tab: "stats", success: !0, requestId: i });
+            g = typeof r.value == "string" ? r.value : Number(r.value) || 0;
+          await u.update({ [p]: g }), await this.sendResponse({ type: "SHEET_DELTA", actorId: f, delta: { [p]: g }, tab: "stats", success: !0, requestId: i });
         }
         break;
       }
       case "ATTACK_ROLL": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (u) {
-          const g = r.weaponId, f = r.fireMode, m = canvas.tokens.get(r.targetId), k = "firetype-" + g, U = "cyberpunk-red-core";
+          const p = r.weaponId, g = r.fireMode, m = canvas.tokens.get(r.targetId), k = "firetype-" + p, U = "cyberpunk-red-core";
           let C = "";
-          switch (f) {
+          switch (g) {
             case "Auto":
               C = "autofire";
               break;
@@ -4742,7 +4756,7 @@ class Gr {
           }
           m && m.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), C === "" ? await u.unsetFlag(U, k) : await u.setFlag(U, k, C);
           const M = document.createElement("a");
-          M.dataset.rollType = "attack", M.dataset.itemId = g, M.dataset.rollTitle = f + " Attack";
+          M.dataset.rollType = "attack", M.dataset.itemId = p, M.dataset.rollTitle = g + " Attack";
           const q = async () => {
             await u.sheet._onRoll({
               preventDefault: () => {
@@ -4773,7 +4787,7 @@ class Gr {
                 "Medium Melee Weapon": ["VS"],
                 "Heavy Melee Weapon": ["VS"],
                 "Very Heavy Melee Weapon": ["VS"]
-              }, ee = [6, 12, 25, 50, 100, 200, 400, 800], ye = m.center.x - ne.center.x, be = m.center.y - ne.center.y, G = Math.sqrt(Math.pow(ye, 2) + Math.pow(be, 2)), fe = Math.ceil(G / (((Oe = canvas.grid) == null ? void 0 : Oe.size) || 128)), se = u.items.get(g), de = {
+              }, ee = [6, 12, 25, 50, 100, 200, 400, 800], ye = m.center.x - ne.center.x, be = m.center.y - ne.center.y, G = Math.sqrt(Math.pow(ye, 2) + Math.pow(be, 2)), fe = Math.ceil(G / (((Oe = canvas.grid) == null ? void 0 : Oe.size) || 128)), se = u.items.get(p), de = {
                 heavyPistol: "Pistol",
                 assaultRifle: "Assault Rifle",
                 smg: "SMG",
@@ -4792,20 +4806,20 @@ class Gr {
               Array.isArray(W[F]) && typeof W[F][0] == "string" && (ke = W[F][Math.min(ae !== -1 ? ae : 0, W[F].length - 1)]), z = ke === 99 ? "Out of Range" : ke;
             }
           }
-          const V = await this.rollAndCapture(p, q, r.rollMode);
+          const V = await this.rollAndCapture(f, q, r.rollMode);
           if (V.success) {
             let ne = null;
             typeof z == "number" ? ne = V.total >= z ? "Hit" : "Miss" : z === "Out of Range" && (ne = "Miss");
-            const W = ((Fe = (Ie = (De = u.items.get(g)) == null ? void 0 : De.system) == null ? void 0 : Ie.magazine) == null ? void 0 : Fe.value) ?? null;
+            const W = ((Fe = (Ie = (De = u.items.get(p)) == null ? void 0 : De.system) == null ? void 0 : Ie.magazine) == null ? void 0 : Fe.value) ?? null;
             await this.sendResponse({
               type: "ROLL_RESULT",
               rollMode: V.rollMode,
               requestId: i,
-              actorId: p,
+              actorId: f,
               total: V.total,
               isCriticalSuccess: V.isCriticalSuccess,
               isCriticalFailure: V.isCriticalFailure,
-              label: f + " Attack",
+              label: g + " Attack",
               rawRoll: {
                 total: V.total,
                 isCriticalSuccess: V.isCriticalSuccess,
@@ -4824,14 +4838,14 @@ class Gr {
         break;
       }
       case "GET_ROLL_MODIFIERS": {
-        const u = game.actors.get(p);
+        const u = game.actors.get(f);
         if (!u) return;
-        const g = r.weaponId, f = g ? u.items.get(g) : null;
+        const p = r.weaponId, g = p ? u.items.get(p) : null;
         let m = "None", k = 0, U = "None", C = 0, M = 0;
-        if (f) {
-          m = f.system.weaponSkill;
+        if (g) {
+          m = g.system.weaponSkill;
           const G = u.items.find((fe) => fe.type === "skill" && fe.name === m);
-          k = G && Number(G.system.level) || 0, U = G && G.system.stat || "ref", C = Number((Ue = u.system.stats[U]) == null ? void 0 : Ue.value) || 0, M = Number(f.system.attackmod) || 0;
+          k = G && Number(G.system.level) || 0, U = G && G.system.stat || "ref", C = Number((Ue = u.system.stats[U]) == null ? void 0 : Ue.value) || 0, M = Number(g.system.attackmod) || 0;
         }
         let q = 0;
         const z = [], V = Number(u.system.derivedStats.hp.value) || 0, ne = Number(u.system.derivedStats.seriouslyWounded) || 0, W = u.items.find((G) => G.name === "Stim" && G.type === "drug"), ee = W && W.effects.some((G) => G.disabled === !1);
@@ -4878,8 +4892,8 @@ class Gr {
         break;
       }
       case "GET_DV_INFO": {
-        const u = canvas.tokens.get(I), g = r.targetTokenId || ((He = Array.from(game.user.targets)[0]) == null ? void 0 : He.id), f = canvas.tokens.get(g), m = r.weaponId;
-        if (u && f) {
+        const u = canvas.tokens.get(I), p = r.targetTokenId || ((He = Array.from(game.user.targets)[0]) == null ? void 0 : He.id), g = canvas.tokens.get(p), m = r.weaponId;
+        if (u && g) {
           const k = {
             Pistol: [13, 15, 20, 25, 30, 30, 99, 99],
             SMG: [15, 13, 15, 20, 25, 25, 30, 99],
@@ -4895,7 +4909,7 @@ class Gr {
             "Medium Melee Weapon": ["VS"],
             "Heavy Melee Weapon": ["VS"],
             "Very Heavy Melee Weapon": ["VS"]
-          }, U = [6, 12, 25, 50, 100, 200, 400, 800], C = f.center.x - u.center.x, M = f.center.y - u.center.y, q = Math.sqrt(Math.pow(C, 2) + Math.pow(M, 2)), z = Math.ceil(q / 128), V = u.actor.items.get(m);
+          }, U = [6, 12, 25, 50, 100, 200, 400, 800], C = g.center.x - u.center.x, M = g.center.y - u.center.y, q = Math.sqrt(Math.pow(C, 2) + Math.pow(M, 2)), z = Math.ceil(q / 128), V = u.actor.items.get(m);
           if (!V) {
             console.warn(`GET_DV_INFO: Weapon ID ${m} not found on actor ${u.actor.name}.`), await this.sendResponse({ type: "DV_INFO_DATA", result: null, requestId: i });
             break;
@@ -4918,26 +4932,26 @@ class Gr {
           let ye = ee !== -1 ? k[W][ee] : 99;
           Array.isArray(k[W]) && typeof k[W][0] == "string" && (ye = k[W][Math.min(ee !== -1 ? ee : 0, k[W].length - 1)]);
           const be = {
-            targetName: f.name,
+            targetName: g.name,
             distanceMeters: z,
             weaponCategory: W,
             dv: ye === 99 ? "Out of Range" : ye
           };
           await this.sendResponse({ type: "DV_INFO_DATA", result: be, requestId: i });
         } else
-          console.warn(`GET_DV_INFO: Token(s) not found. Jim: ${!!u}, Target: ${!!f}`), await this.sendResponse({ type: "DV_INFO_DATA", result: null, requestId: i });
+          console.warn(`GET_DV_INFO: Token(s) not found. Jim: ${!!u}, Target: ${!!g}`), await this.sendResponse({ type: "DV_INFO_DATA", result: null, requestId: i });
         break;
       }
       case "LIST_VISIBLE_TOKENS": {
         const u = canvas.tokens.get(I);
-        let g = [];
+        let p = [];
         if (u) {
-          const f = canvas.grid.size, m = canvas.dimensions, k = u.center.x, U = u.center.y;
-          g = canvas.tokens.placeables.filter((C) => {
+          const g = canvas.grid.size, m = canvas.dimensions, k = u.center.x, U = u.center.y;
+          p = canvas.tokens.placeables.filter((C) => {
             const M = !C.document.hidden, q = C.actor && (C.actor.type === "character" || C.actor.type === "mook"), z = C.x >= m.sceneX && C.x <= m.sceneX + m.sceneWidth && C.y >= m.sceneY && C.y <= m.sceneY + m.sceneHeight;
             return M && q && z && C.id !== u.id;
           }).map((C) => {
-            const M = C.center.x - k, q = C.center.y - U, V = (Math.sqrt(Math.pow(M, 2) + Math.pow(q, 2)) / f).toFixed(2);
+            const M = C.center.x - k, q = C.center.y - U, V = (Math.sqrt(Math.pow(M, 2) + Math.pow(q, 2)) / g).toFixed(2);
             return {
               name: C.name,
               id: C.id,
@@ -4947,14 +4961,14 @@ class Gr {
           }).sort((C, M) => C.distanceM - M.distanceM);
         } else
           console.warn(`LIST_VISIBLE_TOKENS: Token ID ${I} not found.`);
-        await this.sendResponse({ type: "VISIBLE_TOKENS_DATA", tokens: g, requestId: i });
+        await this.sendResponse({ type: "VISIBLE_TOKENS_DATA", tokens: p, requestId: i });
         break;
       }
       case "GET_ACTOR": {
-        let u = r.actorId, g = game.user;
-        const f = r.agentLink || r.agent_link || r.foundryUserId || r.requestId;
-        if (f && (g = game.users.find((m) => m.getFlag(L, "agent-link") === f) || game.users.get(f) || (f === game.user.id ? game.user : null)), g || (g = game.user), !u) {
-          const m = g.character;
+        let u = r.actorId, p = game.user;
+        const g = r.agentLink || r.agent_link || r.foundryUserId || r.requestId;
+        if (g && (p = game.users.find((m) => m.getFlag(L, "agent-link") === g) || game.users.get(g) || (g === game.user.id ? game.user : null)), p || (p = game.user), !u) {
+          const m = p.character;
           m && (u = m.id);
         }
         if (u !== null) {
@@ -4975,19 +4989,19 @@ class Gr {
               })),
               flags: k.flags && k.flags["cyberpunk-red-core"] ? { "cyberpunk-red-core": k.flags["cyberpunk-red-core"] } : {}
             };
-            await this.sendResponse({ type: "ACTOR_DATA", actor: U, requestId: i, isGM: g.isGM, agentLink: g.getFlag(L, "agent-link") || g.id });
+            await this.sendResponse({ type: "ACTOR_DATA", actor: U, requestId: i, isGM: p.isGM, agentLink: p.getFlag(L, "agent-link") || p.id });
             break;
           }
         }
-        await this.sendResponse({ type: "ACTOR_DATA", actor: !1, requestId: i, isGM: g.isGM, agentLink: g.getFlag(L, "agent-link") || g.id });
+        await this.sendResponse({ type: "ACTOR_DATA", actor: !1, requestId: i, isGM: p.isGM, agentLink: p.getFlag(L, "agent-link") || p.id });
         break;
       }
       case "GET_ACTORS": {
         let u = game.user;
-        const g = r.agentLink || r.agent_link || r.foundryUserId || r.requestId;
-        g && (u = game.users.find((m) => m.getFlag(L, "agent-link") === g) || game.users.get(g) || (g === game.user.id ? game.user : null)), u || (u = game.user);
-        let f = [];
-        u.isGM ? f = game.actors.filter((m) => m.type === "character" || m.type === "mook").map((m) => {
+        const p = r.agentLink || r.agent_link || r.foundryUserId || r.requestId;
+        p && (u = game.users.find((m) => m.getFlag(L, "agent-link") === p) || game.users.get(p) || (p === game.user.id ? game.user : null)), u || (u = game.user);
+        let g = [];
+        u.isGM ? g = game.actors.filter((m) => m.type === "character" || m.type === "mook").map((m) => {
           var U, C;
           const k = (U = Object.entries(m.ownership || {}).find(([M, q]) => {
             const z = game.users.get(M);
@@ -4999,7 +5013,7 @@ class Gr {
             tokenId: null,
             agentLink: (k ? (C = game.users.get(k)) == null ? void 0 : C.getFlag(L, "agent-link") : null) || k || u.getFlag(L, "agent-link") || u.id
           };
-        }) : (f = canvas.tokens.placeables.filter((m) => m.actor && (m.actor.type === "character" || m.actor.type === "mook")).filter((m) => m.actor.testUserPermission(u, "OWNER")).map((m) => {
+        }) : (g = canvas.tokens.placeables.filter((m) => m.actor && (m.actor.type === "character" || m.actor.type === "mook")).filter((m) => m.actor.testUserPermission(u, "OWNER")).map((m) => {
           var U, C;
           const k = (U = Object.entries(m.actor.ownership || {}).find(([M, q]) => {
             const z = game.users.get(M);
@@ -5011,12 +5025,12 @@ class Gr {
             tokenId: m.id,
             agentLink: (k ? (C = game.users.get(k)) == null ? void 0 : C.getFlag(L, "agent-link") : null) || k || null
           };
-        }), u.character && (f.some((k) => k.actorId === u.character.id) || f.push({
+        }), u.character && (g.some((k) => k.actorId === u.character.id) || g.push({
           name: u.character.name,
           actorId: u.character.id,
           tokenId: null,
           agentLink: u.getFlag(L, "agent-link") || u.id
-        })), !u.isGM && u.character && (f = f.filter((m) => m.actorId === u.character.id))), await this.sendResponse({ type: "ACTORS_DATA", actors: f, requestId: i, isGM: u.isGM, agentLink: u.getFlag(L, "agent-link") || u.id });
+        })), !u.isGM && u.character && (g = g.filter((m) => m.actorId === u.character.id))), await this.sendResponse({ type: "ACTORS_DATA", actors: g, requestId: i, isGM: u.isGM, agentLink: u.getFlag(L, "agent-link") || u.id });
         break;
       }
       default:
