@@ -1,0 +1,3 @@
+1.0.3
+* Added support for Consuming items such as Stims/drugs etc.
+* Added support for Roll types. All are supported except for Blind rolling which will get fixed further down.
