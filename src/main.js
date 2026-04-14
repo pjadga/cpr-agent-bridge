@@ -79,8 +79,8 @@ class CharacterAssignmentMenu extends FormApplication {
             name: u.name,
             isGM: u.isGM,
             hasKey: !!u.getFlag(MODULE_ID, 'hasApiKey'),
-                                           agentLink: u.getFlag(MODULE_ID, 'agent-link'),
-                                           characterId: u.character?.id || ""
+            agentLink: u.getFlag(MODULE_ID, 'agent-link'),
+            characterId: u.character?.id || ""
         }));
 
         const characters = game.actors.filter(a => a.type === 'character').map(a => ({
@@ -187,9 +187,17 @@ class CyberpunkBridge {
         this._isCapturingRoll = false;
     }
 
-    async rollAndCapture(actorId, triggerFunction) {
+    async rollAndCapture(actorId, triggerFunction, rollMode = null) {
         console.log(`%c[Bridge] Starting Render Interceptor for Actor ${actorId}`, "color: #00ffff; font-weight: bold;");
         this._isCapturingRoll = true;
+
+        const prevRollMode = game.settings.get("core", "rollMode");
+        if (rollMode) await game.settings.set("core", "rollMode", rollMode);
+
+        // const restoreRollMode = async () => {
+        //     if (rollMode) await game.settings.set("core", "rollMode", prevRollMode);
+        //     setTimeout(() => { this._isCapturingRoll = false; }, 1000);
+        // };
 
         return new Promise(async (resolve, reject) => {
             let rollFound = false;
@@ -201,13 +209,16 @@ class CyberpunkBridge {
                     rollFound = true;
                     renderTemplate = originalRender;
 
+                    //restoreRollMode();
+
                     resolve({
                         success: true,
                         total: data.resultTotal,
                         isCriticalSuccess: data.wasCritSuccess ? data.wasCritSuccess() : (data.isCriticalSuccess || false),
-                            isCriticalFailure: data.wasCritFail ? data.wasCritFail() : (data.isCriticalFailure || false),
-                            label: data.rollTitle,
-                            rawRoll: data
+                        isCriticalFailure: data.wasCritFail ? data.wasCritFail() : (data.isCriticalFailure || false),
+                        label: data.rollTitle,
+                        rollMode: rollMode || game.settings.get("core", "rollMode"),
+                        rawRoll: data
                     });
                 }
                 return originalRender.apply(this, arguments);
@@ -215,10 +226,11 @@ class CyberpunkBridge {
 
             renderTemplate = spyRender;
 
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (!rollFound) {
                     renderTemplate = originalRender;
                     console.warn("[Bridge] ❌ Interceptor timed out. No rollcard rendered.");
+                    //await restoreRollMode();
                     resolve({ success: false, error: "Timed out waiting for render" });
                 }
             }, 5000);
@@ -227,9 +239,8 @@ class CyberpunkBridge {
                 await triggerFunction();
             } catch (e) {
                 renderTemplate = originalRender;
+                //await restoreRollMode();
                 resolve({ success: false, error: "Trigger failed" });
-            } finally {
-                setTimeout(() => { this._isCapturingRoll = false; }, 1000);
             }
         });
     }
@@ -261,23 +272,23 @@ class CyberpunkBridge {
         game.settings.register(MODULE_ID, 'apiUrl', {
             name: 'Agent URL',
             hint: 'The base URL of your Agent (e.g., https://agent.surrealdisco.co.uk).',
-                               scope: 'world', // URL is usually the same for everyone
-                               config: true,
-                               type: String,
-                               default: 'https://agent.surrealdisco.co.uk',
-                                   onChange: () => {
-                                       if (game.user.isGM) this.reconnect();
-                                       this.syncPlayerLink();
-                                   }
+            scope: 'world', // URL is usually the same for everyone
+            config: true,
+            type: String,
+            default: 'https://agent.surrealdisco.co.uk',
+            onChange: () => {
+                if (game.user.isGM) this.reconnect();
+                this.syncPlayerLink();
+            }
         });
 
         game.settings.register(MODULE_ID, 'reverbHost', {
             name: 'Reverb Host (override)',
-                               scope: 'world',
-                               config: true,
-                               type: String,
-                               default: '',
-                                   onChange: () => this.reconnect()
+            scope: 'world',
+            config: true,
+            type: String,
+            default: '',
+            onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'reverbPort', {
@@ -285,17 +296,17 @@ class CyberpunkBridge {
             scope: 'world',
             config: true,
             type: Number,
-                               default: 0,
-                                   onChange: () => this.reconnect()
+            default: 0,
+            onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'reverbUseSSL', {
             name: 'Reverb Use SSL (wss)',
-                               scope: 'world',
-                               config: true,
-                               type: Boolean,
-                               default: true,
-                                   onChange: () => this.reconnect()
+            scope: 'world',
+            config: true,
+            type: Boolean,
+            default: true,
+            onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'reverbKey', {
@@ -303,23 +314,23 @@ class CyberpunkBridge {
             scope: 'world',
             config: true,
             type: String,
-                               default: 'itdsiqtx8cpskowawl1p',
-                                   onChange: () => this.reconnect()
+            default: 'itdsiqtx8cpskowawl1p',
+            onChange: () => this.reconnect()
         });
 
         game.settings.register(MODULE_ID, 'apiKey', {
             name: 'API Key (Sanctum Token)',
-                               hint: 'Generate this in your Cyberpunk Agent dashboard.',
-                               scope: 'client', // Vital for player uniqueness
-                               config: true,
-                               type: String,
-                               default: '',
-                                   onChange: async (val) => {
-                                       // Update the public flag so the GM Menu instantly knows they added a key
-                                       await game.user.setFlag(MODULE_ID, 'hasApiKey', !!val);
-                                       if (game.user.isGM) this.reconnect();
-                                       this.syncPlayerLink();
-                                   }
+            hint: 'Generate this in your Cyberpunk Agent dashboard.',
+            scope: 'client', // Vital for player uniqueness
+            config: true,
+            type: String,
+            default: '',
+            onChange: async (val) => {
+                // Update the public flag so the GM Menu instantly knows they added a key
+                await game.user.setFlag(MODULE_ID, 'hasApiKey', !!val);
+                if (game.user.isGM) this.reconnect();
+                this.syncPlayerLink();
+            }
         });
 
         game.settings.register(MODULE_ID, 'channelId', {
@@ -328,10 +339,10 @@ class CyberpunkBridge {
             scope: 'world',
             config: true,
             type: String,
-                               default: '',
-                                   onChange: () => {
-                                       if (game.user.isGM) this.reconnect();
-                                   }
+            default: '',
+            onChange: () => {
+                if (game.user.isGM) this.reconnect();
+            }
         });
 
         game.settings.register(MODULE_ID, 'debugMode', {
@@ -339,7 +350,7 @@ class CyberpunkBridge {
             scope: 'client',
             config: true,
             type: Boolean,
-                               default: false
+            default: false
         });
     }
 
@@ -371,20 +382,20 @@ class CyberpunkBridge {
         this.echo = new Echo({
             broadcaster: 'reverb',
             key: game.settings.get(MODULE_ID, 'reverbKey') || 'itdsiqtx8cpskowawl1p',
-                             wsHost: wsHost,
-                             wsPort: wsPort,
-                             wssPort: wsPort,
-                             forceTLS: useTLS,
-                                 enabledTransports: ['ws', 'wss'],
-                                 disableStats: true,
-                                 authEndpoint: `${apiUrl.replace(/\/$/, '')}/api/broadcasting/auth`,
+            wsHost: wsHost,
+            wsPort: wsPort,
+            wssPort: wsPort,
+            forceTLS: useTLS,
+            enabledTransports: ['ws', 'wss'],
+            disableStats: true,
+            authEndpoint: `${apiUrl.replace(/\/$/, '')}/api/broadcasting/auth`,
 
-                             auth: {
-                                 headers: {
-                                     'Authorization': 'Bearer ' + token,
-                                     'Accept': 'application/json'
-                                 }
-                             }
+            auth: {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json'
+                }
+            }
         });
 
         window.CyberpunkSocket = this.echo;
@@ -395,11 +406,11 @@ class CyberpunkBridge {
             if(debug) console.log("Cyberpunk Bridge: Connection Established");
         });
 
-            this.echo.connector.pusher.connection.bind('disconnected', () => {
-                this.isConnected = false;
-            });
+        this.echo.connector.pusher.connection.bind('disconnected', () => {
+            this.isConnected = false;
+        });
 
-            this.listen();
+        this.listen();
     }
 
     listen() {
@@ -408,9 +419,9 @@ class CyberpunkBridge {
 
         // Only the GM listens for World Updates
         this.echo.private(channelName)
-        .listen('.GameUpdate', (e) => {
-            this.handleIncomingData(e);
-        });
+            .listen('.GameUpdate', (e) => {
+                this.handleIncomingData(e);
+            });
 
         this.registerGlobalHooks();
     }
@@ -605,10 +616,7 @@ class CyberpunkBridge {
             if (message.author.id !== game.user.id) return;
             if (this._isCapturingRoll) return;
             if (message.rolls && message.rolls.length > 0) {
-                // If not whispered and not hidden
-                if (message.whisper.length === 0 && !message.blind) {
-                    this.broadcastRoll(message);
-                }
+                this.broadcastRoll(message);
             }
         });
     }
@@ -620,20 +628,36 @@ class CyberpunkBridge {
     broadcastRoll(message) {
         const user = game.users.get(message.author.id);
         const roll = message.rolls[0];
+
+        // Determine roll mode from message properties
+        let rollMode = "publicroll";
+        if (message.blind) {
+            rollMode = "blindroll";
+        } else if (message.whisper && message.whisper.length > 0) {
+            const gms = game.users.filter(u => u.isGM).map(u => u.id);
+            const isToGMs = message.whisper.every(id => gms.includes(id) || id === message.author.id);
+            const isSelf = message.whisper.length === 1 && message.whisper[0] === message.author.id;
+
+            if (isSelf) rollMode = "selfroll";
+            else if (isToGMs) rollMode = "gmroll";
+            else rollMode = "gmroll"; // Default to private if there's a whisper
+        }
+
         this.sendResponse({
             type: 'ROLL_RESULT',
             agentLink: user ? user.getFlag(MODULE_ID, 'agent-link') : null,
-                          playerName: message.alias,
-                          total: roll.total,
-                          formula: roll.formula,
-                              label: message.flavor || 'Dice Roll',
-                              rawRoll: {
-                                  total: roll.total,
-                                  formula: roll.formula,
-                                      rollTitle: message.flavor || 'Dice Roll',
-                                      _roll: roll.toJSON()
-                              },
-                              success: true
+            playerName: message.alias,
+            total: roll.total,
+            formula: roll.formula,
+            rollMode: message.rollMode || rollMode,
+            label: message.flavor || 'Dice Roll',
+            rawRoll: {
+                total: roll.total,
+                formula: roll.formula,
+                rollTitle: message.flavor || 'Dice Roll',
+                _roll: roll.toJSON()
+            },
+            success: true
         });
     }
 
@@ -663,10 +687,15 @@ class CyberpunkBridge {
             data.channelId = channelId;
         }
 
-        // Include player name for roll results
-        if (data.type === 'ROLL_RESULT' && !data.playerName) {
-            const actor = data.actorId ? game.actors.get(data.actorId) : null;
-            data.playerName = actor ? actor.name : game.user.name;
+        // Include player name and rollMode for roll results
+        if (data.type === 'ROLL_RESULT') {
+            if (!data.playerName) {
+                const actor = data.actorId ? game.actors.get(data.actorId) : null;
+                data.playerName = actor ? actor.name : game.user.name;
+            }
+            if (!data.rollMode) {
+                data.rollMode = game.settings.get("core", "rollMode");
+            }
         }
 
         try {
@@ -765,24 +794,7 @@ class CyberpunkBridge {
                     return;
                 }
                 await actor.update(data.changes);
-                ui.notifications.info(`Sync: ${actor.name} updated.`);
-                await this.sendResponse({ type: 'CONFIRMATION', action: type, actorId, success: true, requestId });
-                break;
-            }
-
-            case 'CONSUME_ITEM': {
-                const actor = game.actors.get(actorId);
-                if (!actor) {
-                    console.warn(`Actor ID ${actorId} not found in this world.`);
-                    return;
-                }
-                const item = actor.items.get(data.itemId);
-                if (!item) {
-                    console.warn(`Item ID ${data.itemId} not found on actor ${actor.name}.`);
-                    return;
-                }
-                await item.snort();
-                ui.notifications.info(`Sync: ${item.name} consumed.`);
+                ui.notifications.info(`💾 Sync: ${actor.name} updated.`);
                 await this.sendResponse({ type: 'CONFIRMATION', action: type, actorId, success: true, requestId });
                 break;
             }
@@ -911,26 +923,27 @@ class CyberpunkBridge {
                         });
                     };
 
-                    const result = await this.rollAndCapture(actorId, trigger);
+                    const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
                     if (result.success) {
                         await this.sendResponse({
                             type: 'ROLL_RESULT',
+                            rollMode: result.rollMode,
                             requestId: requestId,
                             actorId,
                             total: result.total,
                             isCriticalSuccess: result.isCriticalSuccess,
                             isCriticalFailure: result.isCriticalFailure,
                             label: `${weapon.name} (Damage)`,
-                                                rawRoll: {
-                                                    total: result.total,
-                                                    isCriticalSuccess: result.isCriticalSuccess,
-                                                    isCriticalFailure: result.isCriticalFailure,
-                                                    label: result.label,
-                                                    resultTotal: result.rawRoll?.resultTotal,
-                                                    rollTitle: result.rawRoll?.rollTitle
-                                                },
-                                                success: true
+                            rawRoll: {
+                                total: result.total,
+                                isCriticalSuccess: result.isCriticalSuccess,
+                                isCriticalFailure: result.isCriticalFailure,
+                                label: result.label,
+                                resultTotal: result.rawRoll?.resultTotal,
+                                rollTitle: result.rawRoll?.rollTitle
+                            },
+                            success: true
                         });
                     }
                 }
@@ -952,7 +965,7 @@ class CyberpunkBridge {
                         });
                     };
 
-                    const result = await this.rollAndCapture(actorId, trigger);
+                    const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
                     if (result.success) {
                         // After roll, sync the updated death saves counter
@@ -960,6 +973,7 @@ class CyberpunkBridge {
 
                         await this.sendResponse({
                             type: 'ROLL_RESULT',
+                            rollMode: result.rollMode,
                             requestId: requestId,
                             actorId,
                             total: result.total,
@@ -1007,11 +1021,12 @@ class CyberpunkBridge {
                 };
 
                 // Use the Interceptor
-                const result = await this.rollAndCapture(actorId, trigger);
+                const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
                 if (result.success) {
                     await this.sendResponse({
                         type: 'ROLL_RESULT',
+                        rollMode: result.rollMode,
                         requestId,
                         actorId,
                         total: result.total,
@@ -1038,11 +1053,12 @@ class CyberpunkBridge {
                         await actor.rollInitiative();
                     };
 
-                    const result = await this.rollAndCapture(actorId, trigger);
+                    const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
                     if (result.success) {
                         await this.sendResponse({
                             type: 'ROLL_RESULT',
+                            rollMode: result.rollMode,
                             requestId,
                             actorId,
                             total: result.total,
@@ -1083,11 +1099,12 @@ class CyberpunkBridge {
                         });
                     };
 
-                    const result = await this.rollAndCapture(actorId, trigger);
+                    const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
                     if (result.success) {
                         await this.sendResponse({
                             type: 'ROLL_RESULT',
+                            rollMode: result.rollMode,
                             requestId,
                             actorId,
                             total: result.total,
@@ -1137,11 +1154,12 @@ class CyberpunkBridge {
                             await actor.sheet._onRoll(rollData);
                         };
 
-                        const result = await this.rollAndCapture(actorId, trigger);
+                        const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
                         if (result.success) {
                             await this.sendResponse({
                                 type: 'ROLL_RESULT',
+                                rollMode: result.rollMode,
                                 requestId,
                                 actorId,
                                 total: result.total,
@@ -1183,11 +1201,12 @@ class CyberpunkBridge {
                             });
                         };
 
-                        const result = await this.rollAndCapture(actorId, trigger);
+                        const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
                         if (result.success) {
                             await this.sendResponse({
                                 type: 'ROLL_RESULT',
+                                rollMode: result.rollMode,
                                 requestId,
                                 actorId,
                                 total: result.total,
@@ -1225,11 +1244,12 @@ class CyberpunkBridge {
                         });
                     };
 
-                    const result = await this.rollAndCapture(actorId, trigger);
+                    const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
                     if (result.success) {
                         await this.sendResponse({
                             type: 'ROLL_RESULT',
+                            rollMode: result.rollMode,
                             requestId,
                             actorId,
                             total: result.total,
@@ -1257,10 +1277,12 @@ class CyberpunkBridge {
                 await roll.evaluate();
                 await roll.toMessage({
                     speaker: ChatMessage.getSpeaker({actor: game.actors.get(actorId)}),
-                                     flavor: data.flavor
+                    flavor: data.flavor,
+                    rollMode: data.rollMode || game.settings.get("core", "rollMode")
                 });
                 await this.sendResponse({
                     type: 'ROLL_RESULT',
+                    rollMode: data.rollMode || game.settings.get("core", "rollMode"),
                     requestId,
                     actorId,
                     total: roll.total,
@@ -1271,7 +1293,7 @@ class CyberpunkBridge {
                         rollTitle: data.flavor || 'Dice Roll',
                         _roll: roll,
                         formula: roll.formula,
-                            resultTotal: roll.total
+                        resultTotal: roll.total
                     },
                     success: true
                 });
@@ -1430,15 +1452,15 @@ class CyberpunkBridge {
                     const trigger = async () => {
                         await actor.sheet._onRoll({
                             preventDefault: () => {},
-                                                  currentTarget: dummyBtn,
-                                                  type: 'click'
+                            currentTarget: dummyBtn,
+                            type: 'click'
                         }, { showDialog: true });
                     };
 
                     // Compute DV against current target if available
                     let computedDV = null;
                     if (targetToken) {
-                        const shooter = canvas.tokens.get(tokenId) || actoweaponIdr.getActiveTokens()?.[0] || canvas.tokens.placeables.find(t => t.actor?.id === actor.id);
+                        const shooter = canvas.tokens.get(tokenId) || actor.getActiveTokens()?.[0] || canvas.tokens.placeables.find(t => t.actor?.id === actor.id);
                         if (shooter) {
                             const RANGE_DV_TABLE = {
                                 'Pistol':           [13, 15, 20, 25, 30, 30, 99, 99],
@@ -1488,7 +1510,7 @@ class CyberpunkBridge {
                         }
                     }
 
-                    const result = await this.rollAndCapture(actorId, trigger);
+                    const result = await this.rollAndCapture(actorId, trigger, data.rollMode);
 
 
                     if (result.success) {
@@ -1501,6 +1523,7 @@ class CyberpunkBridge {
                         const magazineValue = actor.items.get(weaponId)?.system?.magazine?.value ?? null;
                         await this.sendResponse({
                             type: 'ROLL_RESULT',
+                            rollMode: result.rollMode,
                             requestId,
                             actorId,
                             total: result.total,
@@ -1562,8 +1585,8 @@ class CyberpunkBridge {
                     totalPenalty += penaltyValue;
                     effectList.push({
                         title: stimEnabled ? 'Seriously Wounded (Stim Active)' : 'Seriously Wounded',
-                                    penalty: penaltyValue,
-                                    description: stimEnabled ? 'Ignoring penalty due to Stim drug.' : 'All actions at -2.'
+                        penalty: penaltyValue,
+                        description: stimEnabled ? 'Ignoring penalty due to Stim drug.' : 'All actions at -2.'
                     });
                 }
 
@@ -1700,26 +1723,26 @@ class CyberpunkBridge {
                     const jimY = jim.center.y;
 
                     nearbyTokens = canvas.tokens.placeables
-                    .filter(t => {
-                        const isVisible = !t.document.hidden;
-                        const isActorType = t.actor && (t.actor.type === 'character' || t.actor.type === 'mook');
-                        const isOnMap = t.x >= d.sceneX && t.x <= (d.sceneX + d.sceneWidth) &&
-                        t.y >= d.sceneY && t.y <= (d.sceneY + d.sceneHeight);
-                        return isVisible && isActorType && isOnMap && t.id !== jim.id;
-                    })
-                    .map(t => {
-                        const distX = t.center.x - jimX;
-                        const distY = t.center.y - jimY;
-                        const distancePx = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
-                        const distanceMeters = (distancePx / PIXELS_PER_METER).toFixed(2);
-                        return {
-                            name: t.name,
-                            id: t.id,
-                            distanceM: parseFloat(distanceMeters),
-                         type: t.actor.type
-                        };
-                    })
-                    .sort((a, b) => a.distanceM - b.distanceM);
+                        .filter(t => {
+                            const isVisible = !t.document.hidden;
+                            const isActorType = t.actor && (t.actor.type === 'character' || t.actor.type === 'mook');
+                            const isOnMap = t.x >= d.sceneX && t.x <= (d.sceneX + d.sceneWidth) &&
+                                t.y >= d.sceneY && t.y <= (d.sceneY + d.sceneHeight);
+                            return isVisible && isActorType && isOnMap && t.id !== jim.id;
+                        })
+                        .map(t => {
+                            const distX = t.center.x - jimX;
+                            const distY = t.center.y - jimY;
+                            const distancePx = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+                            const distanceMeters = (distancePx / PIXELS_PER_METER).toFixed(2);
+                            return {
+                                name: t.name,
+                                id: t.id,
+                                distanceM: parseFloat(distanceMeters),
+                                type: t.actor.type
+                            };
+                        })
+                        .sort((a, b) => a.distanceM - b.distanceM);
                 } else {
                     console.warn(`LIST_VISIBLE_TOKENS: Token ID ${tokenId} not found.`);
                 }
@@ -1734,8 +1757,8 @@ class CyberpunkBridge {
 
                 if (userIdentifier) {
                     targetUser = game.users.find(u => u.getFlag(MODULE_ID, 'agent-link') === userIdentifier)
-                    || game.users.get(userIdentifier)
-                    || (userIdentifier === game.user.id ? game.user : null);
+                        || game.users.get(userIdentifier)
+                        || (userIdentifier === game.user.id ? game.user : null);
                 }
 
                 if (!targetUser) targetUser = game.user;
@@ -1782,8 +1805,8 @@ class CyberpunkBridge {
                 if (userIdentifier) {
                     // Try to find the user by their agent-link flag
                     targetUser = game.users.find(u => u.getFlag(MODULE_ID, 'agent-link') === userIdentifier)
-                    || game.users.get(userIdentifier) // Fallback to ID
-                    || (userIdentifier === game.user.id ? game.user : null);
+                        || game.users.get(userIdentifier) // Fallback to ID
+                        || (userIdentifier === game.user.id ? game.user : null);
                 }
 
                 if (!targetUser) targetUser = game.user;
@@ -1794,40 +1817,40 @@ class CyberpunkBridge {
                 if (targetUser.isGM) {
                     // GM sees ALL characters and mooks in the world
                     actors = game.actors
-                    .filter(a => a.type === 'character' || a.type === 'mook')
-                    .map(a => {
-                        // Find the primary owner (player) if any
-                        const ownerId = Object.entries(a.ownership || {}).find(([id, level]) => {
-                            const u = game.users.get(id);
-                            return u && !u.isGM && level >= 3;
-                        })?.[0];
+                        .filter(a => a.type === 'character' || a.type === 'mook')
+                        .map(a => {
+                            // Find the primary owner (player) if any
+                            const ownerId = Object.entries(a.ownership || {}).find(([id, level]) => {
+                                const u = game.users.get(id);
+                                return u && !u.isGM && level >= 3;
+                            })?.[0];
 
-                        return {
-                            name: a.name,
-                            actorId: a.id,
-                            tokenId: null,
-                            agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || (ownerId || targetUser.getFlag(MODULE_ID, 'agent-link') || targetUser.id)
-                        };
-                    });
+                            return {
+                                name: a.name,
+                                actorId: a.id,
+                                tokenId: null,
+                                agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || (ownerId || targetUser.getFlag(MODULE_ID, 'agent-link') || targetUser.id)
+                            };
+                        });
                 } else {
                     // Players see tokens they own on the canvas
                     actors = canvas.tokens.placeables
-                    .filter(t => t.actor && (t.actor.type === 'character' || t.actor.type === 'mook'))
-                    .filter(t => t.actor.testUserPermission(targetUser, "OWNER"))
-                    .map(t => {
-                        // Find the primary owner (player)
-                        const ownerId = Object.entries(t.actor.ownership || {}).find(([id, level]) => {
-                            const u = game.users.get(id);
-                            return u && !u.isGM && level >= 3;
-                        })?.[0];
+                        .filter(t => t.actor && (t.actor.type === 'character' || t.actor.type === 'mook'))
+                        .filter(t => t.actor.testUserPermission(targetUser, "OWNER"))
+                        .map(t => {
+                            // Find the primary owner (player)
+                            const ownerId = Object.entries(t.actor.ownership || {}).find(([id, level]) => {
+                                const u = game.users.get(id);
+                                return u && !u.isGM && level >= 3;
+                            })?.[0];
 
-                        return {
-                            name: t.name,
-                            actorId: t.actor.id,
-                            tokenId: t.id,
-                            agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || ownerId || null
-                        };
-                    });
+                            return {
+                                name: t.name,
+                                actorId: t.actor.id,
+                                tokenId: t.id,
+                                agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || ownerId || null
+                            };
+                        });
 
                     // If they have an assigned character, always include it
                     if (targetUser.character) {
