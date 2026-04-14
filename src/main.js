@@ -765,7 +765,24 @@ class CyberpunkBridge {
                     return;
                 }
                 await actor.update(data.changes);
-                ui.notifications.info(`💾 Sync: ${actor.name} updated.`);
+                ui.notifications.info(`Sync: ${actor.name} updated.`);
+                await this.sendResponse({ type: 'CONFIRMATION', action: type, actorId, success: true, requestId });
+                break;
+            }
+
+            case 'CONSUME_ITEM': {
+                const actor = game.actors.get(actorId);
+                if (!actor) {
+                    console.warn(`Actor ID ${actorId} not found in this world.`);
+                    return;
+                }
+                const item = actor.items.get(data.itemId);
+                if (!item) {
+                    console.warn(`Item ID ${data.itemId} not found on actor ${actor.name}.`);
+                    return;
+                }
+                await item.snort();
+                ui.notifications.info(`Sync: ${item.name} consumed.`);
                 await this.sendResponse({ type: 'CONFIRMATION', action: type, actorId, success: true, requestId });
                 break;
             }
