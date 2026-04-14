@@ -91,18 +91,7 @@ release:
   release:
     tag_name: $CI_COMMIT_TAG
     name: "Release $CI_COMMIT_TAG"
-    description: |
-      ## Cyberpunk Red Agent Bridge $CI_COMMIT_TAG
-
-      ### Installation
-
-      **Manifest URL:**
-      ```
-        [https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/module.json](https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/module.json)
-      ```
-
-      **Direct Download:**
-      Download the zip file below and extract it to your Foundry VTT modules folder.
+    description: Release
     assets:
       links:
         - name: "${PACKAGE_NAME}-${BUILD_VERSION}.zip"
