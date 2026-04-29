@@ -1,3 +1,7 @@
 1.0.3
 * Added support for Consuming items such as Stims/drugs etc.
 * Added support for Roll types. All are supported except for Blind rolling which will get fixed further down.
+
+1.0.5
+* Fixed a bug where GET_ACTORS would not pass back tokenIDs, stopping the character from saving properly within the app. 
+* LIST_TOKENS would also fail as a result, failing the token distance function
