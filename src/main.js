@@ -518,6 +518,9 @@ class CyberpunkBridge {
             });
         };
 
+        //dropActorSheetData
+        //
+
         // Hook into Actor updates (stats, derived stats, etc.)
         this.hookIds.updateActor = Hooks.on('updateActor', (actor, changes, options, userId) => {
             // Ignore updates triggered by the Agent itself to avoid loops (though Agent updates usually go through API)
@@ -1731,6 +1734,12 @@ class CyberpunkBridge {
             }
 
             case 'LIST_VISIBLE_TOKENS': {
+
+                const tokens = canvas.tokens.placeables.filter(t => t.actor?.id === actorId);
+                if (tokenId === null) {
+                    tokenId = tokens[0]?.id ?? null;
+                }
+
                 const jim = canvas.tokens.get(tokenId);
                 let nearbyTokens = [];
                 if (jim) {
@@ -1828,6 +1837,11 @@ class CyberpunkBridge {
 
                 if (!targetUser) targetUser = game.user;
 
+                function getTokenFromActor(actorId) {
+                    let tokens = canvas.tokens.placeables.filter(t => t.actor?.id === actorId);
+                    return tokens[0]?.id ?? null;
+                }
+
                 let actors = [];
                 // If the target user is a Game Master, we always return ALL characters and mooks.
                 // We check targetUser.isGM instead of game.user.isGM.
@@ -1845,7 +1859,7 @@ class CyberpunkBridge {
                             return {
                                 name: a.name,
                                 actorId: a.id,
-                                tokenId: null,
+                                tokenId: getTokenFromActor(a.id),
                                 agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || (ownerId || targetUser.getFlag(MODULE_ID, 'agent-link') || targetUser.id)
                             };
                         });
@@ -1864,7 +1878,7 @@ class CyberpunkBridge {
                             return {
                                 name: t.name,
                                 actorId: t.actor.id,
-                                tokenId: t.id,
+                                tokenId: getTokenFromActor(t.actor.id),
                                 agentLink: (ownerId ? game.users.get(ownerId)?.getFlag(MODULE_ID, 'agent-link') : null) || ownerId || null
                             };
                         });
@@ -1876,7 +1890,7 @@ class CyberpunkBridge {
                             actors.push({
                                 name: targetUser.character.name,
                                 actorId: targetUser.character.id,
-                                tokenId: null,
+                                tokenId: getTokenFromActor(targetUser.character.id),
                                 agentLink: targetUser.getFlag(MODULE_ID, 'agent-link') || targetUser.id
                             });
                         }
