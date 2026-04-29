@@ -1,0 +1,72 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <header class="journal-page-header">
+        <h1 class="page-title">{{document.name}}</h1>
+    </header>
+
+    <div class="data-pool-entries flexcol">
+        {{#each entries as |entry i|}}
+            <div class="entry-row flexcol" style="border: 1px solid #7a7971; border-radius: 5px; padding: 10px; margin-bottom: 10px; background: rgba(0, 0, 0, 0.05);">
+                <div class="flexrow" style="align-items: center; margin-bottom: 5px; border-bottom: 1px solid #7a7971; padding-bottom: 5px;">
+                    <div class="flexrow" style="flex: 1; align-items: center;">
+                        <img src="{{entry.icon}}" data-edit="system.entries.{{i}}.icon" title="Click to edit icon" height="32" width="32" style="border: none; margin-right: 10px;"/>
+                        <input type="text" name="system.entries.{{i}}.title" value="{{entry.title}}" placeholder="Title" style="font-weight: bold; height: 32px;">
+                    </div>
+                    <div style="flex: 0 0 100px; text-align: right;">
+                        <button type="button" class="delete-entry" data-id="{{entry.id}}" title="Delete Entry" style="width: 32px; height: 32px; line-height: 32px; padding: 0;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Content Type</label>
+                    <div class="form-fields">
+                        <select name="system.entries.{{i}}.type">
+                            <option value="html" {{#if (eq entry.type "html")}}selected{{/if}}>Rich Text</option>
+                            <option value="pdf" {{#if (eq entry.type "pdf")}}selected{{/if}}>PDF</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group-stacked">
+                    {{#if (eq entry.type "html")}}
+                        {{editor entry.enrichedHtml target=(concat "system.entries." i ".htmlContent") engine="prosemirror" button=false owner=../owner editable=../editable}}
+                    {{else}}
+                        <label>PDF Path</label>
+                        <div class="form-fields">
+                            <h1 style="position: absolute; opacity: 0; pointer-events: none; margin: 0; height: 0; overflow: hidden;">
+                                {{entry.title}} (PDF)
+                            </h1>
+                            <file-picker name="system.entries.{{i}}.pdfPath" value="{{entry.pdfPath}}"></file-picker>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+    <button type="button" class="add-entry" style="margin-top: 10px;">
+        <i class="fas fa-plus"></i> Add New Link
+    </button>
+</form>
+
+<style>
+    /* Force the rich text editor to have a visible presence */
+    .data-pool-sheet .editor {
+        height: 250px;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 3px;
+        display: flex;
+        flex-direction: column;
+    }
+    .data-pool-sheet .editor-content {
+        flex: 1;
+        padding: 5px;
+        overflow-y: auto;
+    }
+    .data-pool-sheet prose-mirror,
+    .data-pool-sheet .ProseMirror {
+        min-height: 100%;
+    }
+</style>

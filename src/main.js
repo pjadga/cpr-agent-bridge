@@ -1,14 +1,17 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import { DataPoolPageModel } from "./data-pool-model.js";
+import { DataPoolPageSheet } from "./data-pool-sheet.js";
 
 // Make Pusher available globally (required for Echo)
 window.Pusher = Pusher;
-
 const MODULE_ID = 'cpr-agent';
+
 
 // ==================================================================
 // CUSTOM GM MENU: CHARACTER ASSIGNMENT
 // ==================================================================
+
 
 /**
  * Truncates a string to show first and last N characters with ellipsis
@@ -1906,6 +1909,61 @@ class CyberpunkBridge {
                 break;
             }
 
+            case 'GET_NET_POOL': {
+                const dataPools = [];
+
+                // Loop through all journal entries in the world
+                for (const journal of game.journal) {
+
+                    // Filter for our custom Data Pool pages
+                    const poolPages = journal.pages.filter(p => p.type === "cpr-agent.datapool");
+
+                    for (const page of poolPages) {
+                        const rawEntries = page.system.entries || [];
+                        const processedEntries = [];
+
+                        // Process and enrich the entries
+                        for (const entry of rawEntries) {
+                            let content = entry.htmlContent;
+
+                            // If it's HTML, resolve Foundry's internal @UUID and @Roll links into standard HTML
+                            if (entry.type === 'html' && content) {
+                                content = await TextEditor.enrichHTML(content, { async: true });
+                            }
+
+                            processedEntries.push({
+                                id: entry.id,
+                                icon: entry.icon,
+                                title: entry.title,
+                                type: entry.type,
+                                htmlContent: content,
+                                pdfPath: entry.pdfPath
+                            });
+                        }
+
+                        dataPools.push({
+                            journalId: journal.id,
+                            journalName: journal.name,
+                            pageId: page.id,
+                            pageName: page.name,
+                            entries: processedEntries
+                        });
+                    }
+                }
+
+                if (debug) console.log("[Bridge] Found Data Pools:", dataPools);
+
+                // Send the payload back to Laravel
+                await this.sendResponse({
+                    type: 'NET_POOL_DATA',
+                    pools: dataPools,
+                    requestId: requestId,
+                    success: true
+                });
+
+                break;
+            }
+
             default:
                 console.log("Unknown DataType: " + type);
                 break;
@@ -1921,6 +1979,25 @@ class CyberpunkBridge {
 // ==================================================================
 // BOOT SEQUENCE & VITE ASYNC FAILSAFE
 // ==================================================================
+
+// Helper to safely register the Data Pool without duplicating
+function registerDataPool() {
+    // Check if it's already registered to prevent Hot-Reload errors
+    if (CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"]) return;
+
+    console.log("%c [Bridge] Registering Data Pool Journal...", 'background: #222; color: #bada55');
+
+    Object.assign(CONFIG.JournalEntryPage.dataModels, {
+        "cpr-agent.datapool": DataPoolPageModel
+    });
+
+    DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", DataPoolPageSheet, {
+        types: ["cpr-agent.datapool"],
+        makeDefault: true,
+        label: "Agent Data Pool"
+    });
+}
+
 if (window.cyberpunkBridge) {
     window.cyberpunkBridge.destroy();
 }
@@ -1937,6 +2014,7 @@ function ensureSettingsRegistered() {
 // If Foundry is completely loaded (Hot Reloading / Very Late Load)
 if (game.ready) {
     ensureSettingsRegistered();
+    registerDataPool();
     if (game.user.isGM) window.cyberpunkBridge.connect();
     window.cyberpunkBridge.syncPlayerLink();
     window.cyberpunkBridge.registerGlobalHooks();
@@ -1946,12 +2024,14 @@ else {
     // Try to catch the normal init hook
     Hooks.once('init', () => {
         ensureSettingsRegistered();
+        registerDataPool();
     });
 
     // When Foundry is ready to play
     Hooks.once('ready', () => {
         // FAILSAFE: If Vite caused us to miss the 'init' hook, do it right now!
         ensureSettingsRegistered();
+        registerDataPool();
 
         if (game.user.isGM) {
             window.cyberpunkBridge.connect();

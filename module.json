@@ -21,6 +21,11 @@
       "url": "https://gitlab.com/surrealtech"
     }
   ],
+  "documentTypes": {
+    "JournalEntryPage": {
+      "datapool": {}
+    }
+  },
   "esmodules": ["dist/module.mjs"],
   "description": "Cyberpunk Red Agent Bridge",
   "url": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge",
