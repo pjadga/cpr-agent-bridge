@@ -1324,6 +1324,8 @@ class CyberpunkBridge {
             }
 
             case 'MOVE_TOKEN': {
+                if (game.paused)
+                    break;
 
                 const token = canvas.tokens.get(tokenId);
                 if (token) {
