@@ -1,22 +1,30 @@
 export class DataPoolPageSheet extends JournalPageSheet {
 
+    /** @override */
+    static LOCAL_TEMPLATES = {
+        "cpr-agent.datapool": "modules/cpr-agent/templates/data-pool.hbs"
+    };
+
+    /** @override */
+    get template() {
+        // Forces the sheet to respect your custom edit/view templates
+        return this.isEditable ? this.options.editTemplate : this.options.viewTemplate;
+    }
+
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            classes: ["sheet", "journal-sheet", "data-pool-sheet"],
+            classes: ["sheet", "journal-entry-page", "data-pool-sheet"],
+            viewTemplate: "modules/cpr-agent/templates/data-pool.hbs",
+            editTemplate: "modules/cpr-agent/templates/data-pool.hbs",
             width: 700,
             height: 800,
-            submitOnChange: true, // Auto-saves when inputs lose focus
+            submitOnChange: true,
             closeOnSubmit: false
         });
     }
 
-    get template() {
-        return `modules/cpr-agent/templates/data-pool.hbs`;
-    }
-
     async getData(options) {
         const context = super.getData(options);
-        // Expose the entries to the handlebars template
         context.entries = this.document.system.entries || [];
 
         // Enrich HTML for the rich text editors so links and secrets work
@@ -42,6 +50,8 @@ export class DataPoolPageSheet extends JournalPageSheet {
         html.find('.delete-entry').click(this._onDeleteEntry.bind(this));
     }
 
+
+
     async _onAddEntry(event) {
         event.preventDefault();
         const currentEntries = this.document.system.entries || [];
@@ -60,4 +70,5 @@ export class DataPoolPageSheet extends JournalPageSheet {
         const newEntries = currentEntries.filter(e => e.id !== entryId);
         await this.document.update({ "system.entries": newEntries });
     }
+
 }

@@ -1,3 +1,6 @@
+var Pr = Object.defineProperty;
+var Er = (y, c, r) => c in y ? Pr(y, c, { enumerable: !0, configurable: !0, writable: !0, value: r }) : y[c] = r;
+var at = (y, c, r) => Er(y, typeof c != "symbol" ? c + "" : c, r);
 import.meta.hot && import.meta.hot.accept((y) => {
   console.log("Hot reloading module...");
 });
@@ -13,14 +16,14 @@ function Y(y, c) {
   if (!(y instanceof c))
     throw new TypeError("Cannot call a class as a function");
 }
-function Ar(y, c) {
+function xr(y, c) {
   for (var r = 0; r < c.length; r++) {
     var o = c[r];
     o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(y, o.key, o);
   }
 }
 function Z(y, c, r) {
-  return c && Ar(y.prototype, c), Object.defineProperty(y, "prototype", {
+  return c && xr(y.prototype, c), Object.defineProperty(y, "prototype", {
     writable: !1
   }), y;
 }
@@ -45,19 +48,19 @@ function ie(y, c) {
     }
   }), Object.defineProperty(y, "prototype", {
     writable: !1
-  }), c && lt(y, c);
+  }), c && ct(y, c);
 }
 function Ve(y) {
   return Ve = Object.setPrototypeOf ? Object.getPrototypeOf : function(r) {
     return r.__proto__ || Object.getPrototypeOf(r);
   }, Ve(y);
 }
-function lt(y, c) {
-  return lt = Object.setPrototypeOf || function(o, i) {
+function ct(y, c) {
+  return ct = Object.setPrototypeOf || function(o, i) {
     return o.__proto__ = i, o;
-  }, lt(y, c);
+  }, ct(y, c);
 }
-function Pr() {
+function Or() {
   if (typeof Reflect > "u" || !Reflect.construct || Reflect.construct.sham) return !1;
   if (typeof Proxy == "function") return !0;
   try {
@@ -67,20 +70,20 @@ function Pr() {
     return !1;
   }
 }
-function Er(y) {
+function Mr(y) {
   if (y === void 0)
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
   return y;
 }
-function xr(y, c) {
+function Nr(y, c) {
   if (c && (typeof c == "object" || typeof c == "function"))
     return c;
   if (c !== void 0)
     throw new TypeError("Derived constructors may only return object or undefined");
-  return Er(y);
+  return Mr(y);
 }
 function oe(y) {
-  var c = Pr();
+  var c = Or();
   return function() {
     var o = Ve(y), i;
     if (c) {
@@ -88,10 +91,10 @@ function oe(y) {
       i = Reflect.construct(o, arguments, l);
     } else
       i = o.apply(this, arguments);
-    return xr(this, i);
+    return Nr(this, i);
   };
 }
-var ut = /* @__PURE__ */ function() {
+var lt = /* @__PURE__ */ function() {
   function y() {
     Y(this, y);
   }
@@ -122,7 +125,7 @@ var ut = /* @__PURE__ */ function() {
       return this.stopListening(".client-" + r, o);
     }
   }]), y;
-}(), Nt = /* @__PURE__ */ function() {
+}(), Mt = /* @__PURE__ */ function() {
   function y(c) {
     Y(this, y), this.namespace = c;
   }
@@ -141,7 +144,7 @@ var ut = /* @__PURE__ */ function() {
     }
   }]), y;
 }();
-function Or(y) {
+function Dr(y) {
   try {
     new y();
   } catch (c) {
@@ -149,12 +152,12 @@ function Or(y) {
   }
   return !0;
 }
-var ht = /* @__PURE__ */ function(y) {
+var ut = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r(o, i, l) {
     var h;
-    return Y(this, r), h = c.call(this), h.name = i, h.pusher = o, h.options = l, h.eventFormatter = new Nt(h.options.namespace), h.subscribe(), h;
+    return Y(this, r), h = c.call(this), h.name = i, h.pusher = o, h.options = l, h.eventFormatter = new Mt(h.options.namespace), h.subscribe(), h;
   }
   return Z(r, [{
     key: "subscribe",
@@ -236,7 +239,7 @@ var ht = /* @__PURE__ */ function(y) {
       return this.subscription.bind(i, l), this;
     }
   }]), r;
-}(ut), Dt = /* @__PURE__ */ function(y) {
+}(lt), Nt = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -253,7 +256,7 @@ var ht = /* @__PURE__ */ function(y) {
       }
     )
   }]), r;
-}(ht), Mr = /* @__PURE__ */ function(y) {
+}(ut), Fr = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -270,7 +273,7 @@ var ht = /* @__PURE__ */ function(y) {
       }
     )
   }]), r;
-}(ht), Nr = /* @__PURE__ */ function(y) {
+}(ut), jr = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -319,12 +322,12 @@ var ht = /* @__PURE__ */ function(y) {
       }), this;
     }
   }]), r;
-}(Dt), Ft = /* @__PURE__ */ function(y) {
+}(Nt), Dt = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r(o, i, l) {
     var h;
-    return Y(this, r), h = c.call(this), h.events = {}, h.listeners = {}, h.name = i, h.socket = o, h.options = l, h.eventFormatter = new Nt(h.options.namespace), h.subscribe(), h;
+    return Y(this, r), h = c.call(this), h.events = {}, h.listeners = {}, h.name = i, h.socket = o, h.options = l, h.eventFormatter = new Mt(h.options.namespace), h.subscribe(), h;
   }
   return Z(r, [{
     key: "subscribe",
@@ -414,7 +417,7 @@ var ht = /* @__PURE__ */ function(y) {
       })), (!l || this.listeners[i].length === 0) && (this.events[i] && (this.socket.removeListener(i, this.events[i]), delete this.events[i]), delete this.listeners[i]);
     }
   }]), r;
-}(ut), jt = /* @__PURE__ */ function(y) {
+}(lt), Ft = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -435,7 +438,7 @@ var ht = /* @__PURE__ */ function(y) {
       }
     )
   }]), r;
-}(Ft), Dr = /* @__PURE__ */ function(y) {
+}(Dt), Ur = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -488,7 +491,7 @@ var ht = /* @__PURE__ */ function(y) {
       }), this;
     }
   }]), r;
-}(jt), We = /* @__PURE__ */ function(y) {
+}(Ft), We = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -559,7 +562,7 @@ var ht = /* @__PURE__ */ function(y) {
       return this;
     }
   }]), r;
-}(ut), Ut = /* @__PURE__ */ function(y) {
+}(lt), jt = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -576,7 +579,7 @@ var ht = /* @__PURE__ */ function(y) {
       }
     )
   }]), r;
-}(We), Fr = /* @__PURE__ */ function(y) {
+}(We), Hr = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -593,7 +596,7 @@ var ht = /* @__PURE__ */ function(y) {
       }
     )
   }]), r;
-}(We), jr = /* @__PURE__ */ function(y) {
+}(We), Br = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -634,7 +637,7 @@ var ht = /* @__PURE__ */ function(y) {
       return this;
     }
   }]), r;
-}(Ut), dt = /* @__PURE__ */ function() {
+}(jt), ht = /* @__PURE__ */ function() {
   function y(c) {
     Y(this, y), this._defaultOptions = {
       auth: {
@@ -670,7 +673,7 @@ var ht = /* @__PURE__ */ function(y) {
       return typeof window < "u" && window.Laravel && window.Laravel.csrfToken ? window.Laravel.csrfToken : this.options.csrfToken ? this.options.csrfToken : typeof document < "u" && typeof document.querySelector == "function" && (r = document.querySelector('meta[name="csrf-token"]')) ? r.getAttribute("content") : null;
     }
   }]), y;
-}(), Ot = /* @__PURE__ */ function(y) {
+}(), xt = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -704,7 +707,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "channel",
     value: function(i) {
-      return this.channels[i] || (this.channels[i] = new ht(this.pusher, i, this.options)), this.channels[i];
+      return this.channels[i] || (this.channels[i] = new ut(this.pusher, i, this.options)), this.channels[i];
     }
     /**
      * Get a private channel instance by name.
@@ -712,7 +715,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "privateChannel",
     value: function(i) {
-      return this.channels["private-" + i] || (this.channels["private-" + i] = new Dt(this.pusher, "private-" + i, this.options)), this.channels["private-" + i];
+      return this.channels["private-" + i] || (this.channels["private-" + i] = new Nt(this.pusher, "private-" + i, this.options)), this.channels["private-" + i];
     }
     /**
      * Get a private encrypted channel instance by name.
@@ -720,7 +723,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "encryptedPrivateChannel",
     value: function(i) {
-      return this.channels["private-encrypted-" + i] || (this.channels["private-encrypted-" + i] = new Mr(this.pusher, "private-encrypted-" + i, this.options)), this.channels["private-encrypted-" + i];
+      return this.channels["private-encrypted-" + i] || (this.channels["private-encrypted-" + i] = new Fr(this.pusher, "private-encrypted-" + i, this.options)), this.channels["private-encrypted-" + i];
     }
     /**
      * Get a presence channel instance by name.
@@ -728,7 +731,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "presenceChannel",
     value: function(i) {
-      return this.channels["presence-" + i] || (this.channels["presence-" + i] = new Nr(this.pusher, "presence-" + i, this.options)), this.channels["presence-" + i];
+      return this.channels["presence-" + i] || (this.channels["presence-" + i] = new jr(this.pusher, "presence-" + i, this.options)), this.channels["presence-" + i];
     }
     /**
      * Leave the given channel, as well as its private and presence variants.
@@ -766,7 +769,7 @@ var ht = /* @__PURE__ */ function(y) {
       this.pusher.disconnect();
     }
   }]), r;
-}(dt), Mt = /* @__PURE__ */ function(y) {
+}(ht), Ot = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -809,7 +812,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "channel",
     value: function(i) {
-      return this.channels[i] || (this.channels[i] = new Ft(this.socket, i, this.options)), this.channels[i];
+      return this.channels[i] || (this.channels[i] = new Dt(this.socket, i, this.options)), this.channels[i];
     }
     /**
      * Get a private channel instance by name.
@@ -817,7 +820,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "privateChannel",
     value: function(i) {
-      return this.channels["private-" + i] || (this.channels["private-" + i] = new jt(this.socket, "private-" + i, this.options)), this.channels["private-" + i];
+      return this.channels["private-" + i] || (this.channels["private-" + i] = new Ft(this.socket, "private-" + i, this.options)), this.channels["private-" + i];
     }
     /**
      * Get a presence channel instance by name.
@@ -825,7 +828,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "presenceChannel",
     value: function(i) {
-      return this.channels["presence-" + i] || (this.channels["presence-" + i] = new Dr(this.socket, "presence-" + i, this.options)), this.channels["presence-" + i];
+      return this.channels["presence-" + i] || (this.channels["presence-" + i] = new Ur(this.socket, "presence-" + i, this.options)), this.channels["presence-" + i];
     }
     /**
      * Leave the given channel, as well as its private and presence variants.
@@ -863,7 +866,7 @@ var ht = /* @__PURE__ */ function(y) {
       this.socket.disconnect();
     }
   }]), r;
-}(dt), Ur = /* @__PURE__ */ function(y) {
+}(ht), qr = /* @__PURE__ */ function(y) {
   ie(r, y);
   var c = oe(r);
   function r() {
@@ -896,7 +899,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "privateChannel",
     value: function(i) {
-      return new Ut();
+      return new jt();
     }
     /**
      * Get a private encrypted channel instance by name.
@@ -904,7 +907,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "encryptedPrivateChannel",
     value: function(i) {
-      return new Fr();
+      return new Hr();
     }
     /**
      * Get a presence channel instance by name.
@@ -912,7 +915,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "presenceChannel",
     value: function(i) {
-      return new jr();
+      return new Br();
     }
     /**
      * Leave the given channel, as well as its private and presence variants.
@@ -944,7 +947,7 @@ var ht = /* @__PURE__ */ function(y) {
     value: function() {
     }
   }]), r;
-}(dt), Hr = /* @__PURE__ */ function() {
+}(ht), zr = /* @__PURE__ */ function() {
   function y(c) {
     Y(this, y), this.options = c, this.connect(), this.options.withoutInterceptors || this.registerInterceptors();
   }
@@ -960,16 +963,16 @@ var ht = /* @__PURE__ */ function(y) {
     key: "connect",
     value: function() {
       if (this.options.broadcaster == "reverb")
-        this.connector = new Ot(Ee(Ee({}, this.options), {
+        this.connector = new xt(Ee(Ee({}, this.options), {
           cluster: ""
         }));
       else if (this.options.broadcaster == "pusher")
-        this.connector = new Ot(this.options);
+        this.connector = new xt(this.options);
       else if (this.options.broadcaster == "socket.io")
-        this.connector = new Mt(this.options);
+        this.connector = new Ot(this.options);
       else if (this.options.broadcaster == "null")
-        this.connector = new Ur(this.options);
-      else if (typeof this.options.broadcaster == "function" && Or(this.options.broadcaster))
+        this.connector = new qr(this.options);
+      else if (typeof this.options.broadcaster == "function" && Dr(this.options.broadcaster))
         this.connector = new this.options.broadcaster(this.options);
       else
         throw new Error("Broadcaster ".concat(Pe(this.options.broadcaster), " ").concat(this.options.broadcaster, " is not supported."));
@@ -1037,7 +1040,7 @@ var ht = /* @__PURE__ */ function(y) {
   }, {
     key: "encryptedPrivate",
     value: function(r) {
-      if (this.connector instanceof Mt)
+      if (this.connector instanceof Ot)
         throw new Error("Broadcaster ".concat(Pe(this.options.broadcaster), " ").concat(this.options.broadcaster, " does not support encrypted private channels."));
       return this.connector.encryptedPrivateChannel(r);
     }
@@ -1104,10 +1107,10 @@ var ht = /* @__PURE__ */ function(y) {
     }
   }]), y;
 }();
-function Br(y) {
+function $r(y) {
   return y && y.__esModule && Object.prototype.hasOwnProperty.call(y, "default") ? y.default : y;
 }
-var Ht = { exports: {} };
+var Ut = { exports: {} };
 /*!
  * Pusher JavaScript Library v8.4.0
  * https://pusher.com/
@@ -1822,17 +1825,17 @@ var Ht = { exports: {} };
               this.request && this.request.cleanup();
             }
           }
-          var Bt = function(n, e) {
+          var qt = function(n, e) {
             return function(t, s) {
               var a = "http" + (e ? "s" : "") + "://", d = a + (n.host || n.options.host) + n.options.path, b = M.createJSONPRequest(d, t), S = M.ScriptReceivers.create(function(O, U) {
                 h.remove(S), b.cleanup(), U && U.host && (n.host = U.host), s && s(O, U);
               });
               b.send(S);
             };
-          }, qt = {
+          }, zt = {
             name: "jsonp",
-            getAgent: Bt
-          }, zt = qt;
+            getAgent: qt
+          }, $t = zt;
           function Xe(n, e, t) {
             var s = n + (e.useTLS ? "s" : ""), a = e.useTLS ? e.hostTLS : e.hostNonTLS;
             return s + "://" + a + t;
@@ -1841,17 +1844,17 @@ var Ht = { exports: {} };
             var t = "/app/" + n, s = "?protocol=" + _.PROTOCOL + "&client=js&version=" + _.VERSION + (e ? "&" + e : "");
             return t + s;
           }
-          var $t = {
+          var Gt = {
             getInitial: function(n, e) {
               var t = (e.httpPath || "") + Ke(n, "flash=false");
               return Xe("ws", e, t);
             }
-          }, Gt = {
+          }, Vt = {
             getInitial: function(n, e) {
               var t = (e.httpPath || "/pusher") + Ke(n);
               return Xe("http", e, t);
             }
-          }, Vt = {
+          }, Wt = {
             getInitial: function(n, e) {
               return Xe("http", e, e.httpPath || "/pusher");
             },
@@ -1859,7 +1862,7 @@ var Ht = { exports: {} };
               return Ke(n);
             }
           };
-          class Wt {
+          class Xt {
             constructor() {
               this._callbacks = {};
             }
@@ -1899,7 +1902,7 @@ var Ht = { exports: {} };
           }
           class ge {
             constructor(e) {
-              this.callbacks = new Wt(), this.global_callbacks = [], this.failThrough = e;
+              this.callbacks = new Xt(), this.global_callbacks = [], this.failThrough = e;
             }
             bind(e, t, s) {
               return this.callbacks.add(e, t, s), this;
@@ -1927,7 +1930,7 @@ var Ht = { exports: {} };
               return this;
             }
           }
-          class Xt extends ge {
+          class Kt extends ge {
             constructor(e, t, s, a, d) {
               super(), this.initialize = M.transportConnectionInitializer, this.hooks = e, this.name = t, this.priority = s, this.key = a, this.options = d, this.state = "new", this.timeline = d.timeline, this.activityTimeout = d.activityTimeout, this.id = this.timeline.generateUniqueID();
             }
@@ -2014,11 +2017,11 @@ var Ht = { exports: {} };
               return this.hooks.isSupported(e);
             }
             createConnection(e, t, s, a) {
-              return new Xt(this.hooks, e, t, s, a);
+              return new Kt(this.hooks, e, t, s, a);
             }
           }
-          var Kt = new Ie({
-            urls: $t,
+          var Jt = new Ie({
+            urls: Gt,
             handlesActivityChecks: !1,
             supportsPing: !1,
             isInitialized: function() {
@@ -2030,32 +2033,32 @@ var Ht = { exports: {} };
             getSocket: function(n) {
               return M.createWebSocket(n);
             }
-          }), ft = {
-            urls: Gt,
+          }), dt = {
+            urls: Vt,
             handlesActivityChecks: !1,
             supportsPing: !0,
             isInitialized: function() {
               return !0;
             }
-          }, pt = u({
+          }, ft = u({
             getSocket: function(n) {
               return M.HTTPFactory.createStreamingSocket(n);
             }
-          }, ft), gt = u({
+          }, dt), pt = u({
             getSocket: function(n) {
               return M.HTTPFactory.createPollingSocket(n);
             }
-          }, ft), mt = {
+          }, dt), gt = {
             isSupported: function() {
               return M.isXHRSupported();
             }
-          }, Jt = new Ie(u({}, pt, mt)), Qt = new Ie(u({}, gt, mt)), Yt = {
-            ws: Kt,
-            xhr_streaming: Jt,
-            xhr_polling: Qt
-          }, qe = Yt, Zt = new Ie({
+          }, Qt = new Ie(u({}, ft, gt)), Yt = new Ie(u({}, pt, gt)), Zt = {
+            ws: Jt,
+            xhr_streaming: Qt,
+            xhr_polling: Yt
+          }, qe = Zt, en = new Ie({
             file: "sockjs",
-            urls: Vt,
+            urls: Wt,
             handlesActivityChecks: !0,
             supportsPing: !1,
             isSupported: function() {
@@ -2077,15 +2080,15 @@ var Ht = { exports: {} };
                 path: e
               }));
             }
-          }), yt = {
+          }), mt = {
             isSupported: function(n) {
               var e = M.isXDRSupported(n.useTLS);
               return e;
             }
-          }, en = new Ie(u({}, pt, yt)), tn = new Ie(u({}, gt, yt));
-          qe.xdr_streaming = en, qe.xdr_polling = tn, qe.sockjs = Zt;
-          var nn = qe;
-          class rn extends ge {
+          }, tn = new Ie(u({}, ft, mt)), nn = new Ie(u({}, pt, mt));
+          qe.xdr_streaming = tn, qe.xdr_polling = nn, qe.sockjs = en;
+          var rn = qe;
+          class sn extends ge {
             constructor() {
               super();
               var e = this;
@@ -2099,8 +2102,8 @@ var Ht = { exports: {} };
               return window.navigator.onLine === void 0 ? !0 : window.navigator.onLine;
             }
           }
-          var sn = new rn();
-          class on {
+          var on = new sn();
+          class an {
             constructor(e, t, s) {
               this.manager = e, this.transport = t, this.minPingDelay = s.minPingDelay, this.maxPingDelay = s.maxPingDelay, this.pingDelay = void 0;
             }
@@ -2124,7 +2127,7 @@ var Ht = { exports: {} };
               return this.manager.isAlive() && this.transport.isSupported(e);
             }
           }
-          const vt = {
+          const yt = {
             decodeMessage: function(n) {
               try {
                 var e = JSON.parse(n.data), t = e.data;
@@ -2147,7 +2150,7 @@ var Ht = { exports: {} };
               return JSON.stringify(n);
             },
             processHandshake: function(n) {
-              var e = vt.decodeMessage(n);
+              var e = yt.decodeMessage(n);
               if (e.event === "pusher:connection_established") {
                 if (!e.data.activity_timeout)
                   throw "No activity timeout specified in handshake";
@@ -2178,8 +2181,8 @@ var Ht = { exports: {} };
               } : null;
             }
           };
-          var _e = vt;
-          class an extends ge {
+          var _e = yt;
+          class cn extends ge {
             constructor(e, t) {
               super(), this.id = e, this.transport = t, this.activityTimeout = t.activityTimeout, this.bindListeners();
             }
@@ -2253,7 +2256,7 @@ var Ht = { exports: {} };
               s && this.emit("error", s), t && this.emit(t, { action: t, error: s });
             }
           }
-          class cn {
+          class ln {
             constructor(e, t) {
               this.transport = e, this.callback = t, this.bindListeners();
             }
@@ -2271,7 +2274,7 @@ var Ht = { exports: {} };
                   return;
                 }
                 t.action === "connected" ? this.finish("connected", {
-                  connection: new an(t.id, this.transport),
+                  connection: new cn(t.id, this.transport),
                   activityTimeout: t.activityTimeout
                 }) : (this.finish(t.action, { error: t.error }), this.transport.close());
               }, this.onClosed = (e) => {
@@ -2287,7 +2290,7 @@ var Ht = { exports: {} };
               this.callback(u({ transport: this.transport, action: e }, t));
             }
           }
-          class ln {
+          class un {
             constructor(e, t) {
               this.timeline = e, this.options = t || {};
             }
@@ -2365,7 +2368,7 @@ var Ht = { exports: {} };
               }, t);
             }
           }
-          class un {
+          class hn {
             constructor() {
               this.reset();
             }
@@ -2397,7 +2400,7 @@ var Ht = { exports: {} };
               this.members = {}, this.count = 0, this.myID = null, this.me = null;
             }
           }
-          var hn = function(n, e, t, s) {
+          var dn = function(n, e, t, s) {
             function a(d) {
               return d instanceof t ? d : new t(function(b) {
                 b(d);
@@ -2424,12 +2427,12 @@ var Ht = { exports: {} };
               U((s = s.apply(n, e || [])).next());
             });
           };
-          class dn extends Ye {
+          class fn extends Ye {
             constructor(e, t) {
-              super(e, t), this.members = new un();
+              super(e, t), this.members = new hn();
             }
             authorize(e, t) {
-              super.authorize(e, (s, a) => hn(this, void 0, void 0, function* () {
+              super.authorize(e, (s, a) => dn(this, void 0, void 0, function* () {
                 if (!s)
                   if (a = a, a.channel_data != null) {
                     var d = JSON.parse(a.channel_data);
@@ -2479,8 +2482,8 @@ var Ht = { exports: {} };
               this.members.reset(), super.disconnect();
             }
           }
-          var fn = i(1), Ze = i(0);
-          class pn extends Ye {
+          var pn = i(1), Ze = i(0);
+          class gn extends Ye {
             constructor(e, t, s) {
               super(e, t), this.key = null, this.nacl = s;
             }
@@ -2546,7 +2549,7 @@ var Ht = { exports: {} };
               this.emit(e, this.getDataToEmit(d));
             }
             getDataToEmit(e) {
-              let t = Object(fn.decode)(e);
+              let t = Object(pn.decode)(e);
               try {
                 return JSON.parse(t);
               } catch {
@@ -2554,7 +2557,7 @@ var Ht = { exports: {} };
               }
             }
           }
-          class gn extends ge {
+          class mn extends ge {
             constructor(e, t) {
               super(), this.state = "initialized", this.connection = null, this.key = e, this.options = t, this.timeline = this.options.timeline, this.usingTLS = this.options.useTLS, this.errorCallbacks = this.buildErrorCallbacks(), this.connectionCallbacks = this.buildConnectionCallbacks(this.errorCallbacks), this.handshakeCallbacks = this.buildHandshakeCallbacks(this.errorCallbacks);
               var s = M.getNetwork();
@@ -2710,12 +2713,12 @@ var Ht = { exports: {} };
               return this.state === "connecting" || this.state === "connected";
             }
           }
-          class mn {
+          class yn {
             constructor() {
               this.channels = {};
             }
             add(e, t) {
-              return this.channels[e] || (this.channels[e] = yn(e, t)), this.channels[e];
+              return this.channels[e] || (this.channels[e] = vn(e, t)), this.channels[e];
             }
             all() {
               return D(this.channels);
@@ -2733,7 +2736,7 @@ var Ht = { exports: {} };
               });
             }
           }
-          function yn(n, e) {
+          function vn(n, e) {
             if (n.indexOf("private-encrypted-") === 0) {
               if (e.config.nacl)
                 return me.createEncryptedChannel(n, e, e.config.nacl);
@@ -2749,12 +2752,12 @@ var Ht = { exports: {} };
               return me.createChannel(n, e);
             }
           }
-          var vn = {
+          var bn = {
             createChannels() {
-              return new mn();
+              return new yn();
             },
             createConnectionManager(n, e) {
-              return new gn(n, e);
+              return new mn(n, e);
             },
             createChannel(n, e) {
               return new Qe(n, e);
@@ -2763,22 +2766,22 @@ var Ht = { exports: {} };
               return new Ye(n, e);
             },
             createPresenceChannel(n, e) {
-              return new dn(n, e);
+              return new fn(n, e);
             },
             createEncryptedChannel(n, e, t) {
-              return new pn(n, e, t);
+              return new gn(n, e, t);
             },
             createTimelineSender(n, e) {
-              return new ln(n, e);
+              return new un(n, e);
             },
             createHandshake(n, e) {
-              return new cn(n, e);
+              return new ln(n, e);
             },
             createAssistantToTheTransportManager(n, e, t) {
-              return new on(n, e, t);
+              return new an(n, e, t);
             }
-          }, me = vn;
-          class bt {
+          }, me = bn;
+          class vt {
             constructor(e) {
               this.options = e || {}, this.livesLeft = this.options.lives || 1 / 0;
             }
@@ -2839,10 +2842,10 @@ var Ht = { exports: {} };
               return W(this.strategies, Q.method("isSupported"));
             }
             connect(e, t) {
-              return bn(this.strategies, e, function(s, a) {
+              return kn(this.strategies, e, function(s, a) {
                 return function(d, b) {
                   if (a[s].error = d, d) {
-                    kn(a) && t(!0);
+                    wn(a) && t(!0);
                     return;
                   }
                   I(a, function(S) {
@@ -2852,13 +2855,13 @@ var Ht = { exports: {} };
               });
             }
           }
-          function bn(n, e, t) {
+          function kn(n, e, t) {
             var s = T(n, function(a, d, b, S) {
               return a.connect(e, t(d, S));
             });
             return {
               abort: function() {
-                I(s, wn);
+                I(s, _n);
               },
               forceMinPriority: function(a) {
                 I(s, function(d) {
@@ -2867,15 +2870,15 @@ var Ht = { exports: {} };
               }
             };
           }
-          function kn(n) {
+          function wn(n) {
             return re(n, function(e) {
               return !!e.error;
             });
           }
-          function wn(n) {
+          function _n(n) {
             !n.error && !n.aborted && (n.abort(), n.aborted = !0);
           }
-          class _n {
+          class Sn {
             constructor(e, t, s) {
               this.strategy = e, this.transports = t, this.ttl = s.ttl || 1800 * 1e3, this.usingTLS = s.useTLS, this.timeline = s.timeline;
             }
@@ -2883,7 +2886,7 @@ var Ht = { exports: {} };
               return this.strategy.isSupported();
             }
             connect(e, t) {
-              var s = this.usingTLS, a = Sn(s), d = a && a.cacheSkipCount ? a.cacheSkipCount : 0, b = [this.strategy];
+              var s = this.usingTLS, a = Cn(s), d = a && a.cacheSkipCount ? a.cacheSkipCount : 0, b = [this.strategy];
               if (a && a.timestamp + this.ttl >= Q.now()) {
                 var S = this.transports[a.transport];
                 S && (["ws", "wss"].includes(a.transport) || d > 3 ? (this.timeline.info({
@@ -2896,7 +2899,7 @@ var Ht = { exports: {} };
                 }))) : d++);
               }
               var O = Q.now(), U = b.pop().connect(e, function q(X, Ge) {
-                X ? (kt(s), b.length > 0 ? (O = Q.now(), U = b.pop().connect(e, q)) : t(X)) : (Cn(s, Ge.transport.name, Q.now() - O, d), t(null, Ge));
+                X ? (bt(s), b.length > 0 ? (O = Q.now(), U = b.pop().connect(e, q)) : t(X)) : (Tn(s, Ge.transport.name, Q.now() - O, d), t(null, Ge));
               });
               return {
                 abort: function() {
@@ -2911,7 +2914,7 @@ var Ht = { exports: {} };
           function tt(n) {
             return "pusherTransport" + (n ? "TLS" : "NonTLS");
           }
-          function Sn(n) {
+          function Cn(n) {
             var e = M.getLocalStorage();
             if (e)
               try {
@@ -2919,11 +2922,11 @@ var Ht = { exports: {} };
                 if (t)
                   return JSON.parse(t);
               } catch {
-                kt(n);
+                bt(n);
               }
             return null;
           }
-          function Cn(n, e, t, s) {
+          function Tn(n, e, t, s) {
             var a = M.getLocalStorage();
             if (a)
               try {
@@ -2936,7 +2939,7 @@ var Ht = { exports: {} };
               } catch {
               }
           }
-          function kt(n) {
+          function bt(n) {
             var e = M.getLocalStorage();
             if (e)
               try {
@@ -2978,7 +2981,7 @@ var Ht = { exports: {} };
               return s.connect(e, t);
             }
           }
-          class Tn {
+          class In {
             constructor(e) {
               this.strategy = e;
             }
@@ -2997,11 +3000,11 @@ var Ht = { exports: {} };
               return n.isSupported();
             };
           }
-          var In = function(n, e, t) {
+          var Rn = function(n, e, t) {
             var s = {};
-            function a(Et, Tr, Ir, Rr, Lr) {
-              var xt = t(n, Et, Tr, Ir, Rr, Lr);
-              return s[Et] = xt, xt;
+            function a(Pt, Ir, Rr, Lr, Ar) {
+              var Et = t(n, Pt, Ir, Rr, Lr, Ar);
+              return s[Pt] = Et, Et;
             }
             var d = Object.assign({}, e, {
               hostNonTLS: n.wsHost + ":" + n.wsPort,
@@ -3017,43 +3020,43 @@ var Ht = { exports: {} };
               loop: !0,
               timeout: 15e3,
               timeoutLimit: 6e4
-            }, U = new bt({
+            }, U = new vt({
               minPingDelay: 1e4,
               maxPingDelay: n.activityTimeout
-            }), q = new bt({
+            }), q = new vt({
               lives: 2,
               minPingDelay: 1e4,
               maxPingDelay: n.activityTimeout
-            }), X = a("ws", "ws", 3, d, U), Ge = a("wss", "ws", 3, b, U), kr = a("sockjs", "sockjs", 1, S), Tt = a("xhr_streaming", "xhr_streaming", 1, S, q), wr = a("xdr_streaming", "xdr_streaming", 1, S, q), It = a("xhr_polling", "xhr_polling", 1, S), _r = a("xdr_polling", "xdr_polling", 1, S), Rt = new Se([X], O), Sr = new Se([Ge], O), Cr = new Se([kr], O), Lt = new Se([
-              new Le(Ae(Tt), Tt, wr)
+            }), X = a("ws", "ws", 3, d, U), Ge = a("wss", "ws", 3, b, U), wr = a("sockjs", "sockjs", 1, S), Ct = a("xhr_streaming", "xhr_streaming", 1, S, q), _r = a("xdr_streaming", "xdr_streaming", 1, S, q), Tt = a("xhr_polling", "xhr_polling", 1, S), Sr = a("xdr_polling", "xdr_polling", 1, S), It = new Se([X], O), Cr = new Se([Ge], O), Tr = new Se([wr], O), Rt = new Se([
+              new Le(Ae(Ct), Ct, _r)
+            ], O), Lt = new Se([
+              new Le(Ae(Tt), Tt, Sr)
             ], O), At = new Se([
-              new Le(Ae(It), It, _r)
-            ], O), Pt = new Se([
-              new Le(Ae(Lt), new et([
-                Lt,
-                new ze(At, { delay: 4e3 })
-              ]), At)
-            ], O), it = new Le(Ae(Pt), Pt, Cr), ot;
+              new Le(Ae(Rt), new et([
+                Rt,
+                new ze(Lt, { delay: 4e3 })
+              ]), Lt)
+            ], O), it = new Le(Ae(At), At, Tr), ot;
             return e.useTLS ? ot = new et([
-              Rt,
+              It,
               new ze(it, { delay: 2e3 })
             ]) : ot = new et([
-              Rt,
-              new ze(Sr, { delay: 2e3 }),
+              It,
+              new ze(Cr, { delay: 2e3 }),
               new ze(it, { delay: 5e3 })
-            ]), new _n(new Tn(new Le(Ae(X), ot, it)), s, {
+            ]), new Sn(new In(new Le(Ae(X), ot, it)), s, {
               ttl: 18e5,
               timeline: e.timeline,
               useTLS: e.useTLS
             });
-          }, Rn = In, Ln = function() {
+          }, Ln = Rn, An = function() {
             var n = this;
             n.timeline.info(n.buildTimelineMessage({
               transport: n.name + (n.options.useTLS ? "s" : "")
             })), n.hooks.isInitialized() ? n.changeState("initialized") : n.hooks.file ? (n.changeState("initializing"), C.load(n.hooks.file, { useTLS: n.options.useTLS }, function(e, t) {
               n.hooks.isInitialized() ? (n.changeState("initialized"), t(!0)) : (e && n.onError(e), n.onClose(), t(!1));
             })) : n.onClose();
-          }, An = {
+          }, Pn = {
             getRequest: function(n) {
               var e = new window.XDomainRequest();
               return e.ontimeout = function() {
@@ -3069,9 +3072,9 @@ var Ht = { exports: {} };
             abortRequest: function(n) {
               n.ontimeout = n.onerror = n.onprogress = n.onload = null, n.abort();
             }
-          }, Pn = An;
-          const En = 256 * 1024;
-          class xn extends ge {
+          }, En = Pn;
+          const xn = 256 * 1024;
+          class On extends ge {
             constructor(e, t, s) {
               super(), this.hooks = e, this.method = t, this.url = s;
             }
@@ -3099,17 +3102,17 @@ var Ht = { exports: {} };
               return s !== -1 ? (this.position += s + 1, t.slice(0, s)) : null;
             }
             isBufferTooLong(e) {
-              return this.position === e.length && e.length > En;
+              return this.position === e.length && e.length > xn;
             }
           }
           var nt;
           (function(n) {
             n[n.CONNECTING = 0] = "CONNECTING", n[n.OPEN = 1] = "OPEN", n[n.CLOSED = 3] = "CLOSED";
           })(nt || (nt = {}));
-          var Ce = nt, On = 1;
-          class Mn {
+          var Ce = nt, Mn = 1;
+          class Nn {
             constructor(e, t) {
-              this.hooks = e, this.session = _t(1e3) + "/" + jn(8), this.location = Nn(t), this.readyState = Ce.CONNECTING, this.openStream();
+              this.hooks = e, this.session = wt(1e3) + "/" + Un(8), this.location = Dn(t), this.readyState = Ce.CONNECTING, this.openStream();
             }
             send(e) {
               return this.sendRaw(JSON.stringify([e]));
@@ -3123,7 +3126,7 @@ var Ht = { exports: {} };
             sendRaw(e) {
               if (this.readyState === Ce.OPEN)
                 try {
-                  return M.createSocketRequest("POST", wt(Dn(this.location, this.session))).start(e), !0;
+                  return M.createSocketRequest("POST", kt(Fn(this.location, this.session))).start(e), !0;
                 } catch {
                   return !1;
                 }
@@ -3166,7 +3169,7 @@ var Ht = { exports: {} };
               }
             }
             onOpen(e) {
-              this.readyState === Ce.CONNECTING ? (e && e.hostname && (this.location.base = Fn(this.location.base, e.hostname)), this.readyState = Ce.OPEN, this.onopen && this.onopen()) : this.onClose(1006, "Server lost session", !0);
+              this.readyState === Ce.CONNECTING ? (e && e.hostname && (this.location.base = jn(this.location.base, e.hostname)), this.readyState = Ce.OPEN, this.onopen && this.onopen()) : this.onClose(1006, "Server lost session", !0);
             }
             onEvent(e) {
               this.readyState === Ce.OPEN && this.onmessage && this.onmessage({ data: e });
@@ -3178,7 +3181,7 @@ var Ht = { exports: {} };
               this.onerror && this.onerror(e);
             }
             openStream() {
-              this.stream = M.createSocketRequest("POST", wt(this.hooks.getReceiveURL(this.location, this.session))), this.stream.bind("chunk", (e) => {
+              this.stream = M.createSocketRequest("POST", kt(this.hooks.getReceiveURL(this.location, this.session))), this.stream.bind("chunk", (e) => {
                 this.onChunk(e);
               }), this.stream.bind("finished", (e) => {
                 this.hooks.onFinished(this, e);
@@ -3197,33 +3200,33 @@ var Ht = { exports: {} };
               this.stream && (this.stream.unbind_all(), this.stream.close(), this.stream = null);
             }
           }
-          function Nn(n) {
+          function Dn(n) {
             var e = /([^\?]*)\/*(\??.*)/.exec(n);
             return {
               base: e[1],
               queryString: e[2]
             };
           }
-          function Dn(n, e) {
+          function Fn(n, e) {
             return n.base + "/" + e + "/xhr_send";
           }
-          function wt(n) {
+          function kt(n) {
             var e = n.indexOf("?") === -1 ? "?" : "&";
-            return n + e + "t=" + +/* @__PURE__ */ new Date() + "&n=" + On++;
+            return n + e + "t=" + +/* @__PURE__ */ new Date() + "&n=" + Mn++;
           }
-          function Fn(n, e) {
+          function jn(n, e) {
             var t = /(https?:\/\/)([^\/:]+)((\/|:)?.*)/.exec(n);
             return t[1] + e + t[3];
           }
-          function _t(n) {
+          function wt(n) {
             return M.randomInt(n);
           }
-          function jn(n) {
+          function Un(n) {
             for (var e = [], t = 0; t < n; t++)
-              e.push(_t(32).toString(32));
+              e.push(wt(32).toString(32));
             return e.join("");
           }
-          var Un = Mn, Hn = {
+          var Hn = Nn, Bn = {
             getReceiveURL: function(n, e) {
               return n.base + "/" + e + "/xhr_streaming" + n.queryString;
             },
@@ -3236,7 +3239,7 @@ var Ht = { exports: {} };
             onFinished: function(n, e) {
               n.onClose(1006, "Connection interrupted (" + e + ")", !1);
             }
-          }, Bn = Hn, qn = {
+          }, qn = Bn, zn = {
             getReceiveURL: function(n, e) {
               return n.base + "/" + e + "/xhr" + n.queryString;
             },
@@ -3248,7 +3251,7 @@ var Ht = { exports: {} };
             onFinished: function(n, e) {
               e === 200 ? n.reconnect() : n.onClose(1006, "Connection interrupted (" + e + ")", !1);
             }
-          }, zn = qn, $n = {
+          }, $n = zn, Gn = {
             getRequest: function(n) {
               var e = M.getXHRAPI(), t = new e();
               return t.onreadystatechange = t.onprogress = function() {
@@ -3265,36 +3268,36 @@ var Ht = { exports: {} };
             abortRequest: function(n) {
               n.onreadystatechange = null, n.abort();
             }
-          }, Gn = $n, Vn = {
+          }, Vn = Gn, Wn = {
             createStreamingSocket(n) {
-              return this.createSocket(Bn, n);
+              return this.createSocket(qn, n);
             },
             createPollingSocket(n) {
-              return this.createSocket(zn, n);
+              return this.createSocket($n, n);
             },
             createSocket(n, e) {
-              return new Un(n, e);
+              return new Hn(n, e);
             },
             createXHR(n, e) {
-              return this.createRequest(Gn, n, e);
+              return this.createRequest(Vn, n, e);
             },
             createRequest(n, e, t) {
-              return new xn(n, e, t);
+              return new On(n, e, t);
             }
-          }, St = Vn;
-          St.createXDR = function(n, e) {
-            return this.createRequest(Pn, n, e);
+          }, _t = Wn;
+          _t.createXDR = function(n, e) {
+            return this.createRequest(En, n, e);
           };
-          var Wn = St, Xn = {
+          var Xn = _t, Kn = {
             nextAuthCallbackID: 1,
             auth_callbacks: {},
             ScriptReceivers: h,
             DependenciesReceivers: R,
-            getDefaultStrategy: Rn,
-            Transports: nn,
-            transportConnectionInitializer: Ln,
-            HTTPFactory: Wn,
-            TimelineTransport: zt,
+            getDefaultStrategy: Ln,
+            Transports: rn,
+            transportConnectionInitializer: An,
+            HTTPFactory: Xn,
+            TimelineTransport: $t,
             getXHRAPI() {
               return window.XMLHttpRequest;
             },
@@ -3346,7 +3349,7 @@ var Ht = { exports: {} };
               return new ActiveXObject("Microsoft.XMLHTTP");
             },
             getNetwork() {
-              return sn;
+              return on;
             },
             createWebSocket(n) {
               var e = this.getWebSocketAPI();
@@ -3378,12 +3381,12 @@ var Ht = { exports: {} };
                 return (window.crypto || window.msCrypto).getRandomValues(new Uint32Array(1))[0] / Math.pow(2, 32);
               }() * n);
             }
-          }, M = Xn, rt;
+          }, M = Kn, rt;
           (function(n) {
             n[n.ERROR = 3] = "ERROR", n[n.INFO = 6] = "INFO", n[n.DEBUG = 7] = "DEBUG";
           })(rt || (rt = {}));
           var $e = rt;
-          class Kn {
+          class Jn {
             constructor(e, t, s) {
               this.key = e, this.session = t, this.events = [], this.options = s || {}, this.sent = 0, this.uniqueID = 0;
             }
@@ -3421,7 +3424,7 @@ var Ht = { exports: {} };
               return this.uniqueID++, this.uniqueID;
             }
           }
-          class Jn {
+          class Qn {
             constructor(e, t, s, a) {
               this.name = e, this.priority = t, this.transport = s, this.options = a || {};
             }
@@ -3433,8 +3436,8 @@ var Ht = { exports: {} };
             connect(e, t) {
               if (this.isSupported()) {
                 if (this.priority < e)
-                  return Ct(new z(), t);
-              } else return Ct(new ce(), t);
+                  return St(new z(), t);
+              } else return St(new ce(), t);
               var s = !1, a = this.transport.createConnection(this.name, this.priority, this.options.key, this.options), d = null, b = function() {
                 a.unbind("initialized", b), a.connect();
               }, S = function() {
@@ -3460,7 +3463,7 @@ var Ht = { exports: {} };
               };
             }
           }
-          function Ct(n, e) {
+          function St(n, e) {
             return Q.defer(function() {
               e(n);
             }), {
@@ -3470,14 +3473,14 @@ var Ht = { exports: {} };
               }
             };
           }
-          const { Transports: Qn } = M;
-          var Yn = function(n, e, t, s, a, d) {
-            var b = Qn[t];
+          const { Transports: Yn } = M;
+          var Zn = function(n, e, t, s, a, d) {
+            var b = Yn[t];
             if (!b)
               throw new se(t);
             var S = (!n.enabledTransports || p(n.enabledTransports, e) !== -1) && (!n.disabledTransports || p(n.disabledTransports, e) === -1), O;
-            return S ? (a = Object.assign({ ignoreNullOrigin: n.ignoreNullOrigin }, a), O = new Jn(e, s, d ? d.getAssistant(b) : b, a)) : O = Zn, O;
-          }, Zn = {
+            return S ? (a = Object.assign({ ignoreNullOrigin: n.ignoreNullOrigin }, a), O = new Qn(e, s, d ? d.getAssistant(b) : b, a)) : O = er, O;
+          }, er = {
             isSupported: function() {
               return !1;
             },
@@ -3494,14 +3497,14 @@ var Ht = { exports: {} };
               };
             }
           };
-          function er(n) {
+          function tr(n) {
             if (n == null)
               throw "You must pass an options object";
             if (n.cluster == null)
               throw "Options object must provide a cluster";
             "disableStats" in n && j.warn("The disableStats option is deprecated in favor of enableStats");
           }
-          const tr = (n, e) => {
+          const nr = (n, e) => {
             var t = "socket_id=" + encodeURIComponent(n.socketId);
             for (var s in e.params)
               t += "&" + encodeURIComponent(s) + "=" + encodeURIComponent(e.params[s]);
@@ -3512,15 +3515,15 @@ var Ht = { exports: {} };
             }
             return t;
           };
-          var nr = (n) => {
+          var rr = (n) => {
             if (typeof M.getAuthorizers()[n.transport] > "u")
               throw `'${n.transport}' is not a recognized auth transport`;
             return (e, t) => {
-              const s = tr(e, n);
+              const s = nr(e, n);
               M.getAuthorizers()[n.transport](M, s, n, L.UserAuthentication, t);
             };
           };
-          const rr = (n, e) => {
+          const sr = (n, e) => {
             var t = "socket_id=" + encodeURIComponent(n.socketId);
             t += "&channel_name=" + encodeURIComponent(n.channelName);
             for (var s in e.params)
@@ -3532,15 +3535,15 @@ var Ht = { exports: {} };
             }
             return t;
           };
-          var sr = (n) => {
+          var ir = (n) => {
             if (typeof M.getAuthorizers()[n.transport] > "u")
               throw `'${n.transport}' is not a recognized auth transport`;
             return (e, t) => {
-              const s = rr(e, n);
+              const s = sr(e, n);
               M.getAuthorizers()[n.transport](M, s, n, L.ChannelAuthorization, t);
             };
           };
-          const ir = (n, e, t) => {
+          const or = (n, e, t) => {
             const s = {
               authTransport: e.transport,
               authEndpoint: e.endpoint,
@@ -3554,7 +3557,7 @@ var Ht = { exports: {} };
               t(b, s).authorize(a.socketId, d);
             };
           };
-          function or(n, e) {
+          function ar(n, e) {
             let t = {
               activityTimeout: n.activityTimeout || _.activityTimeout,
               cluster: n.cluster,
@@ -3567,46 +3570,46 @@ var Ht = { exports: {} };
               wsPath: n.wsPath || _.wsPath,
               wsPort: n.wsPort || _.wsPort,
               wssPort: n.wssPort || _.wssPort,
-              enableStats: hr(n),
-              httpHost: ar(n),
-              useTLS: ur(n),
-              wsHost: cr(n),
-              userAuthenticator: dr(n),
-              channelAuthorizer: pr(n, e)
+              enableStats: dr(n),
+              httpHost: cr(n),
+              useTLS: hr(n),
+              wsHost: lr(n),
+              userAuthenticator: fr(n),
+              channelAuthorizer: gr(n, e)
             };
             return "disabledTransports" in n && (t.disabledTransports = n.disabledTransports), "enabledTransports" in n && (t.enabledTransports = n.enabledTransports), "ignoreNullOrigin" in n && (t.ignoreNullOrigin = n.ignoreNullOrigin), "timelineParams" in n && (t.timelineParams = n.timelineParams), "nacl" in n && (t.nacl = n.nacl), t;
           }
-          function ar(n) {
+          function cr(n) {
             return n.httpHost ? n.httpHost : n.cluster ? `sockjs-${n.cluster}.pusher.com` : _.httpHost;
           }
-          function cr(n) {
-            return n.wsHost ? n.wsHost : lr(n.cluster);
-          }
           function lr(n) {
-            return `ws-${n}.pusher.com`;
+            return n.wsHost ? n.wsHost : ur(n.cluster);
           }
           function ur(n) {
-            return M.getProtocol() === "https:" ? !0 : n.forceTLS !== !1;
+            return `ws-${n}.pusher.com`;
           }
           function hr(n) {
-            return "enableStats" in n ? n.enableStats : "disableStats" in n ? !n.disableStats : !1;
+            return M.getProtocol() === "https:" ? !0 : n.forceTLS !== !1;
           }
           function dr(n) {
-            const e = Object.assign(Object.assign({}, _.userAuthentication), n.userAuthentication);
-            return "customHandler" in e && e.customHandler != null ? e.customHandler : nr(e);
+            return "enableStats" in n ? n.enableStats : "disableStats" in n ? !n.disableStats : !1;
           }
-          function fr(n, e) {
+          function fr(n) {
+            const e = Object.assign(Object.assign({}, _.userAuthentication), n.userAuthentication);
+            return "customHandler" in e && e.customHandler != null ? e.customHandler : rr(e);
+          }
+          function pr(n, e) {
             let t;
             return "channelAuthorization" in n ? t = Object.assign(Object.assign({}, _.channelAuthorization), n.channelAuthorization) : (t = {
               transport: n.authTransport || _.authTransport,
               endpoint: n.authEndpoint || _.authEndpoint
-            }, "auth" in n && ("params" in n.auth && (t.params = n.auth.params), "headers" in n.auth && (t.headers = n.auth.headers)), "authorizer" in n && (t.customHandler = ir(e, t, n.authorizer))), t;
+            }, "auth" in n && ("params" in n.auth && (t.params = n.auth.params), "headers" in n.auth && (t.headers = n.auth.headers)), "authorizer" in n && (t.customHandler = or(e, t, n.authorizer))), t;
           }
-          function pr(n, e) {
-            const t = fr(n, e);
-            return "customHandler" in t && t.customHandler != null ? t.customHandler : sr(t);
+          function gr(n, e) {
+            const t = pr(n, e);
+            return "customHandler" in t && t.customHandler != null ? t.customHandler : ir(t);
           }
-          class gr extends ge {
+          class mr extends ge {
             constructor(e) {
               super(function(t, s) {
                 j.debug(`No callbacks on watchlist events for ${t}`);
@@ -3624,14 +3627,14 @@ var Ht = { exports: {} };
               });
             }
           }
-          function mr() {
+          function yr() {
             let n, e;
             return { promise: new Promise((s, a) => {
               n = s, e = a;
             }), resolve: n, reject: e };
           }
-          var yr = mr;
-          class vr extends ge {
+          var vr = yr;
+          class br extends ge {
             constructor(e) {
               super(function(t, s) {
                 j.debug("No callbacks on user for " + t);
@@ -3646,7 +3649,7 @@ var Ht = { exports: {} };
                 });
               }, this.pusher = e, this.pusher.connection.bind("state_change", ({ previous: t, current: s }) => {
                 t !== "connected" && s === "connected" && this._signin(), t === "connected" && s !== "connected" && (this._cleanup(), this._newSigninPromiseIfNeeded());
-              }), this.watchlist = new gr(e), this.pusher.connection.bind("message", (t) => {
+              }), this.watchlist = new mr(e), this.pusher.connection.bind("message", (t) => {
                 var s = t.event;
                 s === "pusher:signin_success" && this._onSigninSuccess(t.data), this.serverToUserChannel && this.serverToUserChannel.name === t.channel && this.serverToUserChannel.handleEvent(t);
               });
@@ -3686,7 +3689,7 @@ var Ht = { exports: {} };
             _newSigninPromiseIfNeeded() {
               if (!this.signin_requested || this.signinDonePromise && !this.signinDonePromise.done)
                 return;
-              const { promise: e, resolve: t } = yr();
+              const { promise: e, resolve: t } = vr();
               e.done = !1;
               const s = () => {
                 e.done = !0;
@@ -3706,7 +3709,7 @@ var Ht = { exports: {} };
               }));
             }
             constructor(e, t) {
-              br(e), er(t), this.key = e, this.config = or(t, this), this.channels = me.createChannels(), this.global_emitter = new ge(), this.sessionID = M.randomInt(1e9), this.timeline = new Kn(this.key, this.sessionID, {
+              kr(e), tr(t), this.key = e, this.config = ar(t, this), this.channels = me.createChannels(), this.global_emitter = new ge(), this.sessionID = M.randomInt(1e9), this.timeline = new Jn(this.key, this.sessionID, {
                 cluster: this.config.cluster,
                 features: ee.getClientFeatures(),
                 params: this.config.timelineParams || {},
@@ -3717,7 +3720,7 @@ var Ht = { exports: {} };
                 host: this.config.statsHost,
                 path: "/timeline/v2/" + M.TimelineTransport.name
               }));
-              var s = (a) => M.getDefaultStrategy(this.config, a, Yn);
+              var s = (a) => M.getDefaultStrategy(this.config, a, Zn);
               this.connection = me.createConnectionManager(this.key, {
                 getStrategy: s,
                 timeline: this.timeline,
@@ -3740,7 +3743,7 @@ var Ht = { exports: {} };
                 this.channels.disconnect();
               }), this.connection.bind("error", (a) => {
                 j.warn(a);
-              }), ee.instances.push(this), this.timeline.info({ instances: ee.instances.length }), this.user = new vr(this), ee.isReady && this.connect();
+              }), ee.instances.push(this), this.timeline.info({ instances: ee.instances.length }), this.user = new br(this), ee.isReady && this.connect();
             }
             channel(e) {
               return this.channels.find(e);
@@ -3799,7 +3802,7 @@ var Ht = { exports: {} };
           }
           ee.instances = [], ee.isReady = !1, ee.logToConsole = !1, ee.Runtime = M, ee.ScriptReceivers = M.ScriptReceivers, ee.DependenciesReceivers = M.DependenciesReceivers, ee.auth_callbacks = M.auth_callbacks;
           var st = o.default = ee;
-          function br(n) {
+          function kr(n) {
             if (n == null)
               throw "You must pass your app key when you instantiate Pusher.";
           }
@@ -3809,10 +3812,10 @@ var Ht = { exports: {} };
       ])
     );
   });
-})(Ht);
-var qr = Ht.exports;
-const zr = /* @__PURE__ */ Br(qr);
-class $r extends foundry.abstract.TypeDataModel {
+})(Ut);
+var Gr = Ut.exports;
+const Vr = /* @__PURE__ */ $r(Gr);
+class Ht extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const c = foundry.data.fields;
     return {
@@ -3828,19 +3831,24 @@ class $r extends foundry.abstract.TypeDataModel {
     };
   }
 }
-class Gr extends JournalPageSheet {
+at(Ht, "metadata", {
+  label: "Agent Data Pool"
+});
+class Bt extends JournalPageSheet {
+  /** @override */
+  get template() {
+    return this.isEditable ? this.options.editTemplate : this.options.viewTemplate;
+  }
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["sheet", "journal-sheet", "data-pool-sheet"],
+      classes: ["sheet", "journal-entry-page", "data-pool-sheet"],
+      viewTemplate: "modules/cpr-agent/templates/data-pool.hbs",
+      editTemplate: "modules/cpr-agent/templates/data-pool.hbs",
       width: 700,
       height: 800,
       submitOnChange: !0,
-      // Auto-saves when inputs lose focus
       closeOnSubmit: !1
     });
-  }
-  get template() {
-    return "modules/cpr-agent/templates/data-pool.hbs";
   }
   async getData(c) {
     const r = super.getData(c);
@@ -3871,12 +3879,16 @@ class Gr extends JournalPageSheet {
     await this.document.update({ "system.entries": i });
   }
 }
-window.Pusher = zr;
+/** @override */
+at(Bt, "LOCAL_TEMPLATES", {
+  "cpr-agent.datapool": "modules/cpr-agent/templates/data-pool.hbs"
+});
+window.Pusher = Vr;
 const A = "cpr-agent";
-function Vr(y, c = 6) {
+function Wr(y, c = 6) {
   return !y || y.length <= c * 2 + 3 ? y : `${y.substring(0, c)}...${y.substring(y.length - c)}`;
 }
-class Wr extends FormApplication {
+class Xr extends FormApplication {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "cpr-agent-assignment-menu",
@@ -3898,7 +3910,7 @@ class Wr extends FormApplication {
         <th style="width: 50px;"></th>
         </tr>`;
     for (let o of c.users) {
-      const i = Vr(o.agentLink);
+      const i = Wr(o.agentLink);
       if (r += `<tr><td style="padding: 5px 0;"><strong>${o.name}</strong></td>`, o.hasKey) {
         r += '<td style="color: #00ff00;">✔ Linked</td>', r += `<td><small><code title="${o.agentLink || ""}">${i || "Pending..."}</code></small></td>`, r += `<td><select class="character-select" data-userid="${o.id}" style="width: 100%;">
                 <option value="">- None -</option>`;
@@ -3979,7 +3991,7 @@ class Wr extends FormApplication {
     });
   }
 }
-class Xr {
+class Kr {
   constructor() {
     this.echo = null, this.isConnected = !1, this.activeRequests = /* @__PURE__ */ new Map(), this.requestAgentLinks = /* @__PURE__ */ new Map(), this.hookIds = {}, this._isCapturingRoll = !1;
   }
@@ -4019,7 +4031,7 @@ class Xr {
       label: "Manage Characters",
       hint: "Assign playable characters to players who have linked their Agent API keys.",
       icon: "fas fa-users",
-      type: Wr,
+      type: Xr,
       restricted: !0
       // GM Only
     }), game.settings.register(A, "apiUrl", {
@@ -4101,7 +4113,7 @@ class Xr {
       return;
     }
     const _ = h || f.hostname, N = f.protocol === "https:", R = typeof l == "boolean" ? l : void 0, C = R ?? N, E = C ? 443 : 80, P = i > 0 ? i : E;
-    this.echo = new Hr({
+    this.echo = new zr({
       broadcaster: "reverb",
       key: game.settings.get(A, "reverbKey") || "itdsiqtx8cpskowawl1p",
       wsHost: _,
@@ -5148,22 +5160,18 @@ class Xr {
     game.user.isGM && this.echo && this.connect();
   }
 }
-function at() {
-  CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] || (console.log("%c [Bridge] Registering Data Pool Journal...", "background: #222; color: #bada55"), Object.assign(CONFIG.JournalEntryPage.dataModels, {
-    "cpr-agent.datapool": $r
-  }), DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", Gr, {
+window.cyberpunkBridge && window.cyberpunkBridge.destroy();
+window.cyberpunkBridge = new Kr();
+Hooks.once("init", () => {
+  Jr(), CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] || (CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] = Ht, console.log("[Bridge] Registered DataPool DataModel.")), DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", Bt, {
     types: ["cpr-agent.datapool"],
     makeDefault: !0,
     label: "Agent Data Pool"
-  }));
-}
-window.cyberpunkBridge && window.cyberpunkBridge.destroy();
-window.cyberpunkBridge = new Xr();
-function ct() {
+  }), console.log("[Bridge] Registered DataPool Journal Page Sheet.");
+});
+Hooks.once("ready", () => {
+  game.user.isGM && window.cyberpunkBridge.connect(), window.cyberpunkBridge.syncPlayerLink(), window.cyberpunkBridge.registerGlobalHooks(), console.log("[Bridge] Cyberpunk Bridge Fully Online.");
+});
+function Jr() {
   game.settings.settings.has(`${A}.apiUrl`) || (console.log("[Bridge] Registering Module Settings..."), window.cyberpunkBridge.registerSettings());
 }
-game.ready ? (ct(), at(), game.user.isGM && window.cyberpunkBridge.connect(), window.cyberpunkBridge.syncPlayerLink(), window.cyberpunkBridge.registerGlobalHooks()) : (Hooks.once("init", () => {
-  ct(), at();
-}), Hooks.once("ready", () => {
-  ct(), at(), game.user.isGM && window.cyberpunkBridge.connect(), window.cyberpunkBridge.syncPlayerLink(), window.cyberpunkBridge.registerGlobalHooks();
-}));

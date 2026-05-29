@@ -1982,63 +1982,39 @@ class CyberpunkBridge {
 // BOOT SEQUENCE & VITE ASYNC FAILSAFE
 // ==================================================================
 
-// Helper to safely register the Data Pool without duplicating
-function registerDataPool() {
-    // Check if it's already registered to prevent Hot-Reload errors
-    if (CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"]) return;
-
-    console.log("%c [Bridge] Registering Data Pool Journal...", 'background: #222; color: #bada55');
-
-    Object.assign(CONFIG.JournalEntryPage.dataModels, {
-        "cpr-agent.datapool": DataPoolPageModel
-    });
-
-    DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", DataPoolPageSheet, {
-        types: ["cpr-agent.datapool"],
-        makeDefault: true,
-        label: "Agent Data Pool"
-    });
-}
 
 if (window.cyberpunkBridge) {
     window.cyberpunkBridge.destroy();
 }
 window.cyberpunkBridge = new CyberpunkBridge();
 
-// Helper to safely register settings without duplicating
+Hooks.once('init', () => {
+    ensureSettingsRegistered();
+
+    if (!CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"]) {
+        CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] = DataPoolPageModel;
+        console.log("[Bridge] Registered DataPool DataModel.");
+    }
+    DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", DataPoolPageSheet, {
+        types: ["cpr-agent.datapool"],
+        makeDefault: true,
+        label: "Agent Data Pool"
+    });
+    console.log("[Bridge] Registered DataPool Journal Page Sheet.");
+});
+
+Hooks.once('ready', () => {
+    if (game.user.isGM) {
+        window.cyberpunkBridge.connect();
+    }
+    window.cyberpunkBridge.syncPlayerLink();
+    window.cyberpunkBridge.registerGlobalHooks();
+    console.log("[Bridge] Cyberpunk Bridge Fully Online.");
+});
+
 function ensureSettingsRegistered() {
     if (!game.settings.settings.has(`${MODULE_ID}.apiUrl`)) {
         console.log("[Bridge] Registering Module Settings...");
         window.cyberpunkBridge.registerSettings();
     }
-}
-
-// If Foundry is completely loaded (Hot Reloading / Very Late Load)
-if (game.ready) {
-    ensureSettingsRegistered();
-    registerDataPool();
-    if (game.user.isGM) window.cyberpunkBridge.connect();
-    window.cyberpunkBridge.syncPlayerLink();
-    window.cyberpunkBridge.registerGlobalHooks();
-}
-// Standard Foundry Boot Sequence
-else {
-    // Try to catch the normal init hook
-    Hooks.once('init', () => {
-        ensureSettingsRegistered();
-        registerDataPool();
-    });
-
-    // When Foundry is ready to play
-    Hooks.once('ready', () => {
-        // FAILSAFE: If Vite caused us to miss the 'init' hook, do it right now!
-        ensureSettingsRegistered();
-        registerDataPool();
-
-        if (game.user.isGM) {
-            window.cyberpunkBridge.connect();
-        }
-        window.cyberpunkBridge.syncPlayerLink();
-        window.cyberpunkBridge.registerGlobalHooks();
-    });
 }

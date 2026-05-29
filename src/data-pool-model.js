@@ -1,4 +1,8 @@
 export class DataPoolPageModel extends foundry.abstract.TypeDataModel {
+    static metadata = {
+        label: "Agent Data Pool"
+    };
+
     static defineSchema() {
         const fields = foundry.data.fields;
         return {

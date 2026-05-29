@@ -1,23 +1,26 @@
-<form class="{{cssClass}} flexcol" autocomplete="off">
-    <header class="journal-page-header">
-        <h1 class="page-title">{{document.name}}</h1>
-    </header>
-
+<form class="{{cssClass}} flexcol data-pool-container" autocomplete="off">
     <div class="data-pool-entries flexcol">
         {{#each entries as |entry i|}}
             <div class="entry-row flexcol" style="border: 1px solid #7a7971; border-radius: 5px; padding: 10px; margin-bottom: 10px; background: rgba(0, 0, 0, 0.05);">
                 <div class="flexrow" style="align-items: center; margin-bottom: 5px; border-bottom: 1px solid #7a7971; padding-bottom: 5px;">
                     <div class="flexrow" style="flex: 1; align-items: center;">
-                        <img src="{{entry.icon}}" data-edit="system.entries.{{i}}.icon" title="Click to edit icon" height="32" width="32" style="border: none; margin-right: 10px;"/>
-                        <input type="text" name="system.entries.{{i}}.title" value="{{entry.title}}" placeholder="Title" style="font-weight: bold; height: 32px;">
+                        <img src="{{entry.icon}}" {{#if ../editable}}data-edit="system.entries.{{i}}.icon" title="Click to edit icon"{{/if}} height="32" width="32" style="border: none; margin-right: 10px;"/>
+                        {{#if ../editable}}
+                            <input type="text" name="system.entries.{{i}}.title" value="{{entry.title}}" placeholder="Title" style="font-weight: bold; height: 32px;">
+                        {{else}}
+                            <h3 style="margin: 0;">{{entry.title}}</h3>
+                        {{/if}}
                     </div>
+                    {{#if ../editable}}
                     <div style="flex: 0 0 100px; text-align: right;">
                         <button type="button" class="delete-entry" data-id="{{entry.id}}" title="Delete Entry" style="width: 32px; height: 32px; line-height: 32px; padding: 0;">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
+                    {{/if}}
                 </div>
 
+                {{#if ../editable}}
                 <div class="form-group">
                     <label>Content Type</label>
                     <div class="form-fields">
@@ -27,27 +30,39 @@
                         </select>
                     </div>
                 </div>
+                {{/if}}
 
                 <div class="form-group-stacked">
                     {{#if (eq entry.type "html")}}
-                        {{editor entry.enrichedHtml target=(concat "system.entries." i ".htmlContent") engine="prosemirror" button=false owner=../owner editable=../editable}}
+                        {{#if ../editable}}
+                            {{editor entry.enrichedHtml target=(concat "system.entries." i ".htmlContent") engine="prosemirror" button=false owner=../owner editable=../editable}}
+                        {{else}}
+                            <div class="editor-content">
+                                {{{entry.enrichedHtml}}}
+                            </div>
+                        {{/if}}
                     {{else}}
-                        <label>PDF Path</label>
-                        <div class="form-fields">
-                            <h1 style="position: absolute; opacity: 0; pointer-events: none; margin: 0; height: 0; overflow: hidden;">
-                                {{entry.title}} (PDF)
-                            </h1>
-                            <file-picker name="system.entries.{{i}}.pdfPath" value="{{entry.pdfPath}}"></file-picker>
-                        </div>
+                        {{#if ../editable}}
+                            <label>PDF Path</label>
+                            <div class="form-fields">
+                                <file-picker name="system.entries.{{i}}.pdfPath" type="any" value="{{entry.pdfPath}}"></file-picker>
+                            </div>
+                        {{else}}
+                             <div class="pdf-link">
+                                 <i class="fas fa-file-pdf"></i> <a href="{{entry.pdfPath}}" target="_blank">Open PDF: {{entry.title}}</a>
+                             </div>
+                        {{/if}}
                     {{/if}}
                 </div>
             </div>
         {{/each}}
     </div>
 
+    {{#if editable}}
     <button type="button" class="add-entry" style="margin-top: 10px;">
         <i class="fas fa-plus"></i> Add New Link
     </button>
+    {{/if}}
 </form>
 
 <style>

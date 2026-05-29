@@ -15,11 +15,11 @@ export default defineConfig({
       output: {
         assetFileNames: "module.[ext]",
         banner: `/** Hot Reload Support **/
-if (import.meta.hot) {
-  import.meta.hot.accept((newModule) => {
-    console.log("Hot reloading module...");
-  });
-}`
+          if (import.meta.hot) {
+            import.meta.hot.accept((newModule) => {
+              console.log("Hot reloading module...");
+            });
+          }`
       }
     }
   }
