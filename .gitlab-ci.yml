@@ -26,7 +26,7 @@ build:
     - mkdir -p build/${PACKAGE_NAME}
 
     # Copy required files to build directory (simplified copy command)
-    - cp -r dist module.json README.md LICENSE.md build/${PACKAGE_NAME}/
+    - cp -r dist module.json README.md LICENSE.md templates lang build/${PACKAGE_NAME}/
 
     # Create versioned zip file
     - cd build
