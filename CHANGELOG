@@ -3,5 +3,9 @@
 * Added support for Roll types. All are supported except for Blind rolling which will get fixed further down.
 
 1.0.5
-* Fixed a bug where GET_ACTORS would not pass back tokenIDs, stopping the character from saving properly within the app. 
+* Fixed a bug where GET_ACTORS would not pass back tokenIDs, stopping the character from saving properly within the app.
 * LIST_TOKENS would also fail as a result, failing the token distance function
+
+1.0.6
+* Added support for EuroBuck changes (set, subtract and add) + transaction titles
+* Added support for Net Pools, integrating a new JournalType to allow the Agent to create a fake net.

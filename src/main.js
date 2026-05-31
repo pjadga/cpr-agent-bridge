@@ -1966,6 +1966,37 @@ class CyberpunkBridge {
                 break;
             }
 
+            case 'UPDATE_EB': {
+                if (actorId == null) {
+                    if (debug) console.log("[Bridge] Actor ID Not set:");
+                    break;
+                }
+
+                let actor = game.actors.get(actorId)
+
+                if (data.action == null || data.value == null) {
+                    if (debug) console.log("[Bridge] EuroBucks data error");
+                }
+
+                switch (data.action) {
+                    case 'add':
+                        actor.deltaLedgerProperty("wealth", data.value, data.reason)
+                        break;
+                    case 'subtract':
+                        actor.deltaLedgerProperty("wealth", -Number(data.value), data.reason)
+                        break;
+                    case 'set':
+                        actor.setLedgerProperty("wealth", data.value, data.reason)
+                        break;
+                }
+
+                if (actor) {
+                    await this.sendResponse({ type: 'SHEET_DELTA', actorId, delta: { 'system.wealth': actor.system.wealth }, tab: 'stats', success: true, requestId });
+                }
+                break;
+            }
+
+
             default:
                 console.log("Unknown DataType: " + type);
                 break;
