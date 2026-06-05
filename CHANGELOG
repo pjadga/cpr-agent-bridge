@@ -9,3 +9,8 @@
 1.0.6
 * Added support for EuroBuck changes (set, subtract and add) + transaction titles
 * Added support for Net Pools, integrating a new JournalType to allow the Agent to create a fake net.
+
+1.0.7/8
+* Fixed bug where ActorID was not sent back
+* Strong typed response names
+* Fixed offline bug
