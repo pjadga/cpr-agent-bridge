@@ -22,11 +22,13 @@ build:
     # Save the VERSION variable to a .env file so subsequent jobs can use it!
     - echo "BUILD_VERSION=$VERSION" >> build.env
 
+    - ls -la
+
     # Create a clean build directory
     - mkdir -p build/${PACKAGE_NAME}
 
     # Copy required files to build directory (simplified copy command)
-    - cp -r dist module.json README.md LICENSE.md build/${PACKAGE_NAME}/
+    - cp -r dist module.json README.md LICENSE.md templates lang build/${PACKAGE_NAME}/
 
     # Create versioned zip file
     - cd build
