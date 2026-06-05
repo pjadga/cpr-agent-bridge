@@ -1,7 +1,7 @@
 {
   "id": "cpr-agent",
   "title": "Cyberpunk Red Agent Bridge",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "compatibility": {
     "minimum": "12",
     "verified": "12"
