@@ -1,6 +1,7 @@
 import { MODULE_ID, DEFAULT_REVERB_KEY, DEFAULT_API_URL } from './constants.js';
 import { CharacterAssignmentMenu } from './ui/character-assignment.js';
 import { AgentLinkMenu } from './ui/agent-link-menu.js';
+import { QuickSetupMenu } from './ui/quick-setup.js';
 
 // ==================================================================
 // MODULE SETTINGS
@@ -12,6 +13,16 @@ import { AgentLinkMenu } from './ui/agent-link-menu.js';
  * @param {CyberpunkBridge} bridge
  */
 export function registerSettings(bridge) {
+    // GM one-paste connection setup from the Agent's "Foundry Setup Code".
+    game.settings.registerMenu(MODULE_ID, 'quickSetup', {
+        name: 'Quick Setup',
+        label: 'Paste Agent Config',
+        hint: 'Paste the Foundry Setup Code from the Agent to auto-fill the URL, Channel ID, API key and Reverb key.',
+        icon: 'fas fa-bolt',
+        type: QuickSetupMenu,
+        restricted: true // GM Only
+    });
+
     // Register the GM Menu
     game.settings.registerMenu(MODULE_ID, 'characterAssignment', {
         name: 'Player Assignments',

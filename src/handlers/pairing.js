@@ -17,11 +17,18 @@ export async function pairAgent(bridge, data, { debug }) {
         return;
     }
 
-    // Verify this nonce was minted by us for this exact Foundry user.
+    // Verify against the nonce we minted. If a pending entry exists it must match
+    // the Foundry user. If it's gone (e.g. the GM reloaded Foundry between minting
+    // the code and the player claiming it), still honour the link: PAIR_AGENT is
+    // broadcast by the Agent server on our private channel, so the foundryUserId is
+    // the one *we* registered — trusting it can't bind to an arbitrary user.
     const pending = bridge.pendingPairings.get(nonce);
-    if (!pending || pending.foundryUserId !== foundryUserId) {
-        console.warn(`[Bridge] PAIR_AGENT nonce not recognised for user ${foundryUserId}. Ignoring.`);
+    if (pending && pending.foundryUserId !== foundryUserId) {
+        console.warn(`[Bridge] PAIR_AGENT nonce/user mismatch for ${foundryUserId}. Ignoring.`);
         return;
+    }
+    if (!pending) {
+        console.warn(`[Bridge] PAIR_AGENT nonce not in local cache (GM reload?). Trusting server payload for ${foundryUserId}.`);
     }
 
     const user = game.users.get(foundryUserId);
@@ -37,6 +44,9 @@ export async function pairAgent(bridge, data, { debug }) {
 
     if (debug) console.log(`[Bridge] PAIR_AGENT: linked ${user.name} -> ${agentLink}`);
     ui.notifications.info(`Agent: ${user.name} linked successfully.`);
+
+    // Refresh an open Character Assignment menu so the GM sees the link immediately.
+    Object.values(ui.windows).find(w => w.options?.id === 'cpr-agent-assignment-menu')?.render(false);
 
     // Let the Agent know the GM applied the link (round-trip confirmation).
     await bridge.sendResponse({

@@ -41,6 +41,10 @@ export async function renderQrDialog(payload, foundryUserName) {
     const ttlMinutes = Math.round(PAIRING_TTL_SECONDS / 60);
     const name = foundryUserName || 'this player';
 
+    // Same payload as the QR, base64-wrapped so a player on a PC (no camera)
+    // can paste it into the Agent's "Paste the link code" field.
+    const linkCode = btoa(payload);
+
     new Dialog({
         title: `Link Agent — ${name}`,
         content: `
@@ -49,12 +53,30 @@ export async function renderQrDialog(payload, foundryUserName) {
                 and point the camera at this code.</p>
                 <img src="${dataUrl}" alt="Pairing QR code"
                      style="width:320px;height:320px;image-rendering:pixelated;background:#fff;padding:8px;border-radius:8px;" />
-                <p style="color:#ffaa00;font-size:0.85em;">This code expires in ~${ttlMinutes} minutes and can only be used once.</p>
+                <p style="margin-top:10px;">On a PC with no camera? Copy this code and paste it into the Agent:</p>
+                <textarea readonly id="cpr-link-code" rows="2"
+                          style="width:100%;font-family:monospace;font-size:0.7em;resize:none;word-break:break-all;"
+                          onclick="this.select()">${linkCode}</textarea>
+                <button type="button" id="cpr-copy-link-code" style="margin-top:6px;">
+                    <i class="fas fa-copy"></i> Copy link code
+                </button>
+                <p style="color:#ffaa00;font-size:0.85em;margin-top:10px;">This code expires in ~${ttlMinutes} minutes and can only be used once.</p>
             </div>
         `,
         buttons: {
             close: { icon: '<i class="fas fa-check"></i>', label: 'Done' },
         },
         default: 'close',
+        render: (html) => {
+            html.find('#cpr-copy-link-code').click(async () => {
+                try {
+                    await navigator.clipboard.writeText(linkCode);
+                    ui.notifications.info('Link code copied to clipboard.');
+                } catch (e) {
+                    html.find('#cpr-link-code').trigger('select');
+                    ui.notifications.warn('Copy failed — select the code and copy it manually.');
+                }
+            });
+        },
     }, { width: 380 }).render(true);
 }
