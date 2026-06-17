@@ -1,5 +1,6 @@
 import { MODULE_ID, DEFAULT_REVERB_KEY, DEFAULT_API_URL } from './constants.js';
 import { CharacterAssignmentMenu } from './ui/character-assignment.js';
+import { AgentLinkMenu } from './ui/agent-link-menu.js';
 
 // ==================================================================
 // MODULE SETTINGS
@@ -19,6 +20,16 @@ export function registerSettings(bridge) {
         icon: 'fas fa-users',
         type: CharacterAssignmentMenu,
         restricted: true // GM Only
+    });
+
+    // Player-facing: generate a personal pairing QR (remote self-serve).
+    game.settings.registerMenu(MODULE_ID, 'agentLink', {
+        name: 'Link my Agent',
+        label: 'Link my Agent',
+        hint: 'Generate a QR code to link the Cyberpunk Agent app on your phone to this game.',
+        icon: 'fas fa-qrcode',
+        type: AgentLinkMenu,
+        restricted: false // Available to all players
     });
 
     game.settings.register(MODULE_ID, 'apiUrl', {

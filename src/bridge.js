@@ -19,6 +19,8 @@ export class CyberpunkBridge {
         this.isConnected = false;
         this.activeRequests = new Map();
         this.requestAgentLinks = new Map();
+        // nonce -> { foundryUserId, ts } for pairings this (GM) Bridge minted.
+        this.pendingPairings = new Map();
         this.hookIds = {};
         this._isCapturingRoll = false;
     }

@@ -1,6 +1,7 @@
 import Pusher from 'pusher-js';
 import { MODULE_ID } from './constants.js';
 import { CyberpunkBridge } from './bridge.js';
+import { registerPairingHooks } from './pairing-hooks.js';
 import { DataPoolPageModel } from "./data-pool-model.js";
 import { DataPoolPageSheet } from "./data-pool-sheet.js";
 
@@ -37,6 +38,7 @@ Hooks.once('ready', () => {
     }
     window.cyberpunkBridge.syncPlayerLink();
     window.cyberpunkBridge.registerGlobalHooks();
+    registerPairingHooks(window.cyberpunkBridge);
     console.log("[Bridge] Cyberpunk Bridge Fully Online.");
 });
 

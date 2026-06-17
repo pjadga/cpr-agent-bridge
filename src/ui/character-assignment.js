@@ -1,5 +1,6 @@
 import { MODULE_ID } from '../constants.js';
 import { truncateAgentLink } from '../utils.js';
+import { showPairingQr } from './qr-link.js';
 
 // ==================================================================
 // CUSTOM GM MENU: CHARACTER ASSIGNMENT
@@ -25,7 +26,7 @@ export class CharacterAssignmentMenu extends FormApplication {
         <th>API Status</th>
         <th>Agent Link</th>
         <th>Assigned Character</th>
-        <th style="width: 50px;"></th>
+        <th style="width: 80px;"></th>
         </tr>`;
 
         for (let u of data.users) {
@@ -41,12 +42,12 @@ export class CharacterAssignmentMenu extends FormApplication {
                     html += `<option value="${c.id}" ${selected}>${c.name}</option>`;
                 }
                 html += `</select></td>`;
-                html += `<td><button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
+                html += `<td><button type="button" class="show-qr" data-userid="${u.id}" data-username="${u.name}" title="Show pairing QR"><i class="fas fa-qrcode"></i></button> <button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
             } else {
                 html += `<td style="color: #ff0000;">❌ Missing</td>
                 <td><small>-</small></td>
                 <td><select disabled style="width: 100%;"><option>- Key Missing -</option></select></td>
-                <td><button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
+                <td><button type="button" class="show-qr" data-userid="${u.id}" data-username="${u.name}" title="Show pairing QR"><i class="fas fa-qrcode"></i></button> <button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
             }
             html += `</tr>`;
         }
@@ -131,6 +132,14 @@ export class CharacterAssignmentMenu extends FormApplication {
             }
 
             this.close(); // Close the window manually after saving
+        });
+
+        // Show a pairing QR for a player to scan with the Agent app.
+        html.find('.show-qr').click(async (event) => {
+            event.preventDefault();
+            const userId = event.currentTarget.dataset.userid;
+            const userName = event.currentTarget.dataset.username;
+            await showPairingQr(window.cyberpunkBridge, userId, userName);
         });
 
         // Handle individual user refresh

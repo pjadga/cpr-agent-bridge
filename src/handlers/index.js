@@ -5,6 +5,7 @@ import * as rolls from './rolls.js';
 import * as tokens from './tokens.js';
 import * as economy from './economy.js';
 import * as netpool from './netpool.js';
+import * as pairing from './pairing.js';
 
 // Maps an incoming message `type` to its handler function.
 // Each handler has the signature (bridge, data, ctx) where ctx is
@@ -43,6 +44,8 @@ export const HANDLERS = {
     UPDATE_EB: economy.updateEb,
 
     GET_NET_POOL: netpool.getNetPool,
+
+    PAIR_AGENT: pairing.pairAgent,
 };
 
 /**
