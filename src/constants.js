@@ -12,10 +12,10 @@ export const DEFAULT_API_URL = 'https://agent.surrealdisco.co.uk';
 export const RANGE_DV_TABLE = {
     'Pistol':           [13, 15, 20, 25, 30, 30, 99, 99],
     'SMG':              [15, 13, 15, 20, 25, 25, 30, 99],
-    'Shotgun (Slug)':   [13, 15, 20, 25, 30, 35, 99, 99],
+    'Shotgun':   [13, 15, 20, 25, 30, 35, 99, 99],
     'Assault Rifle':    [17, 16, 15, 13, 15, 20, 25, 30],
     'Sniper Rifle':     [30, 25, 25, 20, 15, 16, 17, 20],
-    'Bows & Crossbow':  [15, 13, 15, 17, 20, 22, 99, 99],
+    'Bows and Crossbows':  [15, 13, 15, 17, 20, 22, 99, 99],
     'Grenade Launcher': [16, 15, 15, 17, 20, 22, 25, 99],
     'Rocket Launcher':  [17, 16, 15, 15, 20, 20, 25, 30],
     'Martial Arts': ['VS'],
@@ -29,20 +29,33 @@ export const RANGE_DV_TABLE = {
 export const DISTANCE_BRACKETS = [6, 12, 25, 50, 100, 200, 400, 800];
 
 // Maps a weapon's system.weaponType / system.variety to a RANGE_DV_TABLE category.
+// The CPR lang file labels melee as *...MeleeWeapon*, but the value actually stored
+// on the roll/item (system.weaponType) is the short form (e.g. "heavyMelee").
+// Both forms are mapped so lookups resolve regardless of which the item uses.
 export const WEAPON_TYPE_MAP = {
+    'mediumPistol': 'Pistol',
     'heavyPistol': 'Pistol',
-    'assaultRifle': 'Assault Rifle',
+    'veryHeavyPistol': 'Pistol',
     'smg': 'SMG',
-    'shotgun': 'Shotgun (Slug)',
+    'heavySmg': 'SMG',
+    'shotgun': 'Shotgun',
+    'assaultRifle': 'Assault Rifle',
     'sniperRifle': 'Sniper Rifle',
+    'bowsAndCrossbows': 'Bows and Crossbows',
+    'grenadeLauncher': 'Grenade Launcher',
+    'rocketLauncher': 'Rocket Launcher',
+    'thrownWeapon': 'Grenade Launcher',
     'unarmed': 'Unarmed',
     'martialArts': 'Martial Arts',
-    'grenade': 'Grenade Launcher',
-    'thrownWeapon': 'Grenade Launcher',
     'lightMelee': 'Light Melee Weapon',
+    'lightMeleeWeapon': 'Light Melee Weapon',
     'mediumMelee': 'Medium Melee Weapon',
+    'mediumMeleeWeapon': 'Medium Melee Weapon',
     'heavyMelee': 'Heavy Melee Weapon',
+    'heavyMeleeWeapon': 'Heavy Melee Weapon',
     'vHeavyMelee': 'Very Heavy Melee Weapon',
+    'veryHeavyMelee': 'Very Heavy Melee Weapon',
+    'veryHeavyMeleeWeapon': 'Very Heavy Melee Weapon'
 };
 
 /**
