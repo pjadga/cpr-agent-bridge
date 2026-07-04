@@ -15,19 +15,33 @@ build:
   before_script:
     - apk add --no-cache zip jq
   script:
-    # Extract version from module.json
-    - VERSION=$(jq -r '.version' module.json)
-    - echo "Building version $VERSION"
-    
+    # On a tag build, derive version + tag-based URLs and inject them into
+    # module.json. On main/branch builds, keep the committed (tag-agnostic) value.
+    - |
+      if [ -n "$CI_COMMIT_TAG" ]; then
+        VERSION="${CI_COMMIT_TAG#v}"
+        DOWNLOAD_URL="${CI_PROJECT_URL}/-/releases/${CI_COMMIT_TAG}/downloads/${PACKAGE_NAME}-${VERSION}.zip"
+        MANIFEST_URL="${CI_PROJECT_URL}/-/releases/${CI_COMMIT_TAG}/downloads/module.json"
+        echo "Releasing tagged version $VERSION"
+        jq --arg v "$VERSION" --arg d "$DOWNLOAD_URL" --arg m "$MANIFEST_URL" \
+           '.version = $v | .download = $d | .manifest = $m' module.json > module.json.tmp
+        mv module.json.tmp module.json
+      else
+        VERSION=$(jq -r '.version' module.json)
+        echo "Non-release build (branch: ${CI_COMMIT_BRANCH}); using module.json version $VERSION"
+      fi
+
     # Save the VERSION variable to a .env file so subsequent jobs can use it!
     - echo "BUILD_VERSION=$VERSION" >> build.env
 
+    # Show the effective release fields for debugging
+    - jq '{version, download, manifest}' module.json
     - ls -la
 
     # Create a clean build directory
     - mkdir -p build/${PACKAGE_NAME}
 
-    # Copy required files to build directory (simplified copy command)
+    # Copy required files to build directory (the rewritten module.json is bundled)
     - cp -r dist module.json README.md LICENSE.md templates lang build/${PACKAGE_NAME}/
 
     # Create versioned zip file
@@ -35,7 +49,7 @@ build:
     - zip -r ../${PACKAGE_NAME}-${VERSION}.zip ${PACKAGE_NAME}
     - cd ..
 
-    # Also create the standard zip (for the download URL in module.json)
+    # Also create the standard zip (for the latest-permalink download)
     - cp ${PACKAGE_NAME}-${VERSION}.zip ${PACKAGE_NAME}.zip
 
     # Output info
@@ -45,6 +59,7 @@ build:
     name: "${PACKAGE_NAME}-${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}"
     paths:
       - "*.zip"
+      - "module.json"
     reports:
       dotenv: build.env # Exposes BUILD_VERSION to the next jobs
     expire_in: 1 week
@@ -75,6 +90,11 @@ upload-package:
       curl --fail --show-error --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
            --upload-file ${PACKAGE_NAME}.zip \
            "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/${PACKAGE_NAME}.zip"
+    # Upload the tag-injected manifest so the pinned manifest URL resolves
+    - |
+      curl --fail --show-error --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+           --upload-file module.json \
+           "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/module.json"
   rules:
     - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+$/
 
@@ -103,7 +123,12 @@ release:
         - name: "${PACKAGE_NAME}.zip"
           url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/${PACKAGE_NAME}.zip"
           # THIS is the crucial part that unlocks the permalink:
-          filepath: "/${PACKAGE_NAME}.zip" 
+          filepath: "/${PACKAGE_NAME}.zip"
           link_type: package
+        # The pinned manifest asset: resolves the tag-based manifest URL
+        - name: "module.json"
+          url: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${BUILD_VERSION}/module.json"
+          filepath: "/module.json"
+          link_type: other
   rules:
     - if: $CI_COMMIT_TAG =~ /^v?\d+\.\d+\.\d+$/

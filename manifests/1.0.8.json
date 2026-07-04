@@ -1,0 +1,46 @@
+{
+  "id": "cpr-agent",
+  "title": "Cyberpunk Red Agent Bridge",
+  "version": "1.0.8",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "12"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "cyberpunk-red-core",
+        "type": "system",
+        "compatibility": {}
+      }
+    ]
+  },
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "authors": [
+    {
+      "name": "SurrealTech",
+      "url": "https://gitlab.com/surrealtech"
+    }
+  ],
+  "documentTypes": {
+    "JournalEntryPage": {
+      "datapool": {
+        "label": "Agent Data Pool"
+      }
+    }
+  },
+  "esmodules": [
+    "dist/module.mjs"
+  ],
+  "description": "Cyberpunk Red Agent Bridge",
+  "url": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge",
+  "download": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/releases/1.0.8/downloads/cpr-agent-1.0.8.zip",
+  "manifest": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/manifests/1.0.8.json",
+  "license": "https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/raw/main/LICENSE.md"
+}
