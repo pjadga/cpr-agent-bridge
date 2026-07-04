@@ -14,3 +14,11 @@
 * Fixed bug where ActorID was not sent back
 * Strong typed response names
 * Fixed offline bug
+
+1.1.0
+* Added support for QR connection with Agent for GM and Players
+* Added pastebin style connections for Desktop users
+* Fixed DV table bugs not returning correct value
+* Refactored filebase to preserve scalability and improve readability of components.
+* Trigger form update when the GM updates server inputs.
+* Better error handling to point to connection errors.
