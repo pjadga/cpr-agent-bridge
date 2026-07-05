@@ -1,15 +1,20 @@
-import { MODULE_ID } from '../constants.js';
+import { MODULE_ID, DEFAULT_API_URL } from '../constants.js';
 
 // ==================================================================
 // QUICK SETUP MENU (GM only)
 //
-// Accepts the "Foundry Setup Code" copied from the Agent settings page
-// and fills in the module's connection settings in one paste: Agent URL,
+// Accepts the "Foundry Setup Code" from the Agent settings page in either
+// form and fills in the module's connection settings in one go: Agent URL,
 // Channel ID, API key, and Reverb key. The Bridge derives Reverb host/port/
 // SSL from the Agent URL, so the code only needs to carry the key.
+//
+//   - Short code (e.g. "KX7M-4PWD"): one-time code redeemed from the Agent
+//     over HTTP — typeable when the Agent lives on another device (phone).
+//   - Long code: base64 JSON blob, self-contained, same-device paste.
 // ==================================================================
 
 const SUPPORTED_VERSION = 1;
+const SHORT_CODE_PATTERN = /^[A-Z0-9]{4}-?[A-Z0-9]{4}$/i;
 
 /**
  * Decode a base64-wrapped JSON setup code. Returns the object or null.
@@ -27,6 +32,42 @@ function decodeSetupCode(text) {
     return null;
 }
 
+/**
+ * Does the input look like a short one-time code rather than a blob?
+ */
+function isShortCode(text) {
+    return SHORT_CODE_PATTERN.test((text || '').trim());
+}
+
+/**
+ * Redeem a short code against the Agent server. Codes are single-use with a
+ * short TTL. Uses the configured Agent URL, falling back to the default.
+ * @returns {Promise<object>} the setup payload
+ * @throws {Error} with a user-facing message
+ */
+async function redeemShortCode(text) {
+    const code = text.trim().toUpperCase().replace(/^([A-Z0-9]{4})([A-Z0-9]{4})$/, '$1-$2');
+    const base = (game.settings.get(MODULE_ID, 'apiUrl') || DEFAULT_API_URL).replace(/\/$/, '');
+
+    let response;
+    try {
+        response = await fetch(`${base}/api/setup-code/${encodeURIComponent(code)}`, {
+            headers: { Accept: 'application/json' },
+        });
+    } catch (e) {
+        throw new Error(`Could not reach the Agent server at ${base}.`);
+    }
+
+    if (response.status === 404) {
+        throw new Error('That setup code is invalid, expired, or already used — generate a fresh one in the Agent.');
+    }
+    if (!response.ok) {
+        throw new Error(`Agent server rejected the setup code (HTTP ${response.status}).`);
+    }
+
+    return response.json();
+}
+
 export class QuickSetupMenu extends FormApplication {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
@@ -40,11 +81,11 @@ export class QuickSetupMenu extends FormApplication {
     async _renderInner() {
         return $(`
             <div style="padding: 8px;">
-                <p>In the <strong>Cyberpunk Agent</strong> app, open <strong>Settings</strong>,
-                find <strong>Foundry Setup Code</strong>, click <strong>Copy Setup Code</strong>,
-                then paste it below.</p>
+                <p>In the <strong>Cyberpunk Agent</strong> app, open <strong>Settings</strong> and click
+                <strong>Get Foundry Setup Code</strong>. Type the short code (e.g. <code>KX7M-4PWD</code>)
+                below — or paste the full code if the Agent is on this device.</p>
                 <textarea id="cpr-setup-code" rows="4"
-                          placeholder="Paste your Foundry Setup Code here"
+                          placeholder="Short code (KX7M-4PWD) or full setup code"
                           style="width:100%;font-family:monospace;font-size:0.75em;resize:vertical;"></textarea>
                 <div id="cpr-setup-preview" style="margin-top:8px;font-size:0.85em;">
                     <div class="notes" style="opacity:0.7;">Paste a code above to preview its values.</div>
@@ -78,8 +119,16 @@ export class QuickSetupMenu extends FormApplication {
      */
     _renderPreview(html, data) {
         const preview = html.find('#cpr-setup-preview');
+        const raw = html.find('#cpr-setup-code').val().trim();
+
+        if (isShortCode(raw)) {
+            const base = (game.settings.get(MODULE_ID, 'apiUrl') || DEFAULT_API_URL).replace(/\/$/, '');
+            preview.html(`<div class="notes" style="opacity:0.7;">Short code — configuration will be fetched from ${base} when you Apply.</div>`);
+            return;
+        }
+
         if (!data || !data.agentUrl) {
-            const msg = html.find('#cpr-setup-code').val().trim()
+            const msg = raw
                 ? 'Not a valid setup code yet — re-copy it from the Agent.'
                 : 'Paste a code above to preview its values.';
             preview.html(`<div class="notes" style="opacity:0.7;">${msg}</div>`);
@@ -103,7 +152,18 @@ export class QuickSetupMenu extends FormApplication {
     }
 
     async _apply(raw) {
-        const data = decodeSetupCode(raw);
+        let data;
+        if (isShortCode(raw)) {
+            try {
+                data = await redeemShortCode(raw);
+            } catch (e) {
+                ui.notifications.error(`Agent setup: ${e.message}`);
+                return;
+            }
+        } else {
+            data = decodeSetupCode(raw);
+        }
+
         if (!data || !data.agentUrl) {
             ui.notifications.error('Agent setup: that does not look like a valid setup code. Re-copy it from the Agent.');
             return;

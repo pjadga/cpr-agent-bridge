@@ -22,3 +22,7 @@
 * Refactored filebase to preserve scalability and improve readability of components.
 * Trigger form update when the GM updates server inputs.
 * Better error handling to point to connection errors.
+
+1.2.0
+* Quick Setup now accepts short one-time setup codes (e.g. KX7M-4PWD) redeemed from the Agent server — typeable when the Agent is on another device (phone). Long base64 codes still work.
+* "Link my Agent" now works for GMs: it mints and shows their own pairing QR directly instead of redirecting to Manage Characters.

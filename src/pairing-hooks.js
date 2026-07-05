@@ -1,6 +1,6 @@
 import { MODULE_ID } from './constants.js';
 import { mintPairing } from './pairing.js';
-import { renderQrDialog } from './ui/qr-link.js';
+import { renderQrDialog, showPairingQr } from './ui/qr-link.js';
 
 // ==================================================================
 // REMOTE SELF-SERVE PAIRING
@@ -71,8 +71,10 @@ async function handleRequestAsGm(bridge, user) {
  * waits for the GM to respond; warns if the GM's Foundry never answers.
  */
 export async function requestSelfServePairing() {
+    // The GM is the nonce authority — mint and show their own QR directly,
+    // no flag round-trip needed. Lets a GM link the Agent on their phone.
     if (game.user.isGM) {
-        ui.notifications.info('As GM, use Manage Characters → the QR button beside a player.');
+        await showPairingQr(window.cyberpunkBridge, game.user.id, game.user.name);
         return;
     }
 
