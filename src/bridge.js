@@ -279,6 +279,32 @@ export class CyberpunkBridge {
             }
         });
 
+        //V12 Token Blocking
+        this.hookIds.preUpdateToken = Hooks.on("preUpdateToken", (document, changes, options, userId) => {
+            if (!("x" in changes || "y" in changes)) return true;
+
+            const tokenObject = document.object;
+            if (!tokenObject) return true;
+
+            const origin = tokenObject.center;
+            const dx = (changes.x !== undefined ? changes.x : document.x) - document.x;
+            const dy = (changes.y !== undefined ? changes.y : document.y) - document.y;
+            const destination = { x: origin.x + dx, y: origin.y + dy };
+
+            const movementRay = new Ray(origin, destination);
+
+            let isBlocked = CONFIG.Canvas.polygonBackends.move.testCollision(
+                movementRay.A,
+                movementRay.B,
+                { type: "move", mode: "any" }
+            );
+
+            if (isBlocked) {
+                ui.notifications.warn(`${document.name}'s path is blocked by a wall.`);
+                return false;
+            }
+        });
+
         this.hookIds.deleteToken = Hooks.on('deleteToken', (token, options, userId) => {
             this.broadcastRefresh('VISIBLE_TOKENS_DATA');
         });
