@@ -207,3 +207,7 @@ See [LICENSE.md](https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge/-/blo
 ## Support
 
 For issues, feature requests, or contributions, visit the [GitLab repository](https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge).
+
+If you'd like to support development, you can buy me a coffee:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/V8M8238Q2V)
