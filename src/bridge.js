@@ -23,6 +23,9 @@ export class CyberpunkBridge {
         this.pendingPairings = new Map();
         this.hookIds = {};
         this._isCapturingRoll = false;
+        // Active postMessage transport to an embedded Agent iframe, if any.
+        // When set, sendResponse() tees every outbound message to it.
+        this.embedTransport = null;
     }
 
     rollAndCapture(actorId, triggerFunction, rollMode = null) {
@@ -360,19 +363,12 @@ export class CyberpunkBridge {
     }
 
     /**
-     * Send results back to Laravel
+     * Send results outbound. Enriches the message, tees it to an embedded
+     * Agent iframe (postMessage) when one is attached, then POSTs to Laravel
+     * if a hosted Agent is configured. Either transport may be absent.
      */
     async sendResponse(data) {
-        let apiUrl = game.settings.get(MODULE_ID, 'apiUrl');
-        const token = game.settings.get(MODULE_ID, 'apiKey');
-
-        if (!apiUrl || !token) return;
-
-        // Ensure no trailing slash
-        if (apiUrl.endsWith('/')) {
-            apiUrl = apiUrl.slice(0, -1);
-        }
-
+        // --- Enrich (transport-agnostic) ---
         // Include agent-link if available on the current Foundry user
         const agentLink = (data.requestId ? this.requestAgentLinks.get(data.requestId) : null) || game.user.getFlag(MODULE_ID, 'agent-link');
         if (agentLink && !data.agentLink) {
@@ -394,6 +390,22 @@ export class CyberpunkBridge {
             if (!data.rollMode) {
                 data.rollMode = game.settings.get("core", "rollMode");
             }
+        }
+
+        // --- Tee to the embedded iframe (local postMessage path) ---
+        if (this.embedTransport) {
+            try { this.embedTransport.send(data); }
+            catch (e) { console.error("Cyberpunk Bridge: Embed send failed", e); }
+        }
+
+        // --- Hosted Laravel path (unchanged) ---
+        let apiUrl = game.settings.get(MODULE_ID, 'apiUrl');
+        const token = game.settings.get(MODULE_ID, 'apiKey');
+        if (!apiUrl || !token) return null;
+
+        // Ensure no trailing slash
+        if (apiUrl.endsWith('/')) {
+            apiUrl = apiUrl.slice(0, -1);
         }
 
         try {
@@ -483,6 +495,30 @@ export class CyberpunkBridge {
                 tokenId = token.id;
             }
         }
+
+        await dispatch(this, type, data, { type, requestId, actorId, tokenId, debug });
+    }
+
+    /**
+     * Ingress for messages arriving from an embedded Agent iframe.
+     * Skips the Laravel-oriented channel/agentLink routing in handleIncomingData:
+     * the iframe runs in this same client for this same user, already
+     * authenticated by Foundry and validated (origin + nonce) at the transport.
+     * Foundry's own permission model still gates every handler action.
+     */
+    async handleIncomingDataLocal(data) {
+        const type = data.type;
+        const requestId = data.requestId;
+        const actorId = data.actorId;
+        const debug = game.settings.get(MODULE_ID, 'debugMode');
+
+        let tokenId = data.tokenId;
+        if (!tokenId && actorId) {
+            const token = canvas.tokens?.placeables?.find(t => t.actor?.id === actorId);
+            if (token) tokenId = token.id;
+        }
+
+        if (debug) console.log(`%c[Bridge] Embed Call: ${type}`, "color: #c084fc; font-weight: bold;", data);
 
         await dispatch(this, type, data, { type, requestId, actorId, tokenId, debug });
     }
