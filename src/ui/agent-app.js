@@ -41,6 +41,42 @@ export class AgentApp extends Application {
         };
     }
 
+    _getHeaderButtons() {
+        const buttons = super._getHeaderButtons();
+        buttons.unshift({
+            label: 'Fullscreen',
+            class: 'cpr-agent-fullscreen',
+            icon: 'fas fa-expand',
+            onclick: (ev) => this._toggleFullscreen(ev)
+        });
+        return buttons;
+    }
+
+    _toggleFullscreen(ev) {
+        this._isFullscreen = !this._isFullscreen;
+
+        if (this._isFullscreen) {
+            const p = this.position || {};
+            this._prevPosition = { width: p.width, height: p.height, top: p.top, left: p.left };
+            this.setPosition({ left: 0, top: 0, width: window.innerWidth, height: window.innerHeight });
+        } else {
+            this.setPosition(this._prevPosition || { width: 430, height: 820 });
+        }
+
+        // Reflect the current state in the header button icon + label.
+        const anchor = ev?.currentTarget;
+        const icon = anchor?.querySelector?.('i');
+        if (icon) {
+            icon.classList.toggle('fa-expand', !this._isFullscreen);
+            icon.classList.toggle('fa-compress', this._isFullscreen);
+        }
+        if (anchor) {
+            anchor.childNodes.forEach(n => {
+                if (n.nodeType === Node.TEXT_NODE) n.textContent = this._isFullscreen ? ' Windowed' : ' Fullscreen';
+            });
+        }
+    }
+
     /**
      * Bind the postMessage transport to our iframe once it's in the DOM.
      *

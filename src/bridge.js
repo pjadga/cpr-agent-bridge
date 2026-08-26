@@ -22,7 +22,15 @@ export class CyberpunkBridge {
         // nonce -> { foundryUserId, ts } for pairings this (GM) Bridge minted.
         this.pendingPairings = new Map();
         this.hookIds = {};
+        // Roll-capture state. _isCapturingRoll gates the createChatMessage
+        // dedupe (so an Agent-initiated roll isn't double-broadcast) and the
+        // preCreateChatMessage privacy stamp. _captureRollMode is the mode the
+        // player picked in the Agent for the in-flight roll; _prevRollMode +
+        // _captureSafetyTimer restore/clean up if no chat message consumes it.
         this._isCapturingRoll = false;
+        this._captureRollMode = null;
+        this._prevRollMode = null;
+        this._captureSafetyTimer = null;
         // Active postMessage transport to an embedded Agent iframe, if any.
         // When set, sendResponse() tees every outbound message to it.
         this.embedTransport = null;
@@ -30,6 +38,59 @@ export class CyberpunkBridge {
 
     rollAndCapture(actorId, triggerFunction, rollMode = null) {
         return rollAndCapture(this, actorId, triggerFunction, rollMode);
+    }
+
+    /**
+     * Begin an Agent-initiated roll capture. Records the desired roll mode and
+     * mirrors it onto core.rollMode (so a CPR roll that reads the dropdown picks
+     * it up). Awaited, so the setting has landed before the roll fires. A safety
+     * timer guarantees the capture state can't leak if, unusually, no chat
+     * message is ever created to consume it.
+     */
+    async _beginRollCapture(rollMode = null) {
+        this._isCapturingRoll = true;
+        this._captureRollMode = rollMode || null;
+        this._prevRollMode = game.settings.get("core", "rollMode");
+        if (game.settings.get(MODULE_ID, 'debugMode')) {
+            console.log(`%c[Bridge] Roll capture begin: rollMode=${rollMode}`, "color:#c084fc; font-weight:bold;");
+        }
+        if (rollMode) {
+            try { await game.settings.set("core", "rollMode", rollMode); } catch (e) {}
+        }
+        clearTimeout(this._captureSafetyTimer);
+        this._captureSafetyTimer = setTimeout(() => this._endRollCapture(), 6000);
+    }
+
+    /**
+     * End the current capture: consumed by the roll's createChatMessage (the
+     * normal path) or by the safety timer / a failed trigger. Restores the
+     * player's previous core.rollMode.
+     */
+    _endRollCapture() {
+        if (!this._isCapturingRoll) return;
+        clearTimeout(this._captureSafetyTimer);
+        this._captureSafetyTimer = null;
+        const prev = this._prevRollMode;
+        const changed = this._captureRollMode && prev && prev !== this._captureRollMode;
+        this._isCapturingRoll = false;
+        this._captureRollMode = null;
+        this._prevRollMode = null;
+        if (changed) { try { game.settings.set("core", "rollMode", prev); } catch (e) {} }
+    }
+
+    /**
+     * Whisper/blind recipients for a Cyberpunk roll mode, matching Foundry's
+     * own applyRollMode semantics but version-independent. publicroll clears any
+     * inherited whisper.
+     */
+    _whisperForRollMode(rollMode) {
+        const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
+        switch (rollMode) {
+            case 'gmroll':    return { whisper: gmIds, blind: false };
+            case 'blindroll': return { whisper: gmIds, blind: true };
+            case 'selfroll':  return { whisper: [game.user.id], blind: false };
+            default:          return { whisper: [], blind: false }; // publicroll
+        }
     }
 
     registerSettings() {
@@ -312,11 +373,51 @@ export class CyberpunkBridge {
             this.broadcastRefresh('VISIBLE_TOKENS_DATA');
         });
 
+        // Stamp the player's chosen roll mode (whisper/blind) onto an
+        // Agent-initiated roll BEFORE it's created, so Foundry delivers it with
+        // the right visibility natively — this is "privacy reflected in game",
+        // and it's also what gates cross-agent fan-out (Foundry only replicates
+        // a whisper/blind message to its recipients). preCreate fires only on
+        // the originating client, so this only ever touches our own roll.
+        this.hookIds.preCreateChatMessage = Hooks.on('preCreateChatMessage', (message, data, options, userId) => {
+            // Gate on the capture only, not on message.rolls: CPR does not always
+            // populate the rolls array at preCreate time, and during a capture the
+            // message being created IS our roll (preCreate fires only on the
+            // originating client for a message it is creating).
+            if (!this._isCapturingRoll || !this._captureRollMode) return;
+            try {
+                const vis = this._whisperForRollMode(this._captureRollMode);
+                message.updateSource(vis);
+                if (game.settings.get(MODULE_ID, 'debugMode')) {
+                    console.log(`%c[Bridge] Stamped rollMode ${this._captureRollMode}`, "color:#c084fc; font-weight:bold;", vis);
+                }
+            } catch (e) {
+                console.warn('[Bridge] Failed to apply roll-mode visibility', e);
+            }
+        });
+
         this.hookIds.createChatMessage = Hooks.on('createChatMessage', (message, options, userId) => {
-            if (message.author.id !== game.user.id) return;
-            if (this._isCapturingRoll) return;
-            if (message.rolls && message.rolls.length > 0) {
+            if (!(message.rolls && message.rolls.length > 0)) return;
+
+            if (message.author.id === game.user.id) {
+                // My own roll. When it's Agent-initiated we're mid-capture and
+                // rollAndCapture emits the ROLL_RESULT itself — consume the
+                // capture and skip to avoid a duplicate. A Foundry-native roll
+                // by me broadcasts normally (Laravel channel + tee to my iframe).
+                if (this._isCapturingRoll) {
+                    this._endRollCapture();
+                    return;
+                }
                 this.broadcastRoll(message);
+            } else if (this.embedTransport) {
+                // A peer's roll, and we're an embedded client. There is no shared
+                // Reverb channel in embed, so each client must tee peers' rolls
+                // into its own iframe (this is what gives other agents the small
+                // side popup). Foundry only delivered this message to us because
+                // we're an allowed recipient, so whisper/blind visibility is
+                // already enforced upstream — that's privacy reflected in game.
+                // Tee locally only; the author's client owns the Laravel report.
+                this.broadcastRoll(message, { localOnly: true });
             }
         });
     }
@@ -325,7 +426,7 @@ export class CyberpunkBridge {
         this.sendResponse({ type: 'REFRESH_SIGNAL', target: type });
     }
 
-    broadcastRoll(message) {
+    broadcastRoll(message, { localOnly = false } = {}) {
         const user = game.users.get(message.author.id);
         const roll = message.rolls[0];
 
@@ -359,7 +460,7 @@ export class CyberpunkBridge {
                 _roll: roll.toJSON()
             },
             success: true
-        });
+        }, { localOnly });
     }
 
     /**
@@ -367,10 +468,14 @@ export class CyberpunkBridge {
      * Agent iframe (postMessage) when one is attached, then POSTs to Laravel
      * if a hosted Agent is configured. Either transport may be absent.
      */
-    async sendResponse(data) {
+    async sendResponse(data, { localOnly = false } = {}) {
         // --- Enrich (transport-agnostic) ---
-        // Include agent-link if available on the current Foundry user
-        const agentLink = (data.requestId ? this.requestAgentLinks.get(data.requestId) : null) || game.user.getFlag(MODULE_ID, 'agent-link');
+        // Include agent-link if available on the current Foundry user. For a
+        // localOnly peer roll we must NOT fall back to *this* user's link — the
+        // roll isn't ours, and mis-stamping it would make our own iframe treat a
+        // peer's roll as mine (big popup instead of the small side icon).
+        const agentLink = (data.requestId ? this.requestAgentLinks.get(data.requestId) : null)
+            || (localOnly ? null : game.user.getFlag(MODULE_ID, 'agent-link'));
         if (agentLink && !data.agentLink) {
             data.agentLink = agentLink;
         }
@@ -397,6 +502,10 @@ export class CyberpunkBridge {
             try { this.embedTransport.send(data); }
             catch (e) { console.error("Cyberpunk Bridge: Embed send failed", e); }
         }
+
+        // A peer's roll teed into our own iframe must not also be re-reported to
+        // Laravel — the author's client already owns that broadcast.
+        if (localOnly) return null;
 
         // --- Hosted Laravel path (unchanged) ---
         let apiUrl = game.settings.get(MODULE_ID, 'apiUrl');
