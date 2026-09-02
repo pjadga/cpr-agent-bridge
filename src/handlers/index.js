@@ -6,6 +6,7 @@ import * as tokens from './tokens.js';
 import * as economy from './economy.js';
 import * as netpool from './netpool.js';
 import * as pairing from './pairing.js';
+import * as cyberware from './cyberware.js';
 
 // Maps an incoming message `type` to its handler function.
 // Each handler has the signature (bridge, data, ctx) where ctx is
@@ -23,6 +24,10 @@ export const HANDLERS = {
     REMOVE_PROGRAM: cyberdeck.removeProgram,
     TOGGLE_REZ: cyberdeck.toggleRez,
     PROGRAM_ROLL: cyberdeck.programRoll,
+
+    PREPARE_CYBERWARE_INSTALL: cyberware.prepareCyberwareInstall,
+    INSTALL_CYBERWARE: cyberware.installCyberware,
+    UNINSTALL_CYBERWARE: cyberware.uninstallCyberware,
 
     DAMAGE_ROLL: rolls.damageRoll,
     DEATH_SAVE: rolls.deathSave,

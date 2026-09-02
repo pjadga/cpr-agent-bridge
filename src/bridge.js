@@ -1,6 +1,6 @@
 import Echo from 'laravel-echo';
 import { MODULE_ID, DEFAULT_REVERB_KEY } from './constants.js';
-import { flattenToDelta } from './utils.js';
+import { flattenToDelta, resolveWsSecurity } from './utils.js';
 import { rollAndCapture } from './roll-capture.js';
 import { registerSettings } from './settings.js';
 import { dispatch } from './handlers/index.js';
@@ -130,10 +130,24 @@ export class CyberpunkBridge {
         catch (e) { return; }
 
         const wsHost = reverbHostOverride || baseUrl.hostname;
-        const inferredSecure = baseUrl.protocol === 'https:';
-        const forceTLS = (typeof useSSLSetting === 'boolean' ? useSSLSetting : undefined);
-        const useTLS = (forceTLS !== undefined && forceTLS !== null) ? forceTLS : inferredSecure;
-        const defaultPort = useTLS ? 443 : 80;
+
+        // The scheme comes from the Agent URL unless the GM has explicitly said
+        // otherwise. This used to read a Boolean setting, and a registered
+        // Boolean is always a boolean, so the `typeof` guard here never fell
+        // through and the URL was never consulted: with the tick-box defaulting
+        // to ON, every http Agent dialled wss://host:443 and simply never
+        // connected. See resolveWsSecurity.
+        const useTLS = resolveWsSecurity(useSSLSetting, apiUrl);
+
+        // The port is a property of where the Agent is served, so it comes
+        // from the Agent URL and never from the TLS choice above: an Agent on
+        // http://192.168.1.50:8000 serves its WebSocket on 8000 too, and
+        // falling back to the scheme's default dialled a port nothing was
+        // listening on. Deriving it from useTLS instead would also mean the
+        // scheme override silently moved the port, which is not what it says.
+        const defaultPort = baseUrl.port
+            ? Number(baseUrl.port)
+            : (baseUrl.protocol === 'https:' ? 443 : 80);
         const wsPort = reverbPortSetting > 0 ? reverbPortSetting : defaultPort;
 
         this.echo = new Echo({
