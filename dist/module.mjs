@@ -453,9 +453,9 @@ var an = { exports: {} };
           function Z(c) {
             return $n(zn(c));
           }
-          var W = String.fromCharCode, V = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", Ie = function(c) {
+          var K = String.fromCharCode, V = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", Ie = function(c) {
             var t = c.charCodeAt(0);
-            return t < 128 ? c : t < 2048 ? W(192 | t >>> 6) + W(128 | t & 63) : W(224 | t >>> 12 & 15) + W(128 | t >>> 6 & 63) + W(128 | t & 63);
+            return t < 128 ? c : t < 2048 ? K(192 | t >>> 6) + K(128 | t & 63) : K(224 | t >>> 12 & 15) + K(128 | t >>> 6 & 63) + K(128 | t & 63);
           }, zn = function(c) {
             return c.replace(/[^\x00-\x7F]/g, Ie);
           }, qn = function(c) {
@@ -486,7 +486,7 @@ var an = { exports: {} };
           function Vn(c) {
             window.clearTimeout(c);
           }
-          function Kn(c) {
+          function Wn(c) {
             window.clearInterval(c);
           }
           class oe extends St {
@@ -496,9 +496,9 @@ var an = { exports: {} };
               });
             }
           }
-          class Wn extends St {
+          class Kn extends St {
             constructor(t, o) {
-              super(setInterval, Kn, t, function(d) {
+              super(setInterval, Wn, t, function(d) {
                 return o(), d;
               });
             }
@@ -516,7 +516,7 @@ var an = { exports: {} };
                 return d[c].apply(d, o.concat(arguments));
               };
             }
-          }, K = Jn;
+          }, W = Jn;
           function J(c, ...t) {
             for (var o = 0; o < t.length; o++) {
               var d = t[o];
@@ -612,7 +612,7 @@ var an = { exports: {} };
           function nr(c) {
             var t = Et(c, function(d) {
               return d !== void 0;
-            }), o = It(Zn(tr(t)), K.method("join", "=")).join("&");
+            }), o = It(Zn(tr(t)), W.method("join", "=")).join("&");
             return o;
           }
           function rr(c) {
@@ -854,7 +854,7 @@ var an = { exports: {} };
               return this.socket ? (this.socket.close(), !0) : !1;
             }
             send(t) {
-              return this.state === "open" ? (K.defer(() => {
+              return this.state === "open" ? (W.defer(() => {
                 this.socket && this.socket.send(t);
               }), !0) : !1;
             }
@@ -1009,12 +1009,12 @@ var an = { exports: {} };
                 activityTimeout: this.pingDelay
               });
               var w = this.transport.createConnection(t, o, d, f), T = null, L = function() {
-                w.unbind("open", L), w.bind("closed", M), T = K.now();
+                w.unbind("open", L), w.bind("closed", M), T = W.now();
               }, M = (x) => {
                 if (w.unbind("closed", M), x.code === 1002 || x.code === 1003)
                   this.manager.reportDeath();
                 else if (!x.wasClean && T) {
-                  var D = K.now() - T;
+                  var D = W.now() - T;
                   D < 2 * this.maxPingDelay && (this.manager.reportDeath(), this.pingDelay = Math.max(D / 2, this.minPingDelay));
                 }
               };
@@ -1195,7 +1195,7 @@ var an = { exports: {} };
               this.timeline.isEmpty() || this.timeline.send(N.TimelineTransport.getAgent(this, t), o);
             }
           }
-          class Ke extends ne {
+          class We extends ne {
             constructor(t, o) {
               super(function(d, f) {
                 j.debug("No callbacks on " + t + " for " + d);
@@ -1257,7 +1257,7 @@ var an = { exports: {} };
               this.subscriptionCancelled = !1;
             }
           }
-          class We extends Ke {
+          class Ke extends We {
             authorize(t, o) {
               return this.pusher.config.channelAuthorizer({
                 channelName: this.name,
@@ -1324,7 +1324,7 @@ var an = { exports: {} };
               x((d = d.apply(c, t || [])).next());
             });
           };
-          class Nr extends We {
+          class Nr extends Ke {
             constructor(t, o) {
               super(t, o), this.members = new Pr();
             }
@@ -1380,7 +1380,7 @@ var an = { exports: {} };
             }
           }
           var Or = n(1), Je = n(0);
-          class Br extends We {
+          class Br extends Ke {
             constructor(t, o, d) {
               super(t, o), this.key = null, this.nacl = d;
             }
@@ -1657,10 +1657,10 @@ var an = { exports: {} };
               return new xr(c, t);
             },
             createChannel(c, t) {
-              return new Ke(c, t);
+              return new We(c, t);
             },
             createPrivateChannel(c, t) {
-              return new We(c, t);
+              return new Ke(c, t);
             },
             createPresenceChannel(c, t) {
               return new Nr(c, t);
@@ -1700,7 +1700,7 @@ var an = { exports: {} };
               this.strategies = t, this.loop = !!o.loop, this.failFast = !!o.failFast, this.timeout = o.timeout, this.timeoutLimit = o.timeoutLimit;
             }
             isSupported() {
-              return Lt(this.strategies, K.method("isSupported"));
+              return Lt(this.strategies, W.method("isSupported"));
             }
             connect(t, o) {
               var d = this.strategies, f = 0, w = this.timeout, T = null, L = (M, x) => {
@@ -1736,7 +1736,7 @@ var an = { exports: {} };
               this.strategies = t;
             }
             isSupported() {
-              return Lt(this.strategies, K.method("isSupported"));
+              return Lt(this.strategies, W.method("isSupported"));
             }
             connect(t, o) {
               return jr(this.strategies, t, function(d, f) {
@@ -1784,7 +1784,7 @@ var an = { exports: {} };
             }
             connect(t, o) {
               var d = this.usingTLS, f = $r(d), w = f && f.cacheSkipCount ? f.cacheSkipCount : 0, T = [this.strategy];
-              if (f && f.timestamp + this.ttl >= K.now()) {
+              if (f && f.timestamp + this.ttl >= W.now()) {
                 var L = this.transports[f.transport];
                 L && (["ws", "wss"].includes(f.transport) || w > 3 ? (this.timeline.info({
                   cached: !0,
@@ -1795,8 +1795,8 @@ var an = { exports: {} };
                   failFast: !0
                 }))) : w++);
               }
-              var M = K.now(), x = T.pop().connect(t, function D(H, Me) {
-                H ? (Ft(d), T.length > 0 ? (M = K.now(), x = T.pop().connect(t, D)) : o(H)) : (Gr(d, Me.transport.name, K.now() - M, w), o(null, Me));
+              var M = W.now(), x = T.pop().connect(t, function D(H, Me) {
+                H ? (Ft(d), T.length > 0 ? (M = W.now(), x = T.pop().connect(t, D)) : o(H)) : (Gr(d, Me.transport.name, W.now() - M, w), o(null, Me));
               });
               return {
                 abort: function() {
@@ -1828,7 +1828,7 @@ var an = { exports: {} };
             if (f)
               try {
                 f[Ye(c)] = Re({
-                  timestamp: K.now(),
+                  timestamp: W.now(),
                   transport: t,
                   latency: o,
                   cacheSkipCount: d
@@ -1897,10 +1897,10 @@ var an = { exports: {} };
               return c.isSupported();
             };
           }
-          var Kr = function(c, t, o) {
+          var Wr = function(c, t, o) {
             var d = {};
-            function f(Jt, Ki, Wi, Ji, Xi) {
-              var Xt = o(c, Jt, Ki, Wi, Ji, Xi);
+            function f(Jt, Wi, Ki, Ji, Xi) {
+              var Xt = o(c, Jt, Wi, Ki, Ji, Xi);
               return d[Jt] = Xt, Xt;
             }
             var w = Object.assign({}, t, {
@@ -1926,14 +1926,14 @@ var an = { exports: {} };
               maxPingDelay: c.activityTimeout
             }), H = f("ws", "ws", 3, w, x), Me = f("wss", "ws", 3, T, x), zi = f("sockjs", "sockjs", 1, L), qt = f("xhr_streaming", "xhr_streaming", 1, L, D), qi = f("xdr_streaming", "xdr_streaming", 1, L, D), $t = f("xhr_polling", "xhr_polling", 1, L), $i = f("xdr_polling", "xdr_polling", 1, L), Gt = new ce([H], M), Gi = new ce([Me], M), Vi = new ce([zi], M), Vt = new ce([
               new be(ve(qt), qt, qi)
-            ], M), Kt = new ce([
-              new be(ve($t), $t, $i)
             ], M), Wt = new ce([
+              new be(ve($t), $t, $i)
+            ], M), Kt = new ce([
               new be(ve(Vt), new Xe([
                 Vt,
-                new Le(Kt, { delay: 4e3 })
-              ]), Kt)
-            ], M), tt = new be(ve(Wt), Wt, Vi), nt;
+                new Le(Wt, { delay: 4e3 })
+              ]), Wt)
+            ], M), tt = new be(ve(Kt), Kt, Vi), nt;
             return t.useTLS ? nt = new Xe([
               Gt,
               new Le(tt, { delay: 2e3 })
@@ -1946,7 +1946,7 @@ var an = { exports: {} };
               timeline: t.timeline,
               useTLS: t.useTLS
             });
-          }, Wr = Kr, Jr = function() {
+          }, Kr = Wr, Jr = function() {
             var c = this;
             c.timeline.info(c.buildTimelineMessage({
               transport: c.name + (c.options.useTLS ? "s" : "")
@@ -2088,7 +2088,7 @@ var an = { exports: {} };
               try {
                 this.stream.start();
               } catch (t) {
-                K.defer(() => {
+                W.defer(() => {
                   this.onError(t), this.onClose(1006, "Could not start streaming", !1);
                 });
               }
@@ -2190,7 +2190,7 @@ var an = { exports: {} };
             auth_callbacks: {},
             ScriptReceivers: l,
             DependenciesReceivers: g,
-            getDefaultStrategy: Wr,
+            getDefaultStrategy: Kr,
             Transports: Sr,
             transportConnectionInitializer: Jr,
             HTTPFactory: gi,
@@ -2288,7 +2288,7 @@ var an = { exports: {} };
               this.key = t, this.session = o, this.events = [], this.options = d || {}, this.sent = 0, this.uniqueID = 0;
             }
             log(t, o) {
-              t <= this.options.level && (this.events.push(J({}, o, { timestamp: K.now() })), this.options.limit && this.events.length > this.options.limit && this.events.shift());
+              t <= this.options.level && (this.events.push(J({}, o, { timestamp: W.now() })), this.options.limit && this.events.length > this.options.limit && this.events.shift());
             }
             error(t) {
               this.log(Pe.ERROR, t);
@@ -2361,7 +2361,7 @@ var an = { exports: {} };
             }
           }
           function zt(c, t) {
-            return K.defer(function() {
+            return W.defer(function() {
               t(c);
             }), {
               abort: function() {
@@ -2382,7 +2382,7 @@ var an = { exports: {} };
               return !1;
             },
             connect: function(c, t) {
-              var o = K.defer(function() {
+              var o = W.defer(function() {
                 t(new O());
               });
               return {
@@ -2651,7 +2651,7 @@ var an = { exports: {} };
             connect() {
               if (this.connection.connect(), this.timelineSender && !this.timelineSenderTimer) {
                 var t = this.connection.isUsingTLS(), o = this.timelineSender;
-                this.timelineSenderTimer = new Wn(6e4, function() {
+                this.timelineSenderTimer = new Kn(6e4, function() {
                   o.send(t);
                 });
               }
@@ -3885,7 +3885,16 @@ function ut(a, e, r = {}) {
   }
   return r;
 }
-async function ys(a, e, r, i = null) {
+function ys(a, e) {
+  if (a === "wss") return !0;
+  if (a === "ws") return !1;
+  try {
+    return new URL(e).protocol === "https:";
+  } catch {
+    return !0;
+  }
+}
+async function bs(a, e, r, i = null) {
   return console.log(`%c[Bridge] Starting Render Interceptor for Actor ${e}`, "color: #00ffff; font-weight: bold;"), await a._beginRollCapture(i), new Promise(async (n, s) => {
     let l = !1;
     const h = renderTemplate, u = function(p, g) {
@@ -3909,11 +3918,11 @@ async function ys(a, e, r, i = null) {
     }
   });
 }
-var Te = {}, bs = function() {
+var Te = {}, vs = function() {
   return typeof Promise == "function" && Promise.prototype && Promise.prototype.then;
 }, yn = {}, Q = {};
 let vt;
-const vs = [
+const ws = [
   0,
   // Not used
   26,
@@ -3963,7 +3972,7 @@ Q.getSymbolSize = function(e) {
   return e * 4 + 17;
 };
 Q.getSymbolTotalCodewords = function(e) {
-  return vs[e];
+  return ws[e];
 };
 Q.getBCHDigit = function(a) {
   let e = 0;
@@ -4037,7 +4046,7 @@ bn.prototype = {
     this.buffer.length <= e && this.buffer.push(0), a && (this.buffer[e] |= 128 >>> this.length % 8), this.length++;
   }
 };
-var ws = bn;
+var ks = bn;
 function Ae(a) {
   if (!a || a < 1)
     throw new Error("BitMatrix size must be defined and greater than 0");
@@ -4056,7 +4065,7 @@ Ae.prototype.xor = function(a, e, r) {
 Ae.prototype.isReserved = function(a, e) {
   return this.reservedBit[a * this.size + e];
 };
-var ks = Ae, vn = {};
+var _s = Ae, vn = {};
 (function(a) {
   const e = Q.getSymbolSize;
   a.getRowColCoords = function(i) {
@@ -4076,9 +4085,9 @@ var ks = Ae, vn = {};
   };
 })(vn);
 var wn = {};
-const _s = Q.getSymbolSize, en = 7;
+const Cs = Q.getSymbolSize, en = 7;
 wn.getPositions = function(e) {
-  const r = _s(e);
+  const r = Cs(e);
   return [
     // top-left
     [0, 0],
@@ -4602,30 +4611,30 @@ wt.prototype.encode = function(e) {
   }
   return i;
 };
-var Cs = wt, Sn = {}, se = {}, kt = {};
+var Ss = wt, Sn = {}, se = {}, kt = {};
 kt.isValid = function(e) {
   return !isNaN(e) && e >= 1 && e <= 40;
 };
 var ee = {};
-const Tn = "[0-9]+", Ss = "[A-Z $%*+\\-./:]+";
+const Tn = "[0-9]+", Ts = "[A-Z $%*+\\-./:]+";
 let Se = "(?:[u3000-u303F]|[u3040-u309F]|[u30A0-u30FF]|[uFF00-uFFEF]|[u4E00-u9FAF]|[u2605-u2606]|[u2190-u2195]|u203B|[u2010u2015u2018u2019u2025u2026u201Cu201Du2225u2260]|[u0391-u0451]|[u00A7u00A8u00B1u00B4u00D7u00F7])+";
 Se = Se.replace(/u/g, "\\u");
-const Ts = "(?:(?![A-Z0-9 $%*+\\-./:]|" + Se + `)(?:.|[\r
+const As = "(?:(?![A-Z0-9 $%*+\\-./:]|" + Se + `)(?:.|[\r
 ]))+`;
 ee.KANJI = new RegExp(Se, "g");
 ee.BYTE_KANJI = new RegExp("[^A-Z0-9 $%*+\\-./:]+", "g");
-ee.BYTE = new RegExp(Ts, "g");
+ee.BYTE = new RegExp(As, "g");
 ee.NUMERIC = new RegExp(Tn, "g");
-ee.ALPHANUMERIC = new RegExp(Ss, "g");
-const As = new RegExp("^" + Se + "$"), Is = new RegExp("^" + Tn + "$"), Rs = new RegExp("^[A-Z0-9 $%*+\\-./:]+$");
+ee.ALPHANUMERIC = new RegExp(Ts, "g");
+const Is = new RegExp("^" + Se + "$"), Rs = new RegExp("^" + Tn + "$"), Es = new RegExp("^[A-Z0-9 $%*+\\-./:]+$");
 ee.testKanji = function(e) {
-  return As.test(e);
-};
-ee.testNumeric = function(e) {
   return Is.test(e);
 };
-ee.testAlphanumeric = function(e) {
+ee.testNumeric = function(e) {
   return Rs.test(e);
+};
+ee.testAlphanumeric = function(e) {
+  return Es.test(e);
 };
 (function(a) {
   const e = kt, r = ee;
@@ -4750,18 +4759,18 @@ ee.testAlphanumeric = function(e) {
   };
 })(Sn);
 var An = {};
-const ht = Q, In = 1335, Es = 21522, tn = ht.getBCHDigit(In);
+const ht = Q, In = 1335, Ls = 21522, tn = ht.getBCHDigit(In);
 An.getEncodedBits = function(e, r) {
   const i = e.bit << 3 | r;
   let n = i << 10;
   for (; ht.getBCHDigit(n) - tn >= 0; )
     n ^= In << ht.getBCHDigit(n) - tn;
-  return (i << 10 | n) ^ Es;
+  return (i << 10 | n) ^ Ls;
 };
 var Rn = {};
-const Ls = se;
+const Ps = se;
 function de(a) {
-  this.mode = Ls.NUMERIC, this.data = a.toString();
+  this.mode = Ps.NUMERIC, this.data = a.toString();
 }
 de.getBitsLength = function(e) {
   return 10 * Math.floor(e / 3) + (e % 3 ? e % 3 * 3 + 1 : 0);
@@ -4779,8 +4788,8 @@ de.prototype.write = function(e) {
   const s = this.data.length - r;
   s > 0 && (i = this.data.substr(r), n = parseInt(i, 10), e.put(n, s * 3 + 1));
 };
-var Ps = de;
-const Ms = se, it = [
+var Ms = de;
+const Ns = se, it = [
   "0",
   "1",
   "2",
@@ -4828,7 +4837,7 @@ const Ms = se, it = [
   ":"
 ];
 function fe(a) {
-  this.mode = Ms.ALPHANUMERIC, this.data = a;
+  this.mode = Ns.ALPHANUMERIC, this.data = a;
 }
 fe.getBitsLength = function(e) {
   return 11 * Math.floor(e / 2) + 6 * (e % 2);
@@ -4847,10 +4856,10 @@ fe.prototype.write = function(e) {
   }
   this.data.length % 2 && e.put(it.indexOf(this.data[r]), 6);
 };
-var Ns = fe;
-const Os = se;
+var Os = fe;
+const Bs = se;
 function pe(a) {
-  this.mode = Os.BYTE, typeof a == "string" ? this.data = new TextEncoder().encode(a) : this.data = new Uint8Array(a);
+  this.mode = Bs.BYTE, typeof a == "string" ? this.data = new TextEncoder().encode(a) : this.data = new Uint8Array(a);
 }
 pe.getBitsLength = function(e) {
   return e * 8;
@@ -4865,10 +4874,10 @@ pe.prototype.write = function(a) {
   for (let e = 0, r = this.data.length; e < r; e++)
     a.put(this.data[e], 8);
 };
-var Bs = pe;
-const xs = se, Ds = Q;
+var xs = pe;
+const Ds = se, Fs = Q;
 function ge(a) {
-  this.mode = xs.KANJI, this.data = a;
+  this.mode = Ds.KANJI, this.data = a;
 }
 ge.getBitsLength = function(e) {
   return e * 13;
@@ -4882,7 +4891,7 @@ ge.prototype.getBitsLength = function() {
 ge.prototype.write = function(a) {
   let e;
   for (e = 0; e < this.data.length; e++) {
-    let r = Ds.toSJIS(this.data[e]);
+    let r = Fs.toSJIS(this.data[e]);
     if (r >= 33088 && r <= 40956)
       r -= 33088;
     else if (r >= 57408 && r <= 60351)
@@ -4895,7 +4904,7 @@ Make sure your charset is UTF-8`
     r = (r >>> 8 & 255) * 192 + (r & 255), a.put(r, 13);
   }
 };
-var Fs = ge, En = { exports: {} };
+var Us = ge, En = { exports: {} };
 (function(a) {
   var e = {
     single_source_shortest_paths: function(r, i, n) {
@@ -4961,9 +4970,9 @@ var Fs = ge, En = { exports: {} };
   };
   a.exports = e;
 })(En);
-var Us = En.exports;
+var js = En.exports;
 (function(a) {
-  const e = se, r = Ps, i = Ns, n = Bs, s = Fs, l = ee, h = Q, u = Us;
+  const e = se, r = Ms, i = Os, n = xs, s = Us, l = ee, h = Q, u = js;
   function p(v) {
     return unescape(encodeURIComponent(v)).length;
   }
@@ -5050,8 +5059,8 @@ var Us = En.exports;
       for (let U = 0; U < O.length; U++) {
         const F = O[U], Z = "" + P + U;
         B.push(Z), I[Z] = { node: F, lastCount: 0 }, E[Z] = {};
-        for (let W = 0; W < R.length; W++) {
-          const V = R[W];
+        for (let K = 0; K < R.length; K++) {
+          const V = R[K];
           I[V] && I[V].node.mode === F.mode ? (E[V][Z] = b(I[V].lastCount + F.length, F.mode) - b(I[V].lastCount, F.mode), I[V].lastCount += F.length) : (I[V] && (I[V].lastCount = F.length), E[V][Z] = b(F.length, F.mode) + 4 + e.getCharCountIndicator(F.mode, S));
         }
       }
@@ -5093,9 +5102,9 @@ var Us = En.exports;
     );
   };
 })(Rn);
-const qe = Q, st = je, js = ws, Hs = ks, zs = vn, qs = wn, dt = kn, ft = He, $s = Cs, Fe = Sn, Gs = An, Vs = se, ot = Rn;
+const qe = Q, st = je, Hs = ks, zs = _s, qs = vn, $s = wn, dt = kn, ft = He, Gs = Ss, Fe = Sn, Vs = An, Ws = se, ot = Rn;
 function Ks(a, e) {
-  const r = a.size, i = qs.getPositions(e);
+  const r = a.size, i = $s.getPositions(e);
   for (let n = 0; n < i.length; n++) {
     const s = i[n][0], l = i[n][1];
     for (let h = -1; h <= 7; h++)
@@ -5104,15 +5113,15 @@ function Ks(a, e) {
           l + u <= -1 || r <= l + u || (h >= 0 && h <= 6 && (u === 0 || u === 6) || u >= 0 && u <= 6 && (h === 0 || h === 6) || h >= 2 && h <= 4 && u >= 2 && u <= 4 ? a.set(s + h, l + u, !0, !0) : a.set(s + h, l + u, !1, !0));
   }
 }
-function Ws(a) {
+function Js(a) {
   const e = a.size;
   for (let r = 8; r < e - 8; r++) {
     const i = r % 2 === 0;
     a.set(r, 6, i, !0), a.set(6, r, i, !0);
   }
 }
-function Js(a, e) {
-  const r = zs.getPositions(e);
+function Xs(a, e) {
+  const r = qs.getPositions(e);
   for (let i = 0; i < r.length; i++) {
     const n = r[i][0], s = r[i][1];
     for (let l = -2; l <= 2; l++)
@@ -5120,20 +5129,20 @@ function Js(a, e) {
         l === -2 || l === 2 || h === -2 || h === 2 || l === 0 && h === 0 ? a.set(n + l, s + h, !0, !0) : a.set(n + l, s + h, !1, !0);
   }
 }
-function Xs(a, e) {
+function Ys(a, e) {
   const r = a.size, i = Fe.getEncodedBits(e);
   let n, s, l;
   for (let h = 0; h < 18; h++)
     n = Math.floor(h / 3), s = h % 3 + r - 8 - 3, l = (i >> h & 1) === 1, a.set(n, s, l, !0), a.set(s, n, l, !0);
 }
 function at(a, e, r) {
-  const i = a.size, n = Gs.getEncodedBits(e, r);
+  const i = a.size, n = Vs.getEncodedBits(e, r);
   let s, l;
   for (s = 0; s < 15; s++)
     l = (n >> s & 1) === 1, s < 6 ? a.set(s, 8, l, !0) : s < 8 ? a.set(s + 1, 8, l, !0) : a.set(i - 15 + s, 8, l, !0), s < 8 ? a.set(8, i - s - 1, l, !0) : s < 9 ? a.set(8, 15 - s - 1 + 1, l, !0) : a.set(8, 15 - s - 1, l, !0);
   a.set(i - 8, 8, 1, !0);
 }
-function Ys(a, e) {
+function Qs(a, e) {
   const r = a.size;
   let i = -1, n = r - 1, s = 7, l = 0;
   for (let h = r - 1; h > 0; h -= 2)
@@ -5149,10 +5158,10 @@ function Ys(a, e) {
       }
     }
 }
-function Qs(a, e, r) {
-  const i = new js();
+function Zs(a, e, r) {
+  const i = new Hs();
   r.forEach(function(u) {
-    i.put(u.mode.bit, 4), i.put(u.getLength(), Vs.getCharCountIndicator(u.mode, a)), u.write(i);
+    i.put(u.mode.bit, 4), i.put(u.getLength(), Ws.getCharCountIndicator(u.mode, a)), u.write(i);
   });
   const n = qe.getSymbolTotalCodewords(a), s = ft.getTotalCodewordsCount(a, e), l = (n - s) * 8;
   for (i.getLengthInBits() + 4 <= l && i.put(0, 4); i.getLengthInBits() % 8 !== 0; )
@@ -5160,10 +5169,10 @@ function Qs(a, e, r) {
   const h = (l - i.getLengthInBits()) / 8;
   for (let u = 0; u < h; u++)
     i.put(u % 2 ? 17 : 236, 8);
-  return Zs(i, a, e);
+  return eo(i, a, e);
 }
-function Zs(a, e, r) {
-  const i = qe.getSymbolTotalCodewords(e), n = ft.getTotalCodewordsCount(e, r), s = i - n, l = ft.getBlocksCount(e, r), h = i % l, u = l - h, p = Math.floor(i / l), g = Math.floor(s / l), m = g + 1, b = p - g, y = new $s(b);
+function eo(a, e, r) {
+  const i = qe.getSymbolTotalCodewords(e), n = ft.getTotalCodewordsCount(e, r), s = i - n, l = ft.getBlocksCount(e, r), h = i % l, u = l - h, p = Math.floor(i / l), g = Math.floor(s / l), m = g + 1, b = p - g, y = new Gs(b);
   let C = 0;
   const _ = new Array(l), k = new Array(l);
   let v = 0;
@@ -5182,7 +5191,7 @@ function Zs(a, e, r) {
       I[E++] = k[P][R];
   return I;
 }
-function eo(a, e, r, i) {
+function to(a, e, r, i) {
   let n;
   if (Array.isArray(a))
     n = ot.fromArray(a);
@@ -5207,8 +5216,8 @@ The chosen QR Code version cannot contain this amount of data.
 Minimum version required to store current data is: ` + s + `.
 `
     );
-  const l = Qs(e, r, n), h = qe.getSymbolSize(e), u = new Hs(h);
-  return Ks(u, e), Ws(u), Js(u, e), at(u, r, 0), e >= 7 && Xs(u, e), Ys(u, l), isNaN(i) && (i = dt.getBestMask(
+  const l = Zs(e, r, n), h = qe.getSymbolSize(e), u = new zs(h);
+  return Ks(u, e), Js(u), Xs(u, e), at(u, r, 0), e >= 7 && Ys(u, e), Qs(u, l), isNaN(i) && (i = dt.getBestMask(
     u,
     at.bind(null, u, r)
   )), dt.applyMask(i, u), at(u, r, i), {
@@ -5223,7 +5232,7 @@ yn.create = function(e, r) {
   if (typeof e > "u" || e === "")
     throw new Error("No input text");
   let i = st.M, n, s;
-  return typeof r < "u" && (i = st.from(r.errorCorrectionLevel, st.M), n = Fe.from(r.version), s = dt.from(r.maskPattern), r.toSJISFunc && qe.setToSJISFunction(r.toSJISFunc)), eo(e, n, i, s);
+  return typeof r < "u" && (i = st.from(r.errorCorrectionLevel, st.M), n = Fe.from(r.version), s = dt.from(r.maskPattern), r.toSJISFunc && qe.setToSJISFunction(r.toSJISFunc)), to(e, n, i, s);
 };
 var Ln = {}, _t = {};
 (function(a) {
@@ -5302,7 +5311,7 @@ var Ln = {}, _t = {};
   };
 })(Ln);
 var Pn = {};
-const to = _t;
+const no = _t;
 function nn(a, e) {
   const r = a.a / 255, i = e + '="' + a.hex + '"';
   return r < 1 ? i + " " + e + '-opacity="' + r.toFixed(2).slice(1) + '"' : i;
@@ -5311,7 +5320,7 @@ function ct(a, e, r) {
   let i = a + e;
   return typeof r < "u" && (i += " " + r), i;
 }
-function no(a, e, r) {
+function ro(a, e, r) {
   let i = "", n = 0, s = !1, l = 0;
   for (let h = 0; h < a.length; h++) {
     const u = Math.floor(h % e), p = Math.floor(h / e);
@@ -5320,14 +5329,14 @@ function no(a, e, r) {
   return i;
 }
 Pn.render = function(e, r, i) {
-  const n = to.getOptions(r), s = e.modules.size, l = e.modules.data, h = s + n.margin * 2, u = n.color.light.a ? "<path " + nn(n.color.light, "fill") + ' d="M0 0h' + h + "v" + h + 'H0z"/>' : "", p = "<path " + nn(n.color.dark, "stroke") + ' d="' + no(l, s, n.margin) + '"/>', g = 'viewBox="0 0 ' + h + " " + h + '"', b = '<svg xmlns="http://www.w3.org/2000/svg" ' + (n.width ? 'width="' + n.width + '" height="' + n.width + '" ' : "") + g + ' shape-rendering="crispEdges">' + u + p + `</svg>
+  const n = no.getOptions(r), s = e.modules.size, l = e.modules.data, h = s + n.margin * 2, u = n.color.light.a ? "<path " + nn(n.color.light, "fill") + ' d="M0 0h' + h + "v" + h + 'H0z"/>' : "", p = "<path " + nn(n.color.dark, "stroke") + ' d="' + ro(l, s, n.margin) + '"/>', g = 'viewBox="0 0 ' + h + " " + h + '"', b = '<svg xmlns="http://www.w3.org/2000/svg" ' + (n.width ? 'width="' + n.width + '" height="' + n.width + '" ' : "") + g + ' shape-rendering="crispEdges">' + u + p + `</svg>
 `;
   return typeof i == "function" && i(null, b), b;
 };
-const ro = bs, pt = yn, Mn = Ln, so = Pn;
+const so = vs, pt = yn, Mn = Ln, oo = Pn;
 function Ct(a, e, r, i, n) {
   const s = [].slice.call(arguments, 1), l = s.length, h = typeof s[l - 1] == "function";
-  if (!h && !ro())
+  if (!h && !so())
     throw new Error("Callback required as last argument");
   if (h) {
     if (l < 2)
@@ -5356,15 +5365,15 @@ Te.create = pt.create;
 Te.toCanvas = Ct.bind(null, Mn.render);
 Te.toDataURL = Ct.bind(null, Mn.renderToDataURL);
 Te.toString = Ct.bind(null, function(a, e, r) {
-  return so.render(a, r);
+  return oo.render(a, r);
 });
-const gt = 300, oo = 1;
+const gt = 300, ao = 1;
 function Nn() {
   return (game.settings.get(A, "apiUrl") || "").replace(/\/$/, "");
 }
-function ao({ nonce: a, channelId: e, foundryUserName: r }) {
+function co({ nonce: a, channelId: e, foundryUserName: r }) {
   return JSON.stringify({
-    v: oo,
+    v: ao,
     agentUrl: Nn(),
     channelId: e || null,
     nonce: a,
@@ -5399,7 +5408,7 @@ async function On(a, e, r) {
   }
   if (!h.ok)
     throw h.status === 403 ? new Error("Only a GM with a linked Agent account can generate pairings.") : h.status === 404 ? new Error("No Agent session matches this Channel ID. Create/sync the session in the Agent first.") : new Error(`Agent server rejected the pairing (HTTP ${h.status}).`);
-  return a.pendingPairings.set(l, { foundryUserId: e, ts: Date.now() }), setTimeout(() => a.pendingPairings.delete(l), gt * 1e3), { nonce: l, payload: ao({ nonce: l, channelId: s, foundryUserName: r }) };
+  return a.pendingPairings.set(l, { foundryUserId: e, ts: Date.now() }), setTimeout(() => a.pendingPairings.delete(l), gt * 1e3), { nonce: l, payload: co({ nonce: l, channelId: s, foundryUserName: r }) };
 }
 async function Bn(a, e, r) {
   let i;
@@ -5453,7 +5462,7 @@ async function xn(a, e) {
     }
   }, { width: 380 }).render(!0);
 }
-class co extends FormApplication {
+class lo extends FormApplication {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "cpr-agent-assignment-menu",
@@ -5557,15 +5566,15 @@ class co extends FormApplication {
   }
 }
 const Ue = "pairing-request", me = "pairing-nonce";
-function lo(a) {
+function uo(a) {
   a.hookIds.pairingUpdateUser || (a.hookIds.pairingUpdateUser = Hooks.on("updateUser", async (e, r) => {
-    if (game.user.isGM && foundry.utils.getProperty(r, `flags.${A}.${Ue}`) && await uo(a, e), e.id === game.user.id) {
+    if (game.user.isGM && foundry.utils.getProperty(r, `flags.${A}.${Ue}`) && await ho(a, e), e.id === game.user.id) {
       const i = foundry.utils.getProperty(r, `flags.${A}.${me}`);
       i && i.payload && (await xn(i.payload, game.user.name), await game.user.unsetFlag(A, me), await game.user.unsetFlag(A, Ue));
     }
   }));
 }
-async function uo(a, e) {
+async function ho(a, e) {
   try {
     const { payload: r } = await On(a, e.id, e.name);
     await e.setFlag(A, me, { payload: r, ts: Date.now() });
@@ -5573,7 +5582,7 @@ async function uo(a, e) {
     console.warn(`[Bridge] Failed to mint pairing for ${e.name}: ${r.message}`), await e.setFlag(A, me, { error: r.message, ts: Date.now() });
   }
 }
-async function ho() {
+async function fo() {
   if (game.user.isGM) {
     await Bn(window.cyberpunkBridge, game.user.id, game.user.name);
     return;
@@ -5582,7 +5591,7 @@ async function ho() {
     game.user.getFlag(A, me) || (await game.user.unsetFlag(A, Ue), ui.notifications.warn("Agent: no response from the GM. The GM's Foundry must be online to generate a link."));
   }, 12e3);
 }
-class fo extends FormApplication {
+class po extends FormApplication {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "cpr-agent-link-menu",
@@ -5608,11 +5617,11 @@ class fo extends FormApplication {
   }
   activateListeners(e) {
     super.activateListeners(e), e.find("#cpr-generate-qr").click(async (r) => {
-      r.preventDefault(), await ho(), this.close();
+      r.preventDefault(), await fo(), this.close();
     });
   }
 }
-const po = 1, go = /^[A-Z0-9]{4}-?[A-Z0-9]{4}$/i;
+const go = 1, mo = /^[A-Z0-9]{4}-?[A-Z0-9]{4}$/i;
 function rn(a) {
   const e = (a || "").trim();
   if (!e) return null;
@@ -5624,9 +5633,9 @@ function rn(a) {
   return null;
 }
 function sn(a) {
-  return go.test((a || "").trim());
+  return mo.test((a || "").trim());
 }
-async function mo(a) {
+async function yo(a) {
   const e = a.trim().toUpperCase().replace(/^([A-Z0-9]{4})([A-Z0-9]{4})$/, "$1-$2"), r = (game.settings.get(A, "apiUrl") || he).replace(/\/$/, "");
   let i;
   try {
@@ -5642,7 +5651,7 @@ async function mo(a) {
     throw new Error(`Agent server rejected the setup code (HTTP ${i.status}).`);
   return i.json();
 }
-class yo extends FormApplication {
+class bo extends FormApplication {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "cpr-agent-quick-setup",
@@ -5711,7 +5720,7 @@ class yo extends FormApplication {
     let r;
     if (sn(e))
       try {
-        r = await mo(e);
+        r = await yo(e);
       } catch (s) {
         ui.notifications.error(`Agent setup: ${s.message}`);
         return;
@@ -5722,7 +5731,7 @@ class yo extends FormApplication {
       ui.notifications.error("Agent setup: that does not look like a valid setup code. Re-copy it from the Agent.");
       return;
     }
-    if (r.v && r.v !== po) {
+    if (r.v && r.v !== go) {
       ui.notifications.error("Agent setup: this code was made by a newer Agent. Update the Bridge module.");
       return;
     }
@@ -5755,13 +5764,13 @@ class yo extends FormApplication {
       }
   }
 }
-function bo(a) {
+function vo(a) {
   game.settings.registerMenu(A, "quickSetup", {
     name: "Quick Setup",
     label: "Paste Agent Config",
     hint: "Paste the Foundry Setup Code from the Agent to auto-fill the URL, Channel ID, API key and Reverb key.",
     icon: "fas fa-bolt",
-    type: yo,
+    type: bo,
     restricted: !0
     // GM Only
   }), game.settings.registerMenu(A, "characterAssignment", {
@@ -5769,7 +5778,7 @@ function bo(a) {
     label: "Manage Characters",
     hint: "Assign playable characters to players who have linked their Agent API keys.",
     icon: "fas fa-users",
-    type: co,
+    type: lo,
     restricted: !0
     // GM Only
   }), game.settings.registerMenu(A, "agentLink", {
@@ -5777,7 +5786,7 @@ function bo(a) {
     label: "Link my Agent",
     hint: "Generate a QR code to link the Cyberpunk Agent app on your phone to this game.",
     icon: "fas fa-qrcode",
-    type: fo,
+    type: po,
     restricted: !1
     // Available to all players
   }), game.settings.register(A, "apiUrl", {
@@ -5812,8 +5821,13 @@ function bo(a) {
     hint: "Leave on Auto. Auto uses wss:// when your Agent URL starts with https:// and ws:// when it starts with http://, which is what you want unless a proxy in front of the Agent changes the scheme. Only override if live updates fail while the rest of the Agent works.",
     scope: "world",
     config: !0,
-    type: Boolean,
-    default: !0,
+    type: String,
+    choices: {
+      auto: "Auto - match the Agent URL (recommended)",
+      wss: "Always secure (wss://)",
+      ws: "Always plain (ws://)"
+    },
+    default: "auto",
     onChange: () => a.reconnect()
   }), game.settings.register(A, "reverbKey", {
     name: "Reverb App Key",
@@ -5851,7 +5865,7 @@ function bo(a) {
     default: !1
   });
 }
-async function vo(a, e, { type: r, requestId: i, actorId: n }) {
+async function wo(a, e, { type: r, requestId: i, actorId: n }) {
   const s = game.actors.get(n);
   if (!s) {
     console.warn(`⚠️ Actor ID ${n} not found in this world.`);
@@ -5901,7 +5915,7 @@ async function Dn(a, e, { requestId: r }) {
   }
   await a.sendResponse({ type: "ACTOR_DATA", actorId: i, actor: !1, requestId: r, isGM: n.isGM, agentLink: n.getFlag(A, "agent-link") || n.id });
 }
-async function wo(a, e, { requestId: r, actorId: i }) {
+async function ko(a, e, { requestId: r, actorId: i }) {
   let n = game.user;
   const s = e.agentLink || e.agent_link || e.foundryUserId || e.requestId;
   s && (n = game.users.find((u) => u.getFlag(A, "agent-link") === s) || game.users.get(s) || (s === game.user.id ? game.user : null)), n || (n = game.user);
@@ -5944,7 +5958,7 @@ async function wo(a, e, { requestId: r, actorId: i }) {
     agentLink: n.getFlag(A, "agent-link") || n.id
   })), !n.isGM && n.character && (h = h.filter((u) => u.actorId === n.character.id))), await a.sendResponse({ type: "ACTORS_DATA", actorId: i, actors: h, requestId: r, isGM: n.isGM, agentLink: n.getFlag(A, "agent-link") || n.id });
 }
-async function ko(a, e, { type: r, requestId: i, actorId: n }) {
+async function _o(a, e, { type: r, requestId: i, actorId: n }) {
   const s = game.actors.get(n);
   if (!s) {
     console.warn(`Actor ID ${n} not found in this world.`);
@@ -5957,7 +5971,7 @@ async function ko(a, e, { type: r, requestId: i, actorId: n }) {
   }
   await l.snort(), ui.notifications.info(`Sync: ${l.name} consumed.`), await a.sendResponse({ type: "CONFIRMATION", action: r, actorId: n, success: !0, requestId: i });
 }
-async function _o(a, e, { requestId: r, actorId: i }) {
+async function Co(a, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (n) {
     const s = n.items.get(e.itemId);
@@ -5967,7 +5981,7 @@ async function _o(a, e, { requestId: r, actorId: i }) {
     }
   }
 }
-async function Co(a, e, { requestId: r, actorId: i }) {
+async function So(a, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (n) {
     const s = n.items.get(e.weaponId), l = e.ammoId ? n.items.get(e.ammoId) : null, h = async () => {
@@ -5998,7 +6012,7 @@ async function Co(a, e, { requestId: r, actorId: i }) {
       await h();
   }
 }
-async function So(a, e, { requestId: r, actorId: i }) {
+async function To(a, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (!n) return;
   const s = n.items.get(e.cyberdeckId), l = n.items.get(e.programId);
@@ -6025,7 +6039,7 @@ async function So(a, e, { requestId: r, actorId: i }) {
     requestId: r
   });
 }
-async function To(a, e, { requestId: r, actorId: i }) {
+async function Ao(a, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (!n) return;
   const s = n.items.get(e.cyberdeckId), l = n.items.get(e.programId);
@@ -6043,7 +6057,7 @@ async function To(a, e, { requestId: r, actorId: i }) {
   };
   l && l.system.isRezzed && (await l.update({ "system.isRezzed": !1 }), b[`items.${e.programId}.system.isRezzed`] = !1), await a.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: b, success: !0, requestId: r });
 }
-async function Ao(a, e, { requestId: r, actorId: i }) {
+async function Io(a, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (n) {
     const s = n.items.get(e.programId);
@@ -6056,7 +6070,7 @@ async function Ao(a, e, { requestId: r, actorId: i }) {
     }));
   }
 }
-async function Io(a, e, { requestId: r, actorId: i }) {
+async function Ro(a, e, { requestId: r, actorId: i }) {
   var s, l;
   const n = game.actors.get(i);
   if (n) {
@@ -6089,7 +6103,7 @@ async function Io(a, e, { requestId: r, actorId: i }) {
     });
   }
 }
-async function Ro(a, e, { requestId: r, actorId: i }) {
+async function Eo(a, e, { requestId: r, actorId: i }) {
   var l, h;
   const n = game.actors.get(i), s = n.items.get(e.weaponId);
   if (n && s) {
@@ -6125,7 +6139,7 @@ async function Ro(a, e, { requestId: r, actorId: i }) {
     });
   }
 }
-async function Eo(a, e, { requestId: r, actorId: i }) {
+async function Lo(a, e, { requestId: r, actorId: i }) {
   var s, l;
   const n = game.actors.get(i);
   if (n) {
@@ -6170,7 +6184,7 @@ async function Eo(a, e, { requestId: r, actorId: i }) {
     }
   }
 }
-async function Lo(a, e, { requestId: r, actorId: i }) {
+async function Po(a, e, { requestId: r, actorId: i }) {
   var h, u;
   const n = game.actors.get(i), s = async () => {
     await n.sheet._onRoll({
@@ -6202,7 +6216,7 @@ async function Lo(a, e, { requestId: r, actorId: i }) {
     success: !0
   });
 }
-async function Po(a, e, { requestId: r, actorId: i }) {
+async function Mo(a, e, { requestId: r, actorId: i }) {
   var s, l;
   const n = game.actors.get(i);
   if (n) {
@@ -6230,7 +6244,7 @@ async function Po(a, e, { requestId: r, actorId: i }) {
     });
   }
 }
-async function Mo(a, e, { requestId: r, actorId: i }) {
+async function No(a, e, { requestId: r, actorId: i }) {
   var s, l;
   const n = game.actors.get(i);
   if (n) {
@@ -6274,7 +6288,7 @@ async function Mo(a, e, { requestId: r, actorId: i }) {
     }
   }
 }
-async function No(a, e, { requestId: r, actorId: i }) {
+async function Oo(a, e, { requestId: r, actorId: i }) {
   var s, l;
   const n = game.actors.get(i);
   if (n) {
@@ -6315,7 +6329,7 @@ async function No(a, e, { requestId: r, actorId: i }) {
     }
   }
 }
-async function Oo(a, e, { requestId: r, actorId: i }) {
+async function Bo(a, e, { requestId: r, actorId: i }) {
   var s, l;
   const n = game.actors.get(i);
   if (n) {
@@ -6351,7 +6365,7 @@ async function Oo(a, e, { requestId: r, actorId: i }) {
     });
   }
 }
-async function Bo(a, e, { requestId: r, actorId: i }) {
+async function xo(a, e, { requestId: r, actorId: i }) {
   r && a.activeRequests.set(r, { actorId: i, timestamp: Date.now() });
   const n = new Roll(e.formula);
   await n.evaluate(), await n.toMessage({
@@ -6376,7 +6390,7 @@ async function Bo(a, e, { requestId: r, actorId: i }) {
     success: !0
   });
 }
-async function xo(a, e, { requestId: r, actorId: i, tokenId: n }) {
+async function Do(a, e, { requestId: r, actorId: i, tokenId: n }) {
   var l, h, u, p, g, m, b;
   const s = game.actors.get(i);
   if (s) {
@@ -6414,7 +6428,7 @@ async function xo(a, e, { requestId: r, actorId: i, tokenId: n }) {
         return ((U = B.actor) == null ? void 0 : U.id) === s.id;
       });
       if (O) {
-        const B = _.center.x - O.center.x, U = _.center.y - O.center.y, F = Math.sqrt(Math.pow(B, 2) + Math.pow(U, 2)), Z = Math.ceil(F / (((h = canvas.grid) == null ? void 0 : h.size) || 128)), W = s.items.get(y), V = un(W), Ie = hn(V, Z);
+        const B = _.center.x - O.center.x, U = _.center.y - O.center.y, F = Math.sqrt(Math.pow(B, 2) + Math.pow(U, 2)), Z = Math.ceil(F / (((h = canvas.grid) == null ? void 0 : h.size) || 128)), K = s.items.get(y), V = un(K), Ie = hn(V, Z);
         R = Ie === 99 ? "Out of Range" : Ie;
       }
     }
@@ -6448,7 +6462,7 @@ async function xo(a, e, { requestId: r, actorId: i, tokenId: n }) {
     }
   }
 }
-async function Do(a, e, { type: r, requestId: i, actorId: n, tokenId: s }) {
+async function Fo(a, e, { type: r, requestId: i, actorId: n, tokenId: s }) {
   if (game.paused) return;
   const l = canvas.tokens.get(s);
   if (l) {
@@ -6457,11 +6471,11 @@ async function Do(a, e, { type: r, requestId: i, actorId: n, tokenId: s }) {
   } else
     console.warn(`MOVE_TOKEN: Token ID ${s} not found.`), await a.sendResponse({ type: "CONFIRMATION", action: r, actorId: n, tokenId: s, success: !1, message: "Token not found", requestId: i });
 }
-async function Fo(a, e, { type: r, requestId: i, actorId: n }) {
+async function Uo(a, e, { type: r, requestId: i, actorId: n }) {
   const s = canvas.tokens.get(e.targetTokenId);
   s && (s.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), await a.sendResponse({ type: "CONFIRMATION", action: r, actorId: n, tokenId: e.targetTokenId, success: !0, requestId: i }));
 }
-async function Uo(a, e, { requestId: r, actorId: i, tokenId: n }) {
+async function jo(a, e, { requestId: r, actorId: i, tokenId: n }) {
   var u;
   const s = canvas.tokens.placeables.filter((p) => {
     var g;
@@ -6488,7 +6502,7 @@ async function Uo(a, e, { requestId: r, actorId: i, tokenId: n }) {
     console.warn(`LIST_VISIBLE_TOKENS: Token ID ${n} not found.`);
   await a.sendResponse({ type: "VISIBLE_TOKENS_DATA", actorId: i, tokens: h, requestId: r });
 }
-async function jo(a, e, { requestId: r, actorId: i, tokenId: n }) {
+async function Ho(a, e, { requestId: r, actorId: i, tokenId: n }) {
   var p;
   const s = canvas.tokens.get(n), l = e.targetTokenId || ((p = Array.from(game.user.targets)[0]) == null ? void 0 : p.id), h = canvas.tokens.get(l), u = e.weaponId;
   if (s && h) {
@@ -6507,7 +6521,7 @@ async function jo(a, e, { requestId: r, actorId: i, tokenId: n }) {
   } else
     console.warn(`GET_DV_INFO: Token(s) not found. Jim: ${!!s}, Target: ${!!h}`), await a.sendResponse({ type: "DV_INFO_DATA", actorId: i, result: null, requestId: r });
 }
-async function Ho(a, e, { requestId: r, actorId: i }) {
+async function zo(a, e, { requestId: r, actorId: i }) {
   var E;
   const n = game.actors.get(i);
   if (!n) return;
@@ -6536,8 +6550,8 @@ async function Ho(a, e, { requestId: r, actorId: i }) {
     let B = 0;
     if (R.effects && R.effects.length > 0 && R.effects.forEach((F) => {
       !F.disabled && F.changes && F.changes.forEach((Z) => {
-        const W = parseInt(Z.value);
-        isNaN(W) || (B += W);
+        const K = parseInt(Z.value);
+        isNaN(K) || (B += K);
       });
     }), B === 0) {
       const F = String(P).toLowerCase();
@@ -6561,7 +6575,7 @@ async function Ho(a, e, { requestId: r, actorId: i }) {
   };
   await a.sendResponse({ type: "ROLL_MODIFIERS_DATA", actorId: i, result: I, requestId: r });
 }
-async function zo(a, e, { requestId: r, actorId: i }) {
+async function qo(a, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (n) {
     const s = `system.${e.label}`;
@@ -6578,7 +6592,7 @@ async function zo(a, e, { requestId: r, actorId: i }) {
     await n.update({ [s]: l }), await a.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { [s]: l }, tab: "stats", success: !0, requestId: r });
   }
 }
-async function qo(a, e, { requestId: r, actorId: i, debug: n }) {
+async function $o(a, e, { requestId: r, actorId: i, debug: n }) {
   if (i == null) {
     n && console.log("[Bridge] Actor ID Not set:");
     return;
@@ -6597,7 +6611,7 @@ async function qo(a, e, { requestId: r, actorId: i, debug: n }) {
   }
   s && await a.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { "system.wealth": s.system.wealth }, tab: "stats", success: !0, requestId: r });
 }
-async function $o(a, e, { requestId: r, actorId: i, debug: n }) {
+async function Go(a, e, { requestId: r, actorId: i, debug: n }) {
   const s = [];
   for (const l of game.journal) {
     const h = l.pages.filter((u) => u.type === "cpr-agent.datapool");
@@ -6631,7 +6645,7 @@ async function $o(a, e, { requestId: r, actorId: i, debug: n }) {
     success: !0
   });
 }
-async function Go(a, e, { debug: r }) {
+async function Vo(a, e, { debug: r }) {
   var u;
   if (!game.user.isGM) return;
   const i = e.foundryUserId, n = e.agentLink || e.agent_link, s = e.nonce;
@@ -6671,7 +6685,7 @@ async function Fn(a, e, r) {
 function Un(a) {
   return typeof a.recursiveGetAllInstalledItems != "function" ? [] : a.recursiveGetAllInstalledItems().filter((e) => e.type === "cyberware");
 }
-function Vo(a, e) {
+function Wo(a, e) {
   var n, s, l;
   const r = a.items.filter(
     (h) => h.type === "cyberware" && h.system.isInstalled && h.system.isFoundational && h.system.type === e.system.type
@@ -6701,7 +6715,7 @@ async function Ko(a, e, { requestId: r, actorId: i }) {
     await a.sendResponse({ type: "CYBERWARE_INSTALL_OPTIONS", requestId: r, actorId: i, success: !1, reason: "Item not found." });
     return;
   }
-  const l = !!s.system.isFoundational, h = l ? [] : Vo(n, s), u = Un(s), p = u.reduce((b, y) => `${b} + ${y.system.humanityLoss.roll}`, s.system.humanityLoss.roll), g = u.reduce((b, y) => b + y.system.humanityLoss.static, s.system.humanityLoss.static), m = l || h.length > 0;
+  const l = !!s.system.isFoundational, h = l ? [] : Wo(n, s), u = Un(s), p = u.reduce((b, y) => `${b} + ${y.system.humanityLoss.roll}`, s.system.humanityLoss.roll), g = u.reduce((b, y) => b + y.system.humanityLoss.static, s.system.humanityLoss.static), m = l || h.length > 0;
   await a.sendResponse({
     type: "CYBERWARE_INSTALL_OPTIONS",
     requestId: r,
@@ -6716,7 +6730,7 @@ async function Ko(a, e, { requestId: r, actorId: i }) {
     success: !0
   });
 }
-async function Wo(a, e, { requestId: r, actorId: i }) {
+async function Jo(a, e, { requestId: r, actorId: i }) {
   var m, b, y, C, _, k;
   const n = game.actors.get(i);
   if (!n) return;
@@ -6753,7 +6767,7 @@ async function Wo(a, e, { requestId: r, actorId: i }) {
   }
   await a.sendResponse({ type: "CYBERWARE_INSTALLED", requestId: r, actorId: i, itemId: s._id, success: g }), g && await Fn(a, i, r);
 }
-async function Jo(a, e, { requestId: r, actorId: i }) {
+async function Xo(a, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (n) {
     try {
@@ -6764,53 +6778,53 @@ async function Jo(a, e, { requestId: r, actorId: i }) {
     await a.sendResponse({ type: "CYBERWARE_UNINSTALLED", requestId: r, actorId: i, itemId: e.itemId, success: !0 }), await Fn(a, i, r);
   }
 }
-const Xo = {
-  UPDATE_ACTOR: vo,
+const Yo = {
+  UPDATE_ACTOR: wo,
   GET_ACTOR: Dn,
-  GET_ACTORS: wo,
-  CONSUME_ITEM: ko,
-  ITEM_EQUIP: _o,
-  RELOAD_WEAPON: Co,
-  INSTALL_PROGRAM: So,
-  REMOVE_PROGRAM: To,
-  TOGGLE_REZ: Ao,
-  PROGRAM_ROLL: Io,
+  GET_ACTORS: ko,
+  CONSUME_ITEM: _o,
+  ITEM_EQUIP: Co,
+  RELOAD_WEAPON: So,
+  INSTALL_PROGRAM: To,
+  REMOVE_PROGRAM: Ao,
+  TOGGLE_REZ: Io,
+  PROGRAM_ROLL: Ro,
   PREPARE_CYBERWARE_INSTALL: Ko,
-  INSTALL_CYBERWARE: Wo,
-  UNINSTALL_CYBERWARE: Jo,
-  DAMAGE_ROLL: Ro,
-  DEATH_SAVE: Eo,
-  FACEDOWN_ROLL: Lo,
-  INITIATIVE_ROLL: Po,
-  ROLE_ROLL: Mo,
-  SKILL_ROLL: No,
-  STAT_ROLL: Oo,
-  DICE_ROLL: Bo,
-  ATTACK_ROLL: xo,
-  MOVE_TOKEN: Do,
-  TARGET_TOKEN: Fo,
-  LIST_VISIBLE_TOKENS: Uo,
-  GET_DV_INFO: jo,
-  GET_ROLL_MODIFIERS: Ho,
-  UPDATE_STAT: zo,
-  UPDATE_EB: qo,
-  GET_NET_POOL: $o,
-  PAIR_AGENT: Go
+  INSTALL_CYBERWARE: Jo,
+  UNINSTALL_CYBERWARE: Xo,
+  DAMAGE_ROLL: Eo,
+  DEATH_SAVE: Lo,
+  FACEDOWN_ROLL: Po,
+  INITIATIVE_ROLL: Mo,
+  ROLE_ROLL: No,
+  SKILL_ROLL: Oo,
+  STAT_ROLL: Bo,
+  DICE_ROLL: xo,
+  ATTACK_ROLL: Do,
+  MOVE_TOKEN: Fo,
+  TARGET_TOKEN: Uo,
+  LIST_VISIBLE_TOKENS: jo,
+  GET_DV_INFO: Ho,
+  GET_ROLL_MODIFIERS: zo,
+  UPDATE_STAT: qo,
+  UPDATE_EB: $o,
+  GET_NET_POOL: Go,
+  PAIR_AGENT: Vo
 };
 async function on(a, e, r, i) {
-  const n = Xo[e];
+  const n = Yo[e];
   if (!n) {
     console.log("Unknown DataType: " + e);
     return;
   }
   return n(a, r, i);
 }
-class Yo {
+class Qo {
   constructor() {
     this.echo = null, this.isConnected = !1, this.activeRequests = /* @__PURE__ */ new Map(), this.requestAgentLinks = /* @__PURE__ */ new Map(), this.pendingPairings = /* @__PURE__ */ new Map(), this.hookIds = {}, this._isCapturingRoll = !1, this._captureRollMode = null, this._prevRollMode = null, this._captureSafetyTimer = null, this.embedTransport = null;
   }
   rollAndCapture(e, r, i = null) {
-    return ys(this, e, r, i);
+    return bs(this, e, r, i);
   }
   /**
    * Begin an Agent-initiated roll capture. Records the desired roll mode and
@@ -6861,7 +6875,7 @@ class Yo {
     }
   }
   registerSettings() {
-    bo(this);
+    vo(this);
   }
   destroy() {
     var e;
@@ -6884,14 +6898,14 @@ class Yo {
     } catch {
       return;
     }
-    const u = l || h.hostname, p = h.protocol === "https:", g = typeof s == "boolean" ? s : void 0, m = g ?? p, b = m ? 443 : 80, y = n > 0 ? n : b;
+    const u = l || h.hostname, p = ys(s, e), g = h.port ? Number(h.port) : h.protocol === "https:" ? 443 : 80, m = n > 0 ? n : g;
     this.echo = new gs({
       broadcaster: "reverb",
       key: game.settings.get(A, "reverbKey") || cn,
       wsHost: u,
-      wsPort: y,
-      wssPort: y,
-      forceTLS: m,
+      wsPort: m,
+      wssPort: m,
+      forceTLS: p,
       enabledTransports: ["ws", "wss"],
       disableStats: !0,
       authEndpoint: `${e.replace(/\/$/, "")}/api/broadcasting/auth`,
@@ -7273,7 +7287,7 @@ class Hn extends JournalPageSheet {
 rt(Hn, "LOCAL_TEMPLATES", {
   "cpr-agent.datapool": "modules/cpr-agent/templates/data-pool.hbs"
 });
-class Qo {
+class Zo {
   constructor(e) {
     this.bridge = e, this.frame = null, this.nonce = null, this.origin = ns(), this.ready = !1, this._onMessage = this._onMessage.bind(this), window.addEventListener("message", this._onMessage);
   }
@@ -7311,9 +7325,9 @@ class Qo {
     }
   }
 }
-class Zo extends Application {
+class ea extends Application {
   constructor(e, r = {}) {
-    super(r), this.bridge = e, this.nonce = foundry.utils.randomID(24), e.embedTransport || (e.embedTransport = new Qo(e)), this.transport = e.embedTransport;
+    super(r), this.bridge = e, this.nonce = foundry.utils.randomID(24), e.embedTransport || (e.embedTransport = new Zo(e)), this.transport = e.embedTransport;
   }
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -7380,17 +7394,17 @@ class Zo extends Application {
 }
 window.Pusher = ts;
 window.cyberpunkBridge && window.cyberpunkBridge.destroy();
-window.cyberpunkBridge = new Yo();
+window.cyberpunkBridge = new Qo();
 Hooks.once("init", () => {
-  ea(), CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] || (CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] = jn, console.log("[Bridge] Registered DataPool DataModel.")), DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", Hn, {
+  ta(), CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] || (CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] = jn, console.log("[Bridge] Registered DataPool DataModel.")), DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", Hn, {
     types: ["cpr-agent.datapool"],
     makeDefault: !0,
     label: "Agent Data Pool"
   }), console.log("[Bridge] Registered DataPool Journal Page Sheet.");
 });
 Hooks.once("ready", () => {
-  game.user.isGM && window.cyberpunkBridge.connect(), window.cyberpunkBridge.syncPlayerLink(), window.cyberpunkBridge.registerGlobalHooks(), lo(window.cyberpunkBridge), window.cyberpunkBridge.openAgent = () => {
-    window.cyberpunkBridge._agentApp || (window.cyberpunkBridge._agentApp = new Zo(window.cyberpunkBridge)), window.cyberpunkBridge._agentApp.render(!0);
+  game.user.isGM && window.cyberpunkBridge.connect(), window.cyberpunkBridge.syncPlayerLink(), window.cyberpunkBridge.registerGlobalHooks(), uo(window.cyberpunkBridge), window.cyberpunkBridge.openAgent = () => {
+    window.cyberpunkBridge._agentApp || (window.cyberpunkBridge._agentApp = new ea(window.cyberpunkBridge)), window.cyberpunkBridge._agentApp.render(!0);
   }, console.log("[Bridge] Cyberpunk Bridge Fully Online. Open the embedded Agent with: cyberpunkBridge.openAgent()");
 });
 Hooks.on("getSceneControlButtons", (a) => {
@@ -7406,6 +7420,6 @@ Hooks.on("getSceneControlButtons", (a) => {
     }
   });
 });
-function ea() {
+function ta() {
   game.settings.settings.has(`${A}.apiUrl`) || (console.log("[Bridge] Registering Module Settings..."), window.cyberpunkBridge.registerSettings());
 }
