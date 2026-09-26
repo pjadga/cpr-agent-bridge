@@ -141,7 +141,7 @@ export class QuickSetupMenu extends FormApplication {
             ['Channel ID', data.channelId ? String(data.channelId) : '—'],
             ['API Key', mask(data.apiKey)],
             ['Reverb Key', mask(data.reverbKey)],
-            ['Reverb Port', data.reverbPort ? String(data.reverbPort) : '—'],
+            ['Reverb Port', data.reverbPort ? String(data.reverbPort) : 'same as Agent URL'],
         ];
         preview.html(rows.map(([label, value]) => `
             <div style="display:flex;justify-content:space-between;gap:8px;">
@@ -180,7 +180,14 @@ export class QuickSetupMenu extends FormApplication {
         if (data.channelId) applied.channelId = String(data.channelId);
         if (data.apiKey) applied.apiKey = String(data.apiKey);
         if (data.reverbKey) applied.reverbKey = String(data.reverbKey);
-        if (data.reverbPort) applied.reverbPort = String(data.reverbPort);
+
+        // Always write the port, including the absent case. A single-origin
+        // Agent deliberately omits reverbPort so the Bridge derives it from the
+        // Agent URL; applying it only `if (data.reverbPort)` left whatever the
+        // world had from a previous split-origin pairing (typically 8081) in
+        // place, so re-pasting a fresh code did not fix the connection and
+        // there was nothing on screen to say why. 0 means "derive it".
+        applied.reverbPort = data.reverbPort ? String(data.reverbPort) : '0';
 
         try {
             for (const [key, value] of Object.entries(applied)) {

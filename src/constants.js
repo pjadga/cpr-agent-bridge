@@ -7,6 +7,21 @@ export const MODULE_ID = 'cpr-agent';
 export const DEFAULT_REVERB_KEY = 'itdsiqtx8cpskowawl1p';
 export const DEFAULT_API_URL = 'https://agent.surrealdisco.co.uk';
 
+/**
+ * The configured Agent base URL (no trailing slash), falling back to the default.
+ * Used as the iframe embed base and to derive the postMessage origin.
+ */
+export function agentBaseUrl() {
+    const raw = ((game?.settings?.get(MODULE_ID, 'apiUrl')) || DEFAULT_API_URL).trim().replace(/\/$/, '');
+    return raw || DEFAULT_API_URL;
+}
+
+/** The Agent's origin (scheme://host[:port]) for postMessage targetOrigin + validation. */
+export function agentOrigin() {
+    try { return new URL(agentBaseUrl()).origin; }
+    catch (e) { return new URL(DEFAULT_API_URL).origin; }
+}
+
 // Range -> Difficulty Value tables, indexed by DISTANCE_BRACKETS.
 // Melee/VS weapons use a single-element array of ['VS'].
 export const RANGE_DV_TABLE = {

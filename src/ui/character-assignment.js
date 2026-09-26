@@ -19,7 +19,9 @@ export class CharacterAssignmentMenu extends FormApplication {
     async _renderInner(data) {
         let html = `
         <div>
-        <p>Assign playable characters to players who have linked their API keys.</p>
+        <p>Assign a character to each player. A key/QR link is only needed for the
+        hosted (remote) Agent; the embedded in-Foundry Agent just uses the
+        character assigned here, so assignment works with or without a key.</p>
         <table style="width: 100%; text-align: left; margin-bottom: 10px;">
         <tr>
         <th>Player</th>
@@ -32,23 +34,25 @@ export class CharacterAssignmentMenu extends FormApplication {
         for (let u of data.users) {
             const truncatedLink = truncateAgentLink(u.agentLink);
             html += `<tr><td style="padding: 5px 0;"><strong>${u.name}</strong></td>`;
+
+            // API status + agent link are informational only. Assignment below is
+            // always available because the embedded Agent needs no key.
             if (u.hasKey) {
                 html += `<td style="color: #00ff00;">✔ Linked</td>`;
                 html += `<td><small><code title="${u.agentLink || ''}">${truncatedLink || 'Pending...'}</code></small></td>`;
-                html += `<td><select class="character-select" data-userid="${u.id}" style="width: 100%;">
-                <option value="">- None -</option>`;
-                for (let c of data.characters) {
-                    const selected = c.id === u.characterId ? 'selected' : '';
-                    html += `<option value="${c.id}" ${selected}>${c.name}</option>`;
-                }
-                html += `</select></td>`;
-                html += `<td><button type="button" class="show-qr" data-userid="${u.id}" data-username="${u.name}" title="Show pairing QR"><i class="fas fa-qrcode"></i></button> <button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
             } else {
-                html += `<td style="color: #ff0000;">❌ Missing</td>
-                <td><small>-</small></td>
-                <td><select disabled style="width: 100%;"><option>- Key Missing -</option></select></td>
-                <td><button type="button" class="show-qr" data-userid="${u.id}" data-username="${u.name}" title="Show pairing QR"><i class="fas fa-qrcode"></i></button> <button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
+                html += `<td style="color: #ffaa00;" title="No remote key; the embedded Agent still works.">◐ Local only</td>`;
+                html += `<td><small>-</small></td>`;
             }
+
+            html += `<td><select class="character-select" data-userid="${u.id}" style="width: 100%;">
+            <option value="">- None -</option>`;
+            for (let c of data.characters) {
+                const selected = c.id === u.characterId ? 'selected' : '';
+                html += `<option value="${c.id}" ${selected}>${c.name}</option>`;
+            }
+            html += `</select></td>`;
+            html += `<td><button type="button" class="show-qr" data-userid="${u.id}" data-username="${u.name}" title="Show pairing QR"><i class="fas fa-qrcode"></i></button> <button type="button" class="refresh-user" data-userid="${u.id}" title="Refresh user details"><i class="fas fa-sync-alt"></i></button></td>`;
             html += `</tr>`;
         }
 

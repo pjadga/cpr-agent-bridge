@@ -4,6 +4,7 @@ import { CyberpunkBridge } from './bridge.js';
 import { registerPairingHooks } from './pairing-hooks.js';
 import { DataPoolPageModel } from "./data-pool-model.js";
 import { DataPoolPageSheet } from "./data-pool-sheet.js";
+import { AgentApp } from "./ui/agent-app.js";
 
 // Make Pusher available globally (required for Echo)
 window.Pusher = Pusher;
@@ -39,7 +40,31 @@ Hooks.once('ready', () => {
     window.cyberpunkBridge.syncPlayerLink();
     window.cyberpunkBridge.registerGlobalHooks();
     registerPairingHooks(window.cyberpunkBridge);
-    console.log("[Bridge] Cyberpunk Bridge Fully Online.");
+
+    // Open (or focus) the embedded Agent window. Fed locally via postMessage.
+    window.cyberpunkBridge.openAgent = () => {
+        if (!window.cyberpunkBridge._agentApp) {
+            window.cyberpunkBridge._agentApp = new AgentApp(window.cyberpunkBridge);
+        }
+        window.cyberpunkBridge._agentApp.render(true);
+    };
+
+    console.log("[Bridge] Cyberpunk Bridge Fully Online. Open the embedded Agent with: cyberpunkBridge.openAgent()");
+});
+
+// Token-controls button to open the embedded Agent window.
+Hooks.on('getSceneControlButtons', (controls) => {
+    const tokenControls = Array.isArray(controls)
+        ? controls.find(c => c.name === 'token')
+        : controls?.token;
+    if (!tokenControls?.tools) return;
+    tokenControls.tools.push({
+        name: 'cpr-agent',
+        title: 'Open Agent',
+        icon: 'fas fa-mobile-screen-button',
+        button: true,
+        onClick: () => window.cyberpunkBridge?.openAgent?.()
+    });
 });
 
 function ensureSettingsRegistered() {

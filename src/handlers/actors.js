@@ -44,13 +44,30 @@ export async function getActor(bridge, data, { requestId }) {
                 type: actor.type,
                 img: obj.img,
                 system: obj.system,
-                items: (obj.items || []).map(i => ({
-                    _id: i._id,
-                    name: i.name,
-                    type: i.type,
-                    img: i.img,
-                    system: i.system
-                })),
+                items: (obj.items || []).map(i => {
+                    const entry = {
+                        _id: i._id,
+                        name: i.name,
+                        type: i.type,
+                        img: i.img,
+                        system: i.system
+                    };
+                    // isInstalled / isFoundational on cyberware are DERIVED getters
+                    // (installable-schema), which toObject() drops. The Agent needs
+                    // them for the install/uninstall affordances, so merge the live
+                    // values back in.
+                    if (i.type === 'cyberware') {
+                        const live = actor.items.get(i._id);
+                        if (live) {
+                            entry.system = {
+                                ...i.system,
+                                isInstalled: !!live.system.isInstalled,
+                                isFoundational: !!live.system.isFoundational
+                            };
+                        }
+                    }
+                    return entry;
+                }),
                 flags: obj.flags && obj.flags['cyberpunk-red-core'] ? { 'cyberpunk-red-core': obj.flags['cyberpunk-red-core'] } : {}
             };
             await bridge.sendResponse({ type: 'ACTOR_DATA', actorId: actorId, actor: slim, requestId, isGM: targetUser.isGM, agentLink: targetUser.getFlag(MODULE_ID, 'agent-link') || targetUser.id });

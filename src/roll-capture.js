@@ -14,10 +14,13 @@
  */
 export async function rollAndCapture(bridge, actorId, triggerFunction, rollMode = null) {
     console.log(`%c[Bridge] Starting Render Interceptor for Actor ${actorId}`, "color: #00ffff; font-weight: bold;");
-    bridge._isCapturingRoll = true;
 
-    const prevRollMode = game.settings.get("core", "rollMode");
-    if (rollMode) await game.settings.set("core", "rollMode", rollMode);
+    // Marks the capture active and mirrors rollMode onto core.rollMode. Awaited
+    // so the setting has landed before the roll fires. The flag is consumed later
+    // by the roll's createChatMessage (or a safety timer), NOT here: resetting it
+    // at render time would fire before preCreateChatMessage and lose the privacy
+    // stamp and the self-roll dedupe.
+    await bridge._beginRollCapture(rollMode);
 
     return new Promise(async (resolve, reject) => {
         let rollFound = false;
@@ -35,7 +38,7 @@ export async function rollAndCapture(bridge, actorId, triggerFunction, rollMode 
                     isCriticalSuccess: data.wasCritSuccess ? data.wasCritSuccess() : (data.isCriticalSuccess || false),
                     isCriticalFailure: data.wasCritFail ? data.wasCritFail() : (data.isCriticalFailure || false),
                     label: data.rollTitle,
-                    rollMode: rollMode || game.settings.get("core", "rollMode"),
+                    rollMode: bridge._captureRollMode || game.settings.get("core", "rollMode"),
                     rawRoll: data
                 });
             }
@@ -48,6 +51,7 @@ export async function rollAndCapture(bridge, actorId, triggerFunction, rollMode 
             if (!rollFound) {
                 renderTemplate = originalRender;
                 console.warn("[Bridge] ❌ Interceptor timed out. No rollcard rendered.");
+                bridge._endRollCapture();
                 resolve({ success: false, error: "Timed out waiting for render" });
             }
         }, 5000);
@@ -56,6 +60,7 @@ export async function rollAndCapture(bridge, actorId, triggerFunction, rollMode 
             await triggerFunction();
         } catch (e) {
             renderTemplate = originalRender;
+            bridge._endRollCapture();
             resolve({ success: false, error: "Trigger failed" });
         }
     });

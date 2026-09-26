@@ -57,7 +57,8 @@ export function registerSettings(bridge) {
     });
 
     game.settings.register(MODULE_ID, 'reverbHost', {
-        name: 'Reverb Host (override)',
+        name: 'WebSocket Host (override)',
+        hint: 'Leave blank. Blank means "use the same host as the Agent URL". Fill this in only if your Agent serves its WebSocket from a different hostname. Setup codes never carry a host, so this is one field pasting a code will not correct for you - clear it by hand if you set it while troubleshooting.',
         scope: 'world',
         config: true,
         type: String,
@@ -66,7 +67,8 @@ export function registerSettings(bridge) {
     });
 
     game.settings.register(MODULE_ID, 'reverbPort', {
-        name: 'Reverb Port',
+        name: 'WebSocket Port (override)',
+        hint: 'Leave at 0. Zero means "use the same port as the Agent URL", which is right whenever the Agent serves its WebSocket on its own address - the normal setup. Set a port only if your Agent publishes Reverb separately. Pasting a setup code from a single-origin Agent resets this to 0.',
         scope: 'world',
         config: true,
         type: Number,
@@ -74,12 +76,23 @@ export function registerSettings(bridge) {
         onChange: () => bridge.reconnect()
     });
 
+    // Was a tick-box defaulting to ON, which forced wss:// on every install and
+    // broke plain-http Agents outright. 'auto' reads the scheme off the Agent
+    // URL, which is correct for every single-origin setup; the two explicit
+    // options stay for the rare proxy that terminates TLS on a different scheme
+    // than the one the Agent URL advertises.
     game.settings.register(MODULE_ID, 'reverbUseSSL', {
-        name: 'Reverb Use SSL (wss)',
+        name: 'WebSocket security',
+        hint: 'Leave on Auto. Auto uses wss:// when your Agent URL starts with https:// and ws:// when it starts with http://, which is what you want unless a proxy in front of the Agent changes the scheme. Only override if live updates fail while the rest of the Agent works.',
         scope: 'world',
         config: true,
-        type: Boolean,
-        default: true,
+        type: String,
+        choices: {
+            auto: 'Auto - match the Agent URL (recommended)',
+            wss: 'Always secure (wss://)',
+            ws: 'Always plain (ws://)'
+        },
+        default: 'auto',
         onChange: () => bridge.reconnect()
     });
 

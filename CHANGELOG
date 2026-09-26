@@ -26,3 +26,19 @@
 1.2.0
 * Quick Setup now accepts short one-time setup codes (e.g. KX7M-4PWD) redeemed from the Agent server — typeable when the Agent is on another device (phone). Long base64 codes still work.
 * "Link my Agent" now works for GMs: it mints and shows their own pairing QR directly instead of redirecting to Manage Characters.
+* Fixed plain-HTTP Agents never connecting. "Reverb Use SSL (wss)" was a tick-box defaulting to ON, which forced wss:// regardless of the Agent URL, so an Agent on http:// dialled a secure socket that could never answer and the only symptom was "Bridge Offline". It is now a three-way choice defaulting to Auto, which reads the scheme off the Agent URL. Both explicit options are still there for a proxy that changes the scheme.
+* Fixed the WebSocket port ignoring the Agent's own port. An Agent on http://192.168.1.50:8000 serves its WebSocket on 8000; the Bridge fell back to 80 or 443 and connected to nothing.
+* Fixed pasting a setup code leaving a stale Reverb port behind. A single-origin Agent omits the port on purpose so the Bridge derives it, but the old code only applied a port when one was present, so a previous 8081 survived and re-pairing appeared to do nothing.
+* The WebSocket host, port and security settings now explain in the settings form what they do and when they should be left alone.
+
+1.3.0
+* New: Embedded Agent. The Agent can now open inside Foundry as a resizable window, so at PC players that want to use the Sheet can do so in Foundry. Open it from the new "Open Agent" button in the Token controls. It has a Fullscreen/Windowed toggle, and it talks to Foundry directly via postMessage, checking the origin and a per-window nonce. NOTE: This will take a blank sheet from whatever URL is used as the agent base.
+* New: Cyberware installation and management. The Agent can now install and uninstall cyberware. It shows the compatible foundational and option-slot targets, and lets you choose how Humanity Loss is applied (none, static or rolled). The Humanity lost is shown like a dice roll. Actor data now includes each cyberware's isInstalled / isFoundational state.
+* Roll privacy is now applied in the game itself. The roll mode picked in the Agent (public, GM, blind or self) is set on the chat message before it's created, so Foundry whispers and hides it correctly. The player's previous roll mode is restored afterwards, and a safety timer stops a stuck roll from leaving the mode changed.
+* Other players' rolls now reach their Agents through Foundry's socket (module.json now sets "socket": true). Who receives each roll follows its roll mode, so GM, blind and self rolls stay private.
+* Fixed Agent-initiated rolls sometimes being broadcast twice, or losing their privacy setting, because the capture ended too early.
+* Fixed live sheet changes (HP, ammo, etc.) not reaching the embedded Agent when there was no hosted connection.
+* Manage Characters: GMs can now assign characters to players who have no API key ("◐ Local only"), since the embedded Agent doesn't need one.
+* WebSocket settings: "Reverb Use SSL" is now a three-way "WebSocket security" choice (Auto / wss / ws) that defaults to Auto. The port is taken from the Agent URL. Pasting a setup code now resets a stale Reverb port. Host and port are relabelled with explanatory hints.
+* Dev: `vite build` (and watch mode) now copies the built module into your local Foundry data folder when foundryconfig.json is present. That file is gitignored.
+* README: added a Ko-fi support badge.
