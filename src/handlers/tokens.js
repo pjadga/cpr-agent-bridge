@@ -1,4 +1,4 @@
-import { weaponCategory, lookupRangeDV } from '../constants.js';
+import { weaponCategory, lookupRangeDV, rollBonusKeys, modLabel } from '../constants.js';
 
 // Handlers for token/targeting/combat-info reads:
 // MOVE_TOKEN, TARGET_TOKEN, LIST_VISIBLE_TOKENS, GET_DV_INFO, GET_ROLL_MODIFIERS.
@@ -13,6 +13,24 @@ export async function moveToken(bridge, data, { type, requestId, actorId, tokenI
         else if (data.direction === "down") newPos.y = token.document.y + canvas.grid.size;
         else if (data.direction === "left") newPos.x = token.document.x - canvas.grid.size;
         else if (data.direction === "right") newPos.x = token.document.x + canvas.grid.size;
+
+        // Only Agent moves are wall-checked here; GM drags go through Foundry untouched.
+        const origin = token.center;
+        const destination = {
+            x: origin.x + ((newPos.x ?? token.document.x) - token.document.x),
+            y: origin.y + ((newPos.y ?? token.document.y) - token.document.y)
+        };
+        const isBlocked = CONFIG.Canvas.polygonBackends.move.testCollision(
+            origin,
+            destination,
+            { type: "move", mode: "any" }
+        );
+        if (isBlocked) {
+            ui.notifications.warn(`${token.name}'s path is blocked by a wall.`);
+            await bridge.sendResponse({ type: 'CONFIRMATION', action: type, actorId: actorId, tokenId, success: false, message: 'Path blocked by a wall', requestId });
+            return;
+        }
+
         await token.document.update(newPos);
 
         await bridge.sendResponse({ type: 'CONFIRMATION', action: type, actorId: actorId, tokenId, success: true, requestId });
@@ -149,25 +167,42 @@ export async function getRollModifiers(bridge, data, { requestId, actorId }) {
     }
 
     const critInjuries = actor.items.filter(i => i.type === 'criticalInjury');
+    // Only count injury changes this roll would pick up in CPR. Stat changes
+    // (Broken Leg: MOVE -4) are already inside statValue, and a Lost Ear's
+    // Perception penalty has nothing to do with an attack.
+    const relevantKeys = rollBonusKeys(weapon ? weaponSkillName : null, weapon);
+
     critInjuries.forEach(injury => {
         const title = injury.name || 'Injury';
         const description = (injury.system.description?.value || '').replace(/<[^>]*>/g, '');
 
         let injuryPenalty = 0;
-        if (injury.effects && injury.effects.length > 0) {
-            injury.effects.forEach(eff => {
-                if (!eff.disabled && eff.changes) {
-                    eff.changes.forEach(change => {
-                        const val = parseInt(change.value);
-                        if (!isNaN(val)) {
-                            injuryPenalty += val;
-                        }
-                    });
+        let hasChanges = false;
+        // What each change does when it isn't counted here, so a 0 in the
+        // panel reads as "MOVE -6 (in stat)" rather than looking broken.
+        const notes = [];
+        (injury.effects || []).forEach(eff => {
+            if (!eff.changes?.length) return;
+            hasChanges = true;
+            const active = eff.active ?? (!eff.disabled && !eff.system?.isSuppressed);
+            const situational = eff.flags?.['cyberpunk-red-core']?.changes?.situational || [];
+            eff.changes.forEach((change, index) => {
+                const val = parseInt(change.value);
+                if (isNaN(val)) return;
+                const label = `${modLabel(change.key)} ${val > 0 ? '+' : ''}${val}`;
+                const key = String(change.key).replace(/^bonuses\./, '');
+                if (!active) return notes.push(`${label} (inactive)`);
+                if (key === change.key) return notes.push(`${label} (in stat)`);
+                if (!relevantKeys.includes(key)) return notes.push(`${label} (not this roll)`);
+                if (situational[index]?.isSituational && !situational[index]?.onByDefault) {
+                    return notes.push(`${label} (situational, tick it in Foundry's roll dialog)`);
                 }
+                injuryPenalty += val;
             });
-        }
+        });
 
-        if (injuryPenalty === 0) {
+        // Guesswork fallback, only for injuries that carry no effect data at all.
+        if (!hasChanges) {
             const lowerTitle = String(title).toLowerCase();
             if (description.includes('-2') || lowerTitle.includes('arm') || lowerTitle.includes('eye')) {
                 injuryPenalty = -2;
@@ -175,7 +210,7 @@ export async function getRollModifiers(bridge, data, { requestId, actorId }) {
         }
 
         totalPenalty += injuryPenalty;
-        effectList.push({ title, description, penalty: injuryPenalty });
+        effectList.push({ title, description, penalty: injuryPenalty, note: notes.join(' · ') });
     });
 
     const result = {
