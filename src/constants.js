@@ -94,3 +94,61 @@ export function lookupRangeDV(category, distanceM) {
 
     return targetDV;
 }
+
+/**
+ * CPR's skill-name → bonus-key slug ("Shoulder Arms" → "shoulderArms").
+ * Ported from cyberpunk-red-core SystemUtils.slugify, quirks included.
+ * Keep in sync with resources/js/utils/rollEffects.js in the Agent repo.
+ */
+export function slugify(name) {
+    const initialSplit = String(name).split(' ').join('');
+    const lowerFirst = (s) => s.charAt(0).toLowerCase() + s.slice(1);
+    if (name === 'Conceal/Reveal Object' || name === 'Paint/Draw/Sculpt' || name === 'Resist Torture/Drugs') {
+        return lowerFirst(initialSplit.split('/').join('Or'));
+    }
+    if (name === 'Language (Streetslang)') {
+        return lowerFirst(initialSplit.split('(').join('').split(')').join(''));
+    }
+    return lowerFirst(initialSplit.split('/').join('And').split('&').join('And'));
+}
+
+/**
+ * The `bonuses.*` keys (without the prefix) a roll picks up, per CPR's
+ * cpr-attackable.js. With no weapon, only all-action bonuses apply.
+ */
+export function rollBonusKeys(skillName, weapon) {
+    const keys = ['allActions', 'allActionsSpeech', 'allActionsHands'];
+    if (!weapon) return keys;
+    keys.push('universalAttack');
+    if (skillName && skillName !== 'None') {
+        const slug = slugify(skillName);
+        keys.push(slug, `${slug}Hearing`, `${slug}Sight`);
+    }
+    if (weapon.system?.isRanged === true) keys.push('ranged', 'singleShot');
+    if (weapon.system?.isRanged === false) keys.push('melee');
+    return keys;
+}
+const MOD_LABELS = {
+    allActions: 'All actions',
+    allActionsHands: 'Hand actions',
+    allActionsSpeech: 'Speech actions',
+    universalAttack: 'Attacks',
+    ranged: 'Ranged attacks',
+    melee: 'Melee attacks',
+    singleShot: 'Single shot',
+    perceptionSight: 'Perception (sight)',
+    perceptionHearing: 'Perception (hearing)',
+};
+
+/**
+ * Human label for an effect change key: "system.stats.move.value" → "MOVE",
+ * "bonuses.allActionsHands" → "Hand actions", "bonuses.shoulderArms" → "Shoulder arms".
+ */
+export function modLabel(key) {
+    const stat = String(key).match(/^system\.stats\.(\w+)\.value$/);
+    if (stat) return stat[1].toUpperCase();
+    const bonus = String(key).replace(/^bonuses\./, '');
+    if (MOD_LABELS[bonus]) return MOD_LABELS[bonus];
+    const words = bonus.replace(/([A-Z])/g, ' $1').toLowerCase().trim();
+    return words.charAt(0).toUpperCase() + words.slice(1);
+}

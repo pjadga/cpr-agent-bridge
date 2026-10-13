@@ -38,6 +38,16 @@ export async function getActor(bridge, data, { requestId }) {
         const actor = game.actors.get(actorId);
         if (actor) {
             const obj = actor.toObject();
+            // Effects carry the changes behind armour/drug/injury modifiers. The
+            // Agent works out roll mods and effect-adjusted stats from these, so
+            // keep the fields it reads and drop the rest (icons, durations, etc).
+            const slimEffects = (effects) => (effects || []).map(e => ({
+                _id: e._id,
+                name: e.name,
+                disabled: e.disabled,
+                changes: e.changes,
+                flags: e.flags?.['cyberpunk-red-core'] ? { 'cyberpunk-red-core': e.flags['cyberpunk-red-core'] } : {}
+            }));
             const slim = {
                 _id: actor.id,
                 name: actor.name,
@@ -50,7 +60,8 @@ export async function getActor(bridge, data, { requestId }) {
                         name: i.name,
                         type: i.type,
                         img: i.img,
-                        system: i.system
+                        system: i.system,
+                        effects: slimEffects(i.effects)
                     };
                     // isInstalled / isFoundational on cyberware are DERIVED getters
                     // (installable-schema), which toObject() drops. The Agent needs
@@ -68,6 +79,7 @@ export async function getActor(bridge, data, { requestId }) {
                     }
                     return entry;
                 }),
+                effects: slimEffects(obj.effects),
                 flags: obj.flags && obj.flags['cyberpunk-red-core'] ? { 'cyberpunk-red-core': obj.flags['cyberpunk-red-core'] } : {}
             };
             await bridge.sendResponse({ type: 'ACTOR_DATA', actorId: actorId, actor: slim, requestId, isGM: targetUser.isGM, agentLink: targetUser.getFlag(MODULE_ID, 'agent-link') || targetUser.id });

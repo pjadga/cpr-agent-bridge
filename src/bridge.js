@@ -362,31 +362,21 @@ export class CyberpunkBridge {
             }
         });
 
-        //V12 Token Blocking
-        this.hookIds.preUpdateToken = Hooks.on("preUpdateToken", (document, changes, options, userId) => {
-            if (!("x" in changes || "y" in changes)) return true;
+        // Wall blocking for Agent moves lives in handlers/tokens.js moveToken, not
+        // a global preUpdateToken hook: a hook here also blocked the GM's own drags.
 
-            const tokenObject = document.object;
-            if (!tokenObject) return true;
-
-            const origin = tokenObject.center;
-            const dx = (changes.x !== undefined ? changes.x : document.x) - document.x;
-            const dy = (changes.y !== undefined ? changes.y : document.y) - document.y;
-            const destination = { x: origin.x + dx, y: origin.y + dy };
-
-            const movementRay = new Ray(origin, destination);
-
-            let isBlocked = CONFIG.Canvas.polygonBackends.move.testCollision(
-                movementRay.A,
-                movementRay.B,
-                { type: "move", mode: "any" }
-            );
-
-            if (isBlocked) {
-                ui.notifications.warn(`${document.name}'s path is blocked by a wall.`);
-                return false;
-            }
-        });
+        // Item effects (drugs snorted, injuries toggled) change via ActiveEffect
+        // documents, which never fire updateItem. Resend the item's effects array
+        // so the Agent's roll mods and stat display stay live.
+        const syncItemEffects = (effect) => {
+            const item = effect.parent;
+            const actor = item?.parent;
+            if (!(item instanceof Item) || !(actor instanceof Actor)) return;
+            syncUpdate(actor, { [`items.${item.id}.effects`]: item.toObject().effects });
+        };
+        this.hookIds.createActiveEffect = Hooks.on('createActiveEffect', syncItemEffects);
+        this.hookIds.updateActiveEffect = Hooks.on('updateActiveEffect', syncItemEffects);
+        this.hookIds.deleteActiveEffect = Hooks.on('deleteActiveEffect', syncItemEffects);
 
         this.hookIds.deleteToken = Hooks.on('deleteToken', (token, options, userId) => {
             this.broadcastRefresh('VISIBLE_TOKENS_DATA');
