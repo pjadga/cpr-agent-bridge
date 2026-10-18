@@ -42,3 +42,10 @@
 * WebSocket settings: "Reverb Use SSL" is now a three-way "WebSocket security" choice (Auto / wss / ws) that defaults to Auto. The port is taken from the Agent URL. Pasting a setup code now resets a stale Reverb port. Host and port are relabelled with explanatory hints.
 * Dev: `vite build` (and watch mode) now copies the built module into your local Foundry data folder when foundryconfig.json is present. That file is gitignored.
 * README: added a Ko-fi support badge.
+
+1.3.2
+* Fixed range being read at roughly half the real distance. Distances were worked out as pixels per grid square, so a 2 m square counted as 1 m. They are now measured the same way Foundry's own ruler measures, and rounded up to a whole metre so the distance, the DV and the highlighted range band always agree.
+* DV now comes straight from Foundry. The Bridge reads each weapon's DV table from the Cyberpunk Red Core DV compendium instead of a hardcoded copy, so homebrew tables and re-pointed weapons are picked up. The full table and the band in use are sent to the Agent. The built-in tables remain as a fallback when a weapon has no table.
+* Fixed DV showing "Out of Range" on Foundry 12. Core v0.92 stores a table entry's DV in `text`, newer versions use `description`; both are now read.
+* Fixed the Agent losing track of your token after a scene change or when a token was added. Token IDs belong to a scene, so a stored one went stale. If the ID the Agent sends is no longer on the canvas, the Bridge now finds the character's token on the current scene.
+* Tokens now only move from the Agent on the active scene. A GM viewing a scene they have not activated could previously move tokens on it. The Agent gets a "Scene is not active" response instead.
