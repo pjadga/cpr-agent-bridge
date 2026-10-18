@@ -8,6 +8,13 @@ import { requestingUser, hasNoClip, tokenDistanceM } from '../utils.js';
 export async function moveToken(bridge, data, { type, requestId, actorId, tokenId }) {
     if (game.paused) return;
 
+    // A GM can view a scene without activating it; the Agent must not drive tokens there.
+    // Players always see the active scene, so this only ever bites a viewing GM.
+    if (!canvas.scene?.active) {
+        await bridge.sendResponse({ type: 'CONFIRMATION', action: type, actorId: actorId, tokenId, success: false, message: 'Scene is not active', requestId });
+        return;
+    }
+
     const token = canvas.tokens.get(tokenId);
     if (token) {
         let newPos = {};
