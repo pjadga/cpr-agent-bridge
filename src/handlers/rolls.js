@@ -1,4 +1,5 @@
-import { weaponCategory, lookupRangeDV } from '../constants.js';
+import { resolveWeaponDV } from '../dv.js';
+import { tokenDistanceM } from '../utils.js';
 
 // Handlers for rolls: DAMAGE_ROLL, DEATH_SAVE, FACEDOWN_ROLL, INITIATIVE_ROLL,
 // ROLE_ROLL, SKILL_ROLL, STAT_ROLL, DICE_ROLL, ATTACK_ROLL.
@@ -392,15 +393,10 @@ export async function attackRoll(bridge, data, { requestId, actorId, tokenId }) 
         if (targetToken) {
             const shooter = canvas.tokens.get(tokenId) || actor.getActiveTokens()?.[0] || canvas.tokens.placeables.find(t => t.actor?.id === actor.id);
             if (shooter) {
-                const distX = targetToken.center.x - shooter.center.x;
-                const distY = targetToken.center.y - shooter.center.y;
-                const distancePx = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
-                const distanceM = Math.ceil(distancePx / (canvas.grid?.size || 128));
+                const distanceM = tokenDistanceM(shooter, targetToken);
 
                 const weaponData = actor.items.get(weaponId);
-                const category = weaponCategory(weaponData);
-                const targetDV = lookupRangeDV(category, distanceM);
-                computedDV = (targetDV === 99 ? 'Out of Range' : targetDV);
+                computedDV = (await resolveWeaponDV(weaponData, distanceM)).dv;
             }
         }
 

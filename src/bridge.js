@@ -1,6 +1,6 @@
 import Echo from 'laravel-echo';
 import { MODULE_ID, DEFAULT_REVERB_KEY } from './constants.js';
-import { flattenToDelta, resolveWsSecurity } from './utils.js';
+import { flattenToDelta, resolveWsSecurity, isPrimaryGM, resolveTokenId } from './utils.js';
 import { rollAndCapture } from './roll-capture.js';
 import { registerSettings } from './settings.js';
 import { dispatch } from './handlers/index.js';
@@ -681,17 +681,9 @@ export class CyberpunkBridge {
             }
         }
 
-        let tokenId = data.tokenId;
+        const tokenId = resolveTokenId(data.tokenId, actorId);
 
-        // If no tokenId provided, but we have an actorId, try to find a token for that actor on the canvas
-        if (!tokenId && actorId) {
-            const token = canvas.tokens.placeables.find(t => t.actor?.id === actorId);
-            if (token) {
-                tokenId = token.id;
-            }
-        }
-
-        await dispatch(this, type, data, { type, requestId, actorId, tokenId, debug });
+        await dispatch(this, type, data, { type, requestId, actorId, tokenId, debug, remote: true });
     }
 
     /**
@@ -707,11 +699,7 @@ export class CyberpunkBridge {
         const actorId = data.actorId;
         const debug = game.settings.get(MODULE_ID, 'debugMode');
 
-        let tokenId = data.tokenId;
-        if (!tokenId && actorId) {
-            const token = canvas.tokens?.placeables?.find(t => t.actor?.id === actorId);
-            if (token) tokenId = token.id;
-        }
+        const tokenId = resolveTokenId(data.tokenId, actorId);
 
         if (debug) console.log(`%c[Bridge] Embed Call: ${type}`, "color: #c084fc; font-weight: bold;", data);
 

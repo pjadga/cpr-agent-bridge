@@ -1,4 +1,6 @@
-import { weaponCategory, lookupRangeDV, rollBonusKeys, modLabel } from '../constants.js';
+import { rollBonusKeys, modLabel } from '../constants.js';
+import { resolveWeaponDV } from '../dv.js';
+import { requestingUser, hasNoClip, tokenDistanceM } from '../utils.js';
 
 // Handlers for token/targeting/combat-info reads:
 // MOVE_TOKEN, TARGET_TOKEN, LIST_VISIBLE_TOKENS, GET_DV_INFO, GET_ROLL_MODIFIERS.
@@ -57,10 +59,7 @@ export async function listVisibleTokens(bridge, data, { requestId, actorId, toke
     const jim = canvas.tokens.get(tokenId);
     let nearbyTokens = [];
     if (jim) {
-        const PIXELS_PER_METER = canvas.grid.size;
         const d = canvas.dimensions;
-        const jimX = jim.center.x;
-        const jimY = jim.center.y;
 
         nearbyTokens = canvas.tokens.placeables
             .filter(t => {
@@ -71,14 +70,10 @@ export async function listVisibleTokens(bridge, data, { requestId, actorId, toke
                 return isVisible && isActorType && isOnMap && t.id !== jim.id;
             })
             .map(t => {
-                const distX = t.center.x - jimX;
-                const distY = t.center.y - jimY;
-                const distancePx = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
-                const distanceMeters = (distancePx / PIXELS_PER_METER).toFixed(2);
                 return {
                     name: t.name,
                     id: t.id,
-                    distanceM: parseFloat(distanceMeters),
+                    distanceM: tokenDistanceM(jim, t),
                     type: t.actor.type
                 };
             })
@@ -96,10 +91,7 @@ export async function getDvInfo(bridge, data, { requestId, actorId, tokenId }) {
     const weaponId = data.weaponId;
 
     if (jim && target) {
-        const distX = target.center.x - jim.center.x;
-        const distY = target.center.y - jim.center.y;
-        const distancePx = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
-        const distanceM = Math.ceil(distancePx / 128);
+        const distanceM = tokenDistanceM(jim, target);
 
         const weaponData = jim.actor.items.get(weaponId);
         if (!weaponData) {
@@ -108,14 +100,16 @@ export async function getDvInfo(bridge, data, { requestId, actorId, tokenId }) {
             return;
         }
 
-        const category = weaponCategory(weaponData);
-        const targetDV = lookupRangeDV(category, distanceM);
+        const { dv, table, activeIndex, category, source } = await resolveWeaponDV(weaponData, distanceM);
 
         const result = {
             targetName: target.name,
             distanceMeters: distanceM,
             weaponCategory: category,
-            dv: targetDV === 99 ? 'Out of Range' : targetDV
+            dv,
+            table,
+            activeIndex,
+            source
         };
         await bridge.sendResponse({ type: 'DV_INFO_DATA', actorId: actorId, result, requestId });
     } else {
