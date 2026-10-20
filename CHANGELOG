@@ -49,3 +49,7 @@
 * Fixed DV showing "Out of Range" on Foundry 12. Core v0.92 stores a table entry's DV in `text`, newer versions use `description`; both are now read.
 * Fixed the Agent losing track of your token after a scene change or when a token was added. Token IDs belong to a scene, so a stored one went stale. If the ID the Agent sends is no longer on the canvas, the Bridge now finds the character's token on the current scene.
 * Tokens now only move from the Agent on the active scene. A GM viewing a scene they have not activated could previously move tokens on it. The Agent gets a "Scene is not active" response instead.
+
+1.3.3
+* CitiNet now respects Foundry visibility. Data Pool pages in journals or pages a player cannot Observe are no longer sent to their Agent.
+* Added a "Hidden" toggle to each Data Pool link/content row to hide it from the Agent only. Rows default to visible, so existing pools are unchanged. A page with every row hidden is not shown.

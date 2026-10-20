@@ -1,16 +1,33 @@
 // Handler for GET_NET_POOL — reads custom "Agent Data Pool" journal pages.
 
+// Who is this request for? A player's own client is that player. A GM's client
+// answers on behalf of players, so resolve the non-GM owners of the actor.
+// No player owner found (GM's own character, no actor) means the GM view: see everything.
+function resolveViewers(actorId) {
+    if (!game.user.isGM) return [game.user];
+    const actor = actorId ? game.actors.get(actorId) : null;
+    if (!actor) return [];
+    return game.users.filter(u => !u.isGM && actor.testUserPermission(u, "OWNER"));
+}
+
 export async function getNetPool(bridge, data, { requestId, actorId, debug }) {
     const dataPools = [];
+    const viewers = resolveViewers(actorId);
+    const canSee = (doc) => viewers.length === 0
+        || viewers.some(u => doc.testUserPermission(u, "OBSERVER"));
 
     // Loop through all journal entries in the world
     for (const journal of game.journal) {
 
         // Filter for our custom Data Pool pages
-        const poolPages = journal.pages.filter(p => p.type === "cpr-agent.datapool");
+        // Respect Foundry's own visibility: hidden journals/pages are not sent
+        const poolPages = journal.pages.filter(p => p.type === "cpr-agent.datapool"
+            && canSee(journal) && canSee(p));
 
         for (const page of poolPages) {
-            const rawEntries = page.system.entries || [];
+            // Rows flagged "hidden from Agent" are never sent
+            const rawEntries = (page.system.entries || []).filter(e => !e.hidden);
+            if (rawEntries.length === 0) continue;
             const processedEntries = [];
 
             // Process and enrich the entries

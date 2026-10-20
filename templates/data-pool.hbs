@@ -12,7 +12,10 @@
                         {{/if}}
                     </div>
                     {{#if ../editable}}
-                    <div style="flex: 0 0 100px; text-align: right;">
+                    <div style="flex: 0 0 150px; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                        <label class="checkbox" title="Hide this row from the Agent's CitiNet" style="display: flex; align-items: center; gap: 4px; white-space: nowrap;">
+                            <input type="checkbox" name="system.entries.{{i}}.hidden" {{checked entry.hidden}}> Hidden
+                        </label>
                         <button type="button" class="delete-entry" data-id="{{entry.id}}" title="Delete Entry" style="width: 32px; height: 32px; line-height: 32px; padding: 0;">
                             <i class="fas fa-trash"></i>
                         </button>

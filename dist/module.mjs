@@ -162,10 +162,10 @@ var wn = { exports: {} };
           );
           i.URLSafeCoder = y;
           var m = new y();
-          function w(_) {
+          function v(_) {
             return m.encode(_);
           }
-          i.encodeURLSafe = w;
+          i.encodeURLSafe = v;
           function C(_) {
             return m.decode(_);
           }
@@ -183,23 +183,23 @@ var wn = { exports: {} };
           Object.defineProperty(i, "__esModule", { value: !0 });
           var s = "utf8: invalid string", l = "utf8: invalid source encoding";
           function h(p) {
-            for (var y = new Uint8Array(u(p)), m = 0, w = 0; w < p.length; w++) {
-              var C = p.charCodeAt(w);
-              C < 128 ? y[m++] = C : C < 2048 ? (y[m++] = 192 | C >> 6, y[m++] = 128 | C & 63) : C < 55296 ? (y[m++] = 224 | C >> 12, y[m++] = 128 | C >> 6 & 63, y[m++] = 128 | C & 63) : (w++, C = (C & 1023) << 10, C |= p.charCodeAt(w) & 1023, C += 65536, y[m++] = 240 | C >> 18, y[m++] = 128 | C >> 12 & 63, y[m++] = 128 | C >> 6 & 63, y[m++] = 128 | C & 63);
+            for (var y = new Uint8Array(u(p)), m = 0, v = 0; v < p.length; v++) {
+              var C = p.charCodeAt(v);
+              C < 128 ? y[m++] = C : C < 2048 ? (y[m++] = 192 | C >> 6, y[m++] = 128 | C & 63) : C < 55296 ? (y[m++] = 224 | C >> 12, y[m++] = 128 | C >> 6 & 63, y[m++] = 128 | C & 63) : (v++, C = (C & 1023) << 10, C |= p.charCodeAt(v) & 1023, C += 65536, y[m++] = 240 | C >> 18, y[m++] = 128 | C >> 12 & 63, y[m++] = 128 | C >> 6 & 63, y[m++] = 128 | C & 63);
             }
             return y;
           }
           i.encode = h;
           function u(p) {
             for (var y = 0, m = 0; m < p.length; m++) {
-              var w = p.charCodeAt(m);
-              if (w < 128)
+              var v = p.charCodeAt(m);
+              if (v < 128)
                 y += 1;
-              else if (w < 2048)
+              else if (v < 2048)
                 y += 2;
-              else if (w < 55296)
+              else if (v < 55296)
                 y += 3;
-              else if (w <= 57343) {
+              else if (v <= 57343) {
                 if (m >= p.length - 1)
                   throw new Error(s);
                 m++, y += 4;
@@ -211,41 +211,41 @@ var wn = { exports: {} };
           i.encodedLength = u;
           function g(p) {
             for (var y = [], m = 0; m < p.length; m++) {
-              var w = p[m];
-              if (w & 128) {
+              var v = p[m];
+              if (v & 128) {
                 var C = void 0;
-                if (w < 224) {
+                if (v < 224) {
                   if (m >= p.length)
                     throw new Error(l);
                   var _ = p[++m];
                   if ((_ & 192) !== 128)
                     throw new Error(l);
-                  w = (w & 31) << 6 | _ & 63, C = 128;
-                } else if (w < 240) {
+                  v = (v & 31) << 6 | _ & 63, C = 128;
+                } else if (v < 240) {
                   if (m >= p.length - 1)
                     throw new Error(l);
                   var _ = p[++m], k = p[++m];
                   if ((_ & 192) !== 128 || (k & 192) !== 128)
                     throw new Error(l);
-                  w = (w & 15) << 12 | (_ & 63) << 6 | k & 63, C = 2048;
-                } else if (w < 248) {
+                  v = (v & 15) << 12 | (_ & 63) << 6 | k & 63, C = 2048;
+                } else if (v < 248) {
                   if (m >= p.length - 2)
                     throw new Error(l);
                   var _ = p[++m], k = p[++m], b = p[++m];
                   if ((_ & 192) !== 128 || (k & 192) !== 128 || (b & 192) !== 128)
                     throw new Error(l);
-                  w = (w & 15) << 18 | (_ & 63) << 12 | (k & 63) << 6 | b & 63, C = 65536;
+                  v = (v & 15) << 18 | (_ & 63) << 12 | (k & 63) << 6 | b & 63, C = 65536;
                 } else
                   throw new Error(l);
-                if (w < C || w >= 55296 && w <= 57343)
+                if (v < C || v >= 55296 && v <= 57343)
                   throw new Error(l);
-                if (w >= 65536) {
-                  if (w > 1114111)
+                if (v >= 65536) {
+                  if (v > 1114111)
                     throw new Error(l);
-                  w -= 65536, y.push(String.fromCharCode(55296 | w >> 10)), w = 56320 | w & 1023;
+                  v -= 65536, y.push(String.fromCharCode(55296 | v >> 10)), v = 56320 | v & 1023;
                 }
               }
-              y.push(String.fromCharCode(w));
+              y.push(String.fromCharCode(v));
             }
             return y.join("");
           }
@@ -266,8 +266,8 @@ var wn = { exports: {} };
             }
             create(t) {
               this.lastId++;
-              var a = this.lastId, d = this.prefix + a, f = this.name + "[" + a + "]", v = !1, T = function() {
-                v || (t.apply(null, arguments), v = !0);
+              var a = this.lastId, d = this.prefix + a, f = this.name + "[" + a + "]", w = !1, T = function() {
+                w || (t.apply(null, arguments), w = !0);
               };
               return this[a] = T, { number: a, id: d, name: f, callback: T };
             }
@@ -313,17 +313,17 @@ var wn = { exports: {} };
                 f.loading[t].push(d);
               else {
                 f.loading[t] = [d];
-                var v = N.createScriptRequest(f.getPath(t, a)), T = f.receivers.create(function(L) {
+                var w = N.createScriptRequest(f.getPath(t, a)), T = f.receivers.create(function(L) {
                   if (f.receivers.remove(T), f.loading[t]) {
                     var M = f.loading[t];
                     delete f.loading[t];
                     for (var x = function(z) {
-                      z || v.cleanup();
+                      z || w.cleanup();
                     }, D = 0; D < M.length; D++)
                       M[D](L, x);
                   }
                 });
-                v.send(T);
+                w.send(T);
               }
             }
             getRoot(t) {
@@ -417,23 +417,23 @@ var wn = { exports: {} };
             }
           }
           var H = function(c, t, a, d, f) {
-            const v = N.createXHR();
-            v.open("POST", a.endpoint, !0), v.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            const w = N.createXHR();
+            w.open("POST", a.endpoint, !0), w.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             for (var T in a.headers)
-              v.setRequestHeader(T, a.headers[T]);
+              w.setRequestHeader(T, a.headers[T]);
             if (a.headersProvider != null) {
               let L = a.headersProvider();
               for (var T in L)
-                v.setRequestHeader(T, L[T]);
+                w.setRequestHeader(T, L[T]);
             }
-            return v.onreadystatechange = function() {
-              if (v.readyState === 4)
-                if (v.status === 200) {
+            return w.onreadystatechange = function() {
+              if (w.readyState === 4)
+                if (w.status === 200) {
                   let L, M = !1;
                   try {
-                    L = JSON.parse(v.responseText), M = !0;
+                    L = JSON.parse(w.responseText), M = !0;
                   } catch {
-                    f(new B(200, `JSON returned from ${d.toString()} endpoint was invalid, yet status code was 200. Data was: ${v.responseText}`), null);
+                    f(new B(200, `JSON returned from ${d.toString()} endpoint was invalid, yet status code was 200. Data was: ${w.responseText}`), null);
                   }
                   M && f(null, L);
                 } else {
@@ -446,9 +446,9 @@ var wn = { exports: {} };
                       L = `Clients must be authorized to join private or presence channels. ${C.buildLogSuffix("authorizationEndpoint")}`;
                       break;
                   }
-                  f(new B(v.status, `Unable to retrieve auth string from ${d.toString()} endpoint - received status: ${v.status} from ${a.endpoint}. ${L}`), null);
+                  f(new B(w.status, `Unable to retrieve auth string from ${d.toString()} endpoint - received status: ${w.status} from ${a.endpoint}. ${L}`), null);
                 }
-            }, v.send(t), v;
+            }, w.send(t), w;
           };
           function Y(c) {
             return Ne(Pe(c));
@@ -617,7 +617,7 @@ var wn = { exports: {} };
           }
           function or(c) {
             var t = [], a = [];
-            return function d(f, v) {
+            return function d(f, w) {
               var T, L, M;
               switch (typeof f) {
                 case "object":
@@ -626,13 +626,13 @@ var wn = { exports: {} };
                   for (T = 0; T < t.length; T += 1)
                     if (t[T] === f)
                       return { $ref: a[T] };
-                  if (t.push(f), a.push(v), Object.prototype.toString.apply(f) === "[object Array]")
+                  if (t.push(f), a.push(w), Object.prototype.toString.apply(f) === "[object Array]")
                     for (M = [], T = 0; T < f.length; T += 1)
-                      M[T] = d(f[T], v + "[" + T + "]");
+                      M[T] = d(f[T], w + "[" + T + "]");
                   else {
                     M = {};
                     for (L in f)
-                      Object.prototype.hasOwnProperty.call(f, L) && (M[L] = d(f[L], v + "[" + JSON.stringify(L) + "]"));
+                      Object.prototype.hasOwnProperty.call(f, L) && (M[L] = d(f[L], w + "[" + JSON.stringify(L) + "]"));
                   }
                   return M;
                 case "number":
@@ -677,13 +677,13 @@ var wn = { exports: {} };
           }
           var j = new ar(), cr = function(c, t, a, d, f) {
             (a.headers !== void 0 || a.headersProvider != null) && j.warn(`To send headers with the ${d.toString()} request, you must use AJAX, rather than JSONP.`);
-            var v = c.nextAuthCallbackID.toString();
+            var w = c.nextAuthCallbackID.toString();
             c.nextAuthCallbackID++;
             var T = c.getDocument(), L = T.createElement("script");
-            c.auth_callbacks[v] = function(D) {
+            c.auth_callbacks[w] = function(D) {
               f(null, D);
             };
-            var M = "Pusher.auth_callbacks['" + v + "']";
+            var M = "Pusher.auth_callbacks['" + w + "']";
             L.src = a.endpoint + "?callback=" + encodeURIComponent(M) + "&" + t;
             var x = T.getElementsByTagName("head")[0] || T.documentElement;
             x.insertBefore(L, x.firstChild);
@@ -724,7 +724,7 @@ var wn = { exports: {} };
           }
           var dr = function(c, t) {
             return function(a, d) {
-              var f = "http" + (t ? "s" : "") + "://", v = f + (c.host || c.options.host) + c.options.path, T = N.createJSONPRequest(v, a), L = N.ScriptReceivers.create(function(M, x) {
+              var f = "http" + (t ? "s" : "") + "://", w = f + (c.host || c.options.host) + c.options.path, T = N.createJSONPRequest(w, a), L = N.ScriptReceivers.create(function(M, x) {
                 l.remove(L), T.cleanup(), x && x.host && (c.host = x.host), d && d(M, x);
               });
               T.send(L);
@@ -783,8 +783,8 @@ var wn = { exports: {} };
             }
             removeCallback(t, a, d) {
               ke(t, function(f) {
-                this._callbacks[f] = Ut(this._callbacks[f] || [], function(v) {
-                  return a && a !== v.fn || d && d !== v.context;
+                this._callbacks[f] = Ut(this._callbacks[f] || [], function(w) {
+                  return a && a !== w.fn || d && d !== w.context;
                 }), this._callbacks[f].length === 0 && delete this._callbacks[f];
               }, this);
             }
@@ -819,17 +819,17 @@ var wn = { exports: {} };
             emit(t, a, d) {
               for (var f = 0; f < this.global_callbacks.length; f++)
                 this.global_callbacks[f](t, a);
-              var v = this.callbacks.get(t), T = [];
-              if (d ? T.push(a, d) : a && T.push(a), v && v.length > 0)
-                for (var f = 0; f < v.length; f++)
-                  v[f].fn.apply(v[f].context || window, T);
+              var w = this.callbacks.get(t), T = [];
+              if (d ? T.push(a, d) : a && T.push(a), w && w.length > 0)
+                for (var f = 0; f < w.length; f++)
+                  w[f].fn.apply(w[f].context || window, T);
               else this.failThrough && this.failThrough(t, a);
               return this;
             }
           }
           class vr extends re {
-            constructor(t, a, d, f, v) {
-              super(), this.initialize = N.transportConnectionInitializer, this.hooks = t, this.name = a, this.priority = d, this.key = f, this.options = v, this.state = "new", this.timeline = v.timeline, this.activityTimeout = v.activityTimeout, this.id = this.timeline.generateUniqueID();
+            constructor(t, a, d, f, w) {
+              super(), this.initialize = N.transportConnectionInitializer, this.hooks = t, this.name = a, this.priority = d, this.key = f, this.options = w, this.state = "new", this.timeline = w.timeline, this.activityTimeout = w.activityTimeout, this.id = this.timeline.generateUniqueID();
             }
             handlesActivityChecks() {
               return !!this.hooks.handlesActivityChecks;
@@ -1008,17 +1008,17 @@ var wn = { exports: {} };
               f = W({}, f, {
                 activityTimeout: this.pingDelay
               });
-              var v = this.transport.createConnection(t, a, d, f), T = null, L = function() {
-                v.unbind("open", L), v.bind("closed", M), T = q.now();
+              var w = this.transport.createConnection(t, a, d, f), T = null, L = function() {
+                w.unbind("open", L), w.bind("closed", M), T = q.now();
               }, M = (x) => {
-                if (v.unbind("closed", M), x.code === 1002 || x.code === 1003)
+                if (w.unbind("closed", M), x.code === 1002 || x.code === 1003)
                   this.manager.reportDeath();
                 else if (!x.wasClean && T) {
                   var D = q.now() - T;
                   D < 2 * this.maxPingDelay && (this.manager.reportDeath(), this.pingDelay = Math.max(D / 2, this.minPingDelay));
                 }
               };
-              return v.bind("open", L), v;
+              return w.bind("open", L), w;
             }
             isSupported(t) {
               return this.manager.isAlive() && this.transport.isSupported(t);
@@ -1105,10 +1105,10 @@ var wn = { exports: {} };
                   var f;
                   try {
                     f = ae.decodeMessage(d);
-                  } catch (v) {
+                  } catch (w) {
                     this.emit("error", {
                       type: "MessageParseError",
-                      error: v,
+                      error: w,
                       data: d.data
                     });
                   }
@@ -1298,12 +1298,12 @@ var wn = { exports: {} };
             }
           }
           var Br = function(c, t, a, d) {
-            function f(v) {
-              return v instanceof a ? v : new a(function(T) {
-                T(v);
+            function f(w) {
+              return w instanceof a ? w : new a(function(T) {
+                T(w);
               });
             }
-            return new (a || (a = Promise))(function(v, T) {
+            return new (a || (a = Promise))(function(w, T) {
               function L(D) {
                 try {
                   x(d.next(D));
@@ -1319,7 +1319,7 @@ var wn = { exports: {} };
                 }
               }
               function x(D) {
-                D.done ? v(D.value) : f(D.value).then(L, M);
+                D.done ? w(D.value) : f(D.value).then(L, M);
               }
               x((d = d.apply(c, t || [])).next());
             });
@@ -1332,8 +1332,8 @@ var wn = { exports: {} };
               super.authorize(t, (d, f) => Br(this, void 0, void 0, function* () {
                 if (!d)
                   if (f = f, f.channel_data != null) {
-                    var v = JSON.parse(f.channel_data);
-                    this.members.setMyID(v.user_id);
+                    var w = JSON.parse(f.channel_data);
+                    this.members.setMyID(w.user_id);
                   } else if (yield this.pusher.user.signinDonePromise, this.pusher.user.user_data != null)
                     this.members.setMyID(this.pusher.user.user_data.id);
                   else {
@@ -1367,8 +1367,8 @@ var wn = { exports: {} };
                   this.emit("pusher:member_added", f);
                   break;
                 case "pusher_internal:member_removed":
-                  var v = this.members.removeMember(d);
-                  v && this.emit("pusher:member_removed", v);
+                  var w = this.members.removeMember(d);
+                  w && this.emit("pusher:member_removed", w);
                   break;
               }
             }
@@ -1390,12 +1390,12 @@ var wn = { exports: {} };
                   a(d, f);
                   return;
                 }
-                let v = f.shared_secret;
-                if (!v) {
+                let w = f.shared_secret;
+                if (!w) {
                   a(new Error(`No shared_secret key in auth payload for encrypted channel: ${this.name}`), null);
                   return;
                 }
-                this.key = Object(st.decode)(v), delete f.shared_secret, a(null, f);
+                this.key = Object(st.decode)(w), delete f.shared_secret, a(null, f);
               });
             }
             trigger(t, a) {
@@ -1428,22 +1428,22 @@ var wn = { exports: {} };
                 j.error(`Expected encrypted event nonce length to be ${this.nacl.secretbox.nonceLength}, got: ${f.length}`);
                 return;
               }
-              let v = this.nacl.secretbox.open(d, f, this.key);
-              if (v === null) {
+              let w = this.nacl.secretbox.open(d, f, this.key);
+              if (w === null) {
                 j.debug("Failed to decrypt an event, probably because it was encrypted with a different key. Fetching a new key from the authEndpoint..."), this.authorize(this.pusher.connection.socket_id, (T, L) => {
                   if (T) {
                     j.error(`Failed to make a request to the authEndpoint: ${L}. Unable to fetch new key, so dropping encrypted event`);
                     return;
                   }
-                  if (v = this.nacl.secretbox.open(d, f, this.key), v === null) {
+                  if (w = this.nacl.secretbox.open(d, f, this.key), w === null) {
                     j.error("Failed to decrypt event with new key. Dropping encrypted event");
                     return;
                   }
-                  this.emit(t, this.getDataToEmit(v));
+                  this.emit(t, this.getDataToEmit(w));
                 });
                 return;
               }
-              this.emit(t, this.getDataToEmit(v));
+              this.emit(t, this.getDataToEmit(w));
             }
             getDataToEmit(t) {
               let a = Object(Dr.decode)(t);
@@ -1703,10 +1703,10 @@ var wn = { exports: {} };
               return Ht(this.strategies, q.method("isSupported"));
             }
             connect(t, a) {
-              var d = this.strategies, f = 0, v = this.timeout, T = null, L = (M, x) => {
-                x ? a(null, x) : (f = f + 1, this.loop && (f = f % d.length), f < d.length ? (v && (v = v * 2, this.timeoutLimit && (v = Math.min(v, this.timeoutLimit))), T = this.tryStrategy(d[f], t, { timeout: v, failFast: this.failFast }, L)) : a(!0));
+              var d = this.strategies, f = 0, w = this.timeout, T = null, L = (M, x) => {
+                x ? a(null, x) : (f = f + 1, this.loop && (f = f % d.length), f < d.length ? (w && (w = w * 2, this.timeoutLimit && (w = Math.min(w, this.timeoutLimit))), T = this.tryStrategy(d[f], t, { timeout: w, failFast: this.failFast }, L)) : a(!0));
               };
-              return T = this.tryStrategy(d[f], t, { timeout: v, failFast: this.failFast }, L), {
+              return T = this.tryStrategy(d[f], t, { timeout: w, failFast: this.failFast }, L), {
                 abort: function() {
                   T.abort();
                 },
@@ -1716,14 +1716,14 @@ var wn = { exports: {} };
               };
             }
             tryStrategy(t, a, d, f) {
-              var v = null, T = null;
-              return d.timeout > 0 && (v = new ee(d.timeout, function() {
+              var w = null, T = null;
+              return d.timeout > 0 && (w = new ee(d.timeout, function() {
                 T.abort(), f(!0);
               })), T = t.connect(a, function(L, M) {
-                L && v && v.isRunning() && !d.failFast || (v && v.ensureAborted(), f(L, M));
+                L && w && w.isRunning() && !d.failFast || (w && w.ensureAborted(), f(L, M));
               }), {
                 abort: function() {
-                  v && v.ensureAborted(), T.abort();
+                  w && w.ensureAborted(), T.abort();
                 },
                 forceMinPriority: function(L) {
                   T.forceMinPriority(L);
@@ -1740,8 +1740,8 @@ var wn = { exports: {} };
             }
             connect(t, a) {
               return $r(this.strategies, t, function(d, f) {
-                return function(v, T) {
-                  if (f[d].error = v, v) {
+                return function(w, T) {
+                  if (f[d].error = w, w) {
                     qr(f) && a(!0);
                     return;
                   }
@@ -1753,16 +1753,16 @@ var wn = { exports: {} };
             }
           }
           function $r(c, t, a) {
-            var d = Ft(c, function(f, v, T, L) {
-              return f.connect(t, a(v, L));
+            var d = Ft(c, function(f, w, T, L) {
+              return f.connect(t, a(w, L));
             });
             return {
               abort: function() {
                 ke(d, Gr);
               },
               forceMinPriority: function(f) {
-                ke(d, function(v) {
-                  v.forceMinPriority(f);
+                ke(d, function(w) {
+                  w.forceMinPriority(f);
                 });
               }
             };
@@ -1783,20 +1783,20 @@ var wn = { exports: {} };
               return this.strategy.isSupported();
             }
             connect(t, a) {
-              var d = this.usingTLS, f = Wr(d), v = f && f.cacheSkipCount ? f.cacheSkipCount : 0, T = [this.strategy];
+              var d = this.usingTLS, f = Wr(d), w = f && f.cacheSkipCount ? f.cacheSkipCount : 0, T = [this.strategy];
               if (f && f.timestamp + this.ttl >= q.now()) {
                 var L = this.transports[f.transport];
-                L && (["ws", "wss"].includes(f.transport) || v > 3 ? (this.timeline.info({
+                L && (["ws", "wss"].includes(f.transport) || w > 3 ? (this.timeline.info({
                   cached: !0,
                   transport: f.transport,
                   latency: f.latency
                 }), T.push(new ce([L], {
                   timeout: f.latency * 2 + 1e3,
                   failFast: !0
-                }))) : v++);
+                }))) : w++);
               }
               var M = q.now(), x = T.pop().connect(t, function D(z, He) {
-                z ? (Jt(d), T.length > 0 ? (M = q.now(), x = T.pop().connect(t, D)) : a(z)) : (Kr(d, He.transport.name, q.now() - M, v), a(null, He));
+                z ? (Jt(d), T.length > 0 ? (M = q.now(), x = T.pop().connect(t, D)) : a(z)) : (Kr(d, He.transport.name, q.now() - M, w), a(null, He));
               });
               return {
                 abort: function() {
@@ -1852,12 +1852,12 @@ var wn = { exports: {} };
               return this.strategy.isSupported();
             }
             connect(t, a) {
-              var d = this.strategy, f, v = new ee(this.options.delay, function() {
+              var d = this.strategy, f, w = new ee(this.options.delay, function() {
                 f = d.connect(t, a);
               });
               return {
                 abort: function() {
-                  v.ensureAborted(), f && f.abort();
+                  w.ensureAborted(), f && f.abort();
                 },
                 forceMinPriority: function(T) {
                   t = T, f && f.forceMinPriority(T);
@@ -1886,8 +1886,8 @@ var wn = { exports: {} };
               return this.strategy.isSupported();
             }
             connect(t, a) {
-              var d = this.strategy.connect(t, function(f, v) {
-                v && d.abort(), a(f, v);
+              var d = this.strategy.connect(t, function(f, w) {
+                w && d.abort(), a(f, w);
               });
               return d;
             }
@@ -1903,11 +1903,11 @@ var wn = { exports: {} };
               var cn = a(c, an, Xi, Yi, Qi, Zi);
               return d[an] = cn, cn;
             }
-            var v = Object.assign({}, t, {
+            var w = Object.assign({}, t, {
               hostNonTLS: c.wsHost + ":" + c.wsPort,
               hostTLS: c.wsHost + ":" + c.wssPort,
               httpPath: c.wsPath
-            }), T = Object.assign({}, v, {
+            }), T = Object.assign({}, w, {
               useTLS: !0
             }), L = Object.assign({}, t, {
               hostNonTLS: c.httpHost + ":" + c.httpPort,
@@ -1924,7 +1924,7 @@ var wn = { exports: {} };
               lives: 2,
               minPingDelay: 1e4,
               maxPingDelay: c.activityTimeout
-            }), z = f("ws", "ws", 3, v, x), He = f("wss", "ws", 3, T, x), Gi = f("sockjs", "sockjs", 1, L), en = f("xhr_streaming", "xhr_streaming", 1, L, D), Vi = f("xdr_streaming", "xdr_streaming", 1, L, D), tn = f("xhr_polling", "xhr_polling", 1, L), Wi = f("xdr_polling", "xdr_polling", 1, L), nn = new ce([z], M), Ki = new ce([He], M), Ji = new ce([Gi], M), rn = new ce([
+            }), z = f("ws", "ws", 3, w, x), He = f("wss", "ws", 3, T, x), Gi = f("sockjs", "sockjs", 1, L), en = f("xhr_streaming", "xhr_streaming", 1, L, D), Vi = f("xdr_streaming", "xdr_streaming", 1, L, D), tn = f("xhr_polling", "xhr_polling", 1, L), Wi = f("xdr_polling", "xdr_polling", 1, L), nn = new ce([z], M), Ki = new ce([He], M), Ji = new ce([Gi], M), rn = new ce([
               new _e(Ce(en), en, Vi)
             ], M), sn = new ce([
               new _e(Ce(tn), tn, Wi)
@@ -2313,8 +2313,8 @@ var wn = { exports: {} };
                 features: this.options.features,
                 timeline: this.events
               }, this.options.params);
-              return this.events = [], t(d, (f, v) => {
-                f || this.sent++, a && a(f, v);
+              return this.events = [], t(d, (f, w) => {
+                f || this.sent++, a && a(f, w);
               }), !0;
             }
             generateUniqueID() {
@@ -2335,10 +2335,10 @@ var wn = { exports: {} };
                 if (this.priority < t)
                   return Zt(new I(), a);
               } else return Zt(new O(), a);
-              var d = !1, f = this.transport.createConnection(this.name, this.priority, this.options.key, this.options), v = null, T = function() {
+              var d = !1, f = this.transport.createConnection(this.name, this.priority, this.options.key, this.options), w = null, T = function() {
                 f.unbind("initialized", T), f.connect();
               }, L = function() {
-                v = ie.createHandshake(f, function(z) {
+                w = ie.createHandshake(f, function(z) {
                   d = !0, D(), a(null, z);
                 });
               }, M = function(z) {
@@ -2352,10 +2352,10 @@ var wn = { exports: {} };
               };
               return f.bind("initialized", T), f.bind("open", L), f.bind("error", M), f.bind("closed", x), f.initialize(), {
                 abort: () => {
-                  d || (D(), v ? v.close() : f.close());
+                  d || (D(), w ? w.close() : f.close());
                 },
                 forceMinPriority: (z) => {
-                  d || this.priority < z && (v ? v.close() : f.close());
+                  d || this.priority < z && (w ? w.close() : f.close());
                 }
               };
             }
@@ -2371,12 +2371,12 @@ var wn = { exports: {} };
             };
           }
           const { Transports: _i } = N;
-          var Ci = function(c, t, a, d, f, v) {
+          var Ci = function(c, t, a, d, f, w) {
             var T = _i[a];
             if (!T)
               throw new E(a);
             var L = (!c.enabledTransports || xt(c.enabledTransports, t) !== -1) && (!c.disabledTransports || xt(c.disabledTransports, t) === -1), M;
-            return L ? (f = Object.assign({ ignoreNullOrigin: c.ignoreNullOrigin }, f), M = new ki(t, d, v ? v.getAssistant(T) : T, f)) : M = Si, M;
+            return L ? (f = Object.assign({ ignoreNullOrigin: c.ignoreNullOrigin }, f), M = new ki(t, d, w ? w.getAssistant(T) : T, f)) : M = Si, M;
           }, Si = {
             isSupported: function() {
               return !1;
@@ -2449,9 +2449,9 @@ var wn = { exports: {} };
                 headers: t.headers
               }
             };
-            return (f, v) => {
+            return (f, w) => {
               const T = c.channel(f.channelName);
-              a(T, d).authorize(f.socketId, v);
+              a(T, d).authorize(f.socketId, w);
             };
           };
           function Pi(c, t) {
@@ -2628,7 +2628,7 @@ var wn = { exports: {} };
               }), this.connection.bind("connected", () => {
                 this.subscribeAll(), this.timelineSender && this.timelineSender.send(this.connection.isUsingTLS());
               }), this.connection.bind("message", (f) => {
-                var v = f.event, T = v.indexOf("pusher_internal:") === 0;
+                var w = f.event, T = w.indexOf("pusher_internal:") === 0;
                 if (f.channel) {
                   var L = this.channel(f.channel);
                   L && L.handleEvent(f);
@@ -4169,8 +4169,8 @@ var Mn = {};
     for (let y = 0; y < s; y++) {
       h = u = 0, g = p = null;
       for (let m = 0; m < s; m++) {
-        let w = n.get(y, m);
-        w === g ? h++ : (h >= 5 && (l += e.N1 + (h - 5)), g = w, h = 1), w = n.get(m, y), w === p ? u++ : (u >= 5 && (l += e.N1 + (u - 5)), p = w, u = 1);
+        let v = n.get(y, m);
+        v === g ? h++ : (h >= 5 && (l += e.N1 + (h - 5)), g = v, h = 1), v = n.get(m, y), v === p ? u++ : (u >= 5 && (l += e.N1 + (u - 5)), p = v, u = 1);
       }
       h >= 5 && (l += e.N1 + (h - 5)), u >= 5 && (l += e.N1 + (u - 5));
     }
@@ -4741,35 +4741,35 @@ te.testAlphanumeric = function(e) {
 })(oe);
 (function(o) {
   const e = Q, r = Xe, i = Je, n = oe, s = Nt, l = 7973, h = e.getBCHDigit(l);
-  function u(m, w, C) {
+  function u(m, v, C) {
     for (let _ = 1; _ <= 40; _++)
-      if (w <= o.getCapacity(_, C, m))
+      if (v <= o.getCapacity(_, C, m))
         return _;
   }
-  function g(m, w) {
-    return n.getCharCountIndicator(m, w) + 4;
+  function g(m, v) {
+    return n.getCharCountIndicator(m, v) + 4;
   }
-  function p(m, w) {
+  function p(m, v) {
     let C = 0;
     return m.forEach(function(_) {
-      const k = g(_.mode, w);
+      const k = g(_.mode, v);
       C += k + _.getBitsLength();
     }), C;
   }
-  function y(m, w) {
+  function y(m, v) {
     for (let C = 1; C <= 40; C++)
-      if (p(m, C) <= o.getCapacity(C, w, n.MIXED))
+      if (p(m, C) <= o.getCapacity(C, v, n.MIXED))
         return C;
   }
-  o.from = function(w, C) {
-    return s.isValid(w) ? parseInt(w, 10) : C;
-  }, o.getCapacity = function(w, C, _) {
-    if (!s.isValid(w))
+  o.from = function(v, C) {
+    return s.isValid(v) ? parseInt(v, 10) : C;
+  }, o.getCapacity = function(v, C, _) {
+    if (!s.isValid(v))
       throw new Error("Invalid QR Code version");
     typeof _ > "u" && (_ = n.BYTE);
-    const k = e.getSymbolTotalCodewords(w), b = r.getTotalCodewordsCount(w, C), S = (k - b) * 8;
+    const k = e.getSymbolTotalCodewords(v), b = r.getTotalCodewordsCount(v, C), S = (k - b) * 8;
     if (_ === n.MIXED) return S;
-    const I = S - g(_, w);
+    const I = S - g(_, v);
     switch (_) {
       case n.NUMERIC:
         return Math.floor(I / 10 * 3);
@@ -4781,25 +4781,25 @@ te.testAlphanumeric = function(e) {
       default:
         return Math.floor(I / 8);
     }
-  }, o.getBestVersionForData = function(w, C) {
+  }, o.getBestVersionForData = function(v, C) {
     let _;
     const k = i.from(C, i.M);
-    if (Array.isArray(w)) {
-      if (w.length > 1)
-        return y(w, k);
-      if (w.length === 0)
+    if (Array.isArray(v)) {
+      if (v.length > 1)
+        return y(v, k);
+      if (v.length === 0)
         return 1;
-      _ = w[0];
+      _ = v[0];
     } else
-      _ = w;
+      _ = v;
     return u(_.mode, _.getLength(), k);
-  }, o.getEncodedBits = function(w) {
-    if (!s.isValid(w) || w < 7)
+  }, o.getEncodedBits = function(v) {
+    if (!s.isValid(v) || v < 7)
       throw new Error("Invalid QR Code version");
-    let C = w << 12;
+    let C = v << 12;
     for (; e.getBCHDigit(C) - h >= 0; )
       C ^= l << e.getBCHDigit(C) - h;
-    return w << 12 | C;
+    return v << 12 | C;
   };
 })(Bn);
 var Dn = {};
@@ -4956,10 +4956,10 @@ var Ws = be, jn = { exports: {} };
       l[i] = 0;
       var h = e.PriorityQueue.make();
       h.push(i, 0);
-      for (var u, g, p, y, m, w, C, _, k; !h.empty(); ) {
+      for (var u, g, p, y, m, v, C, _, k; !h.empty(); ) {
         u = h.pop(), g = u.value, y = u.cost, m = r[g] || {};
         for (p in m)
-          m.hasOwnProperty(p) && (w = m[p], C = y + w, _ = l[p], k = typeof l[p] > "u", (k || _ > C) && (l[p] = C, h.push(p, C), s[p] = g));
+          m.hasOwnProperty(p) && (v = m[p], C = y + v, _ = l[p], k = typeof l[p] > "u", (k || _ > C) && (l[p] = C, h.push(p, C), s[p] = g));
       }
       if (typeof n < "u" && typeof l[n] > "u") {
         var b = ["Could not find a path from ", i, " to ", n, "."].join("");
@@ -5057,7 +5057,7 @@ var Ks = jn.exports;
         return n.getBitsLength(b);
     }
   }
-  function w(b) {
+  function v(b) {
     return b.reduce(function(S, I) {
       const R = S.length - 1 >= 0 ? S[S.length - 1] : null;
       return R && R.mode === I.mode ? (S[S.length - 1].data += I.data, S) : (S.push(I), S);
@@ -5139,7 +5139,7 @@ var Ks = jn.exports;
     const R = y(S, h.isKanjiModeEnabled()), P = C(R), E = _(P, I), O = u.find_path(E.map, "start", "end"), B = [];
     for (let U = 1; U < O.length - 1; U++)
       B.push(E.table[O[U]].node);
-    return o.fromArray(w(B));
+    return o.fromArray(v(B));
   }, o.rawSplit = function(S) {
     return o.fromArray(
       y(S, h.isKanjiModeEnabled())
@@ -5216,14 +5216,14 @@ function co(o, e, r) {
   return lo(i, o, e);
 }
 function lo(o, e, r) {
-  const i = Qe.getSymbolTotalCodewords(e), n = Ct.getTotalCodewordsCount(e, r), s = i - n, l = Ct.getBlocksCount(e, r), h = i % l, u = l - h, g = Math.floor(i / l), p = Math.floor(s / l), y = p + 1, m = g - p, w = new Zs(m);
+  const i = Qe.getSymbolTotalCodewords(e), n = Ct.getTotalCodewordsCount(e, r), s = i - n, l = Ct.getBlocksCount(e, r), h = i % l, u = l - h, g = Math.floor(i / l), p = Math.floor(s / l), y = p + 1, m = g - p, v = new Zs(m);
   let C = 0;
   const _ = new Array(l), k = new Array(l);
   let b = 0;
   const S = new Uint8Array(o.buffer);
   for (let O = 0; O < l; O++) {
     const B = O < u ? p : y;
-    _[O] = S.slice(C, C + B), k[O] = w.encode(_[O]), C += B, b = Math.max(b, B);
+    _[O] = S.slice(C, C + B), k[O] = v.encode(_[O]), C += B, b = Math.max(b, B);
   }
   const I = new Uint8Array(i);
   let R = 0, P, E;
@@ -5320,10 +5320,10 @@ var Hn = {}, Ot = {};
   }, o.qrToImageData = function(i, n, s) {
     const l = n.modules.size, h = n.modules.data, u = o.getScale(l, s), g = Math.floor((l + s.margin * 2) * u), p = s.margin * u, y = [s.color.light, s.color.dark];
     for (let m = 0; m < g; m++)
-      for (let w = 0; w < g; w++) {
-        let C = (m * g + w) * 4, _ = s.color.light;
-        if (m >= p && w >= p && m < g - p && w < g - p) {
-          const k = Math.floor((m - p) / u), b = Math.floor((w - p) / u);
+      for (let v = 0; v < g; v++) {
+        let C = (m * g + v) * 4, _ = s.color.light;
+        if (m >= p && v >= p && m < g - p && v < g - p) {
+          const k = Math.floor((m - p) / u), b = Math.floor((v - p) / u);
           _ = y[h[k * l + b] ? 1 : 0];
         }
         i[C++] = _.r, i[C++] = _.g, i[C++] = _.b, i[C] = _.a;
@@ -5984,9 +5984,9 @@ async function Eo(o, e, { requestId: r, actorId: i }) {
   let h = [];
   n.isGM ? h = game.actors.filter((u) => u.type === "character" || u.type === "mook").map((u) => {
     var p, y;
-    const g = (p = Object.entries(u.ownership || {}).find(([m, w]) => {
+    const g = (p = Object.entries(u.ownership || {}).find(([m, v]) => {
       const C = game.users.get(m);
-      return C && !C.isGM && w >= 3;
+      return C && !C.isGM && v >= 3;
     })) == null ? void 0 : p[0];
     return {
       name: u.name,
@@ -5996,9 +5996,9 @@ async function Eo(o, e, { requestId: r, actorId: i }) {
     };
   }) : (h = canvas.tokens.placeables.filter((u) => u.actor && (u.actor.type === "character" || u.actor.type === "mook")).filter((u) => u.actor.testUserPermission(n, "OWNER")).map((u) => {
     var p, y;
-    const g = (p = Object.entries(u.actor.ownership || {}).find(([m, w]) => {
+    const g = (p = Object.entries(u.actor.ownership || {}).find(([m, v]) => {
       const C = game.users.get(m);
-      return C && !C.isGM && w >= 3;
+      return C && !C.isGM && v >= 3;
     })) == null ? void 0 : p[0];
     return {
       name: u.name,
@@ -6101,7 +6101,7 @@ async function Oo(o, e, { requestId: r, actorId: i }) {
   if (!s) return;
   const h = s.system.installedItems.list || [];
   if (!h.includes(e.programId)) return;
-  const u = h.filter((w) => w !== e.programId), g = l && l.system.size || 1, p = s.system.installedItems.usedSlots || 0, y = Math.max(0, p - g);
+  const u = h.filter((v) => v !== e.programId), g = l && l.system.size || 1, p = s.system.installedItems.usedSlots || 0, y = Math.max(0, p - g);
   await s.update({
     "system.installedItems.list": u,
     "system.installedItems.usedSlots": y
@@ -6481,9 +6481,9 @@ async function Wo(o, e, { requestId: r, actorId: i, tokenId: n }) {
   var l, h, u, g, p, y;
   const s = game.actors.get(i);
   if (s) {
-    const m = e.weaponId, w = e.fireMode, C = canvas.tokens.get(e.targetId), _ = "firetype-" + m, k = "cyberpunk-red-core";
+    const m = e.weaponId, v = e.fireMode, C = canvas.tokens.get(e.targetId), _ = "firetype-" + m, k = "cyberpunk-red-core";
     let b = "";
-    switch (w) {
+    switch (v) {
       case "Auto":
         b = "autofire";
         break;
@@ -6499,7 +6499,7 @@ async function Wo(o, e, { requestId: r, actorId: i, tokenId: n }) {
     }
     C && C.setTarget(!0, { releaseOthers: !0, groupSelection: !0 }), b === "" ? await s.unsetFlag(k, _) : await s.setFlag(k, _, b);
     const S = document.createElement("a");
-    S.dataset.rollType = "attack", S.dataset.itemId = m, S.dataset.rollTitle = w + " Attack";
+    S.dataset.rollType = "attack", S.dataset.itemId = m, S.dataset.rollTitle = v + " Attack";
     const I = async () => {
       await s.sheet._onRoll({
         preventDefault: () => {
@@ -6532,7 +6532,7 @@ async function Wo(o, e, { requestId: r, actorId: i, tokenId: n }) {
         total: P.total,
         isCriticalSuccess: P.isCriticalSuccess,
         isCriticalFailure: P.isCriticalFailure,
-        label: w + " Attack",
+        label: v + " Attack",
         rawRoll: {
           total: P.total,
           isCriticalSuccess: P.isCriticalSuccess,
@@ -6592,8 +6592,8 @@ async function Xo(o, e, { requestId: r, actorId: i, tokenId: n }) {
   if (l) {
     const g = canvas.dimensions;
     h = canvas.tokens.placeables.filter((p) => {
-      const y = !p.document.hidden, m = p.actor && (p.actor.type === "character" || p.actor.type === "mook"), w = p.x >= g.sceneX && p.x <= g.sceneX + g.sceneWidth && p.y >= g.sceneY && p.y <= g.sceneY + g.sceneHeight;
-      return y && m && w && p.id !== l.id;
+      const y = !p.document.hidden, m = p.actor && (p.actor.type === "character" || p.actor.type === "mook"), v = p.x >= g.sceneX && p.x <= g.sceneX + g.sceneWidth && p.y >= g.sceneY && p.y <= g.sceneY + g.sceneHeight;
+      return y && m && v && p.id !== l.id;
     }).map((p) => ({
       name: p.name,
       id: p.id,
@@ -6613,12 +6613,12 @@ async function Yo(o, e, { requestId: r, actorId: i, tokenId: n }) {
       console.warn(`GET_DV_INFO: Weapon ID ${u} not found on actor ${s.actor.name}.`), await o.sendResponse({ type: "DV_INFO_DATA", actorId: i, result: null, requestId: r });
       return;
     }
-    const { dv: m, table: w, activeIndex: C, category: _, source: k } = await Jn(y, p), b = {
+    const { dv: m, table: v, activeIndex: C, category: _, source: k } = await Jn(y, p), b = {
       targetName: h.name,
       distanceMeters: p,
       weaponCategory: _,
       dv: m,
-      table: w,
+      table: v,
       activeIndex: C,
       source: k
     };
@@ -6638,12 +6638,12 @@ async function Qo(o, e, { requestId: r, actorId: i }) {
     u = E && Number(E.system.level) || 0, g = E && E.system.stat || "ref", p = Number((P = n.system.stats[g]) == null ? void 0 : P.value) || 0, y = Number(l.system.attackmod) || 0;
   }
   let m = 0;
-  const w = [], C = Number(n.system.derivedStats.hp.value) || 0, _ = Number(n.system.derivedStats.seriouslyWounded) || 0, k = n.items.find((E) => E.name === "Stim" && E.type === "drug"), b = k && k.effects.some((E) => E.disabled === !1);
+  const v = [], C = Number(n.system.derivedStats.hp.value) || 0, _ = Number(n.system.derivedStats.seriouslyWounded) || 0, k = n.items.find((E) => E.name === "Stim" && E.type === "drug"), b = k && k.effects.some((E) => E.disabled === !1);
   if (C <= 0)
-    m -= 4, w.push({ title: "Mortally Wounded", penalty: -4, description: "All actions at -4." });
+    m -= 4, v.push({ title: "Mortally Wounded", penalty: -4, description: "All actions at -4." });
   else if (C <= _) {
     const E = b ? 0 : -2;
-    m += E, w.push({
+    m += E, v.push({
       title: b ? "Seriously Wounded (Stim Active)" : "Seriously Wounded",
       penalty: E,
       description: b ? "Ignoring penalty due to Stim drug." : "All actions at -2."
@@ -6676,7 +6676,7 @@ async function Qo(o, e, { requestId: r, actorId: i }) {
       const F = String(O).toLowerCase();
       (B.includes("-2") || F.includes("arm") || F.includes("eye")) && (U = -2);
     }
-    m += U, w.push({ title: O, description: B, penalty: U, note: Y.join(" · ") });
+    m += U, v.push({ title: O, description: B, penalty: U, note: Y.join(" · ") });
   });
   const R = {
     actorName: n.name,
@@ -6690,7 +6690,7 @@ async function Qo(o, e, { requestId: r, actorId: i }) {
     },
     totalPenalty: m,
     finalModifier: p + u + y + m,
-    injuries: w
+    injuries: v
   };
   await o.sendResponse({ type: "ROLL_MODIFIERS_DATA", actorId: i, result: R, requestId: r });
 }
@@ -6730,29 +6730,36 @@ async function ea(o, e, { requestId: r, actorId: i, debug: n }) {
   }
   s && await o.sendResponse({ type: "SHEET_DELTA", actorId: i, delta: { "system.wealth": s.system.wealth }, tab: "stats", success: !0, requestId: r });
 }
-async function ta(o, e, { requestId: r, actorId: i, debug: n }) {
-  const s = [];
-  for (const l of game.journal) {
-    const h = l.pages.filter((u) => u.type === "cpr-agent.datapool");
-    for (const u of h) {
-      const g = u.system.entries || [], p = [];
-      for (const y of g) {
-        let m = y.htmlContent;
-        y.type === "html" && m && (m = await TextEditor.enrichHTML(m, { async: !0 })), p.push({
-          id: y.id,
-          icon: y.icon,
-          title: y.title,
-          type: y.type,
-          htmlContent: m,
-          pdfPath: y.pdfPath
+function ta(o) {
+  if (!game.user.isGM) return [game.user];
+  const e = o ? game.actors.get(o) : null;
+  return e ? game.users.filter((r) => !r.isGM && e.testUserPermission(r, "OWNER")) : [];
+}
+async function na(o, e, { requestId: r, actorId: i, debug: n }) {
+  const s = [], l = ta(i), h = (u) => l.length === 0 || l.some((g) => u.testUserPermission(g, "OBSERVER"));
+  for (const u of game.journal) {
+    const g = u.pages.filter((p) => p.type === "cpr-agent.datapool" && h(u) && h(p));
+    for (const p of g) {
+      const y = (p.system.entries || []).filter((v) => !v.hidden);
+      if (y.length === 0) continue;
+      const m = [];
+      for (const v of y) {
+        let C = v.htmlContent;
+        v.type === "html" && C && (C = await TextEditor.enrichHTML(C, { async: !0 })), m.push({
+          id: v.id,
+          icon: v.icon,
+          title: v.title,
+          type: v.type,
+          htmlContent: C,
+          pdfPath: v.pdfPath
         });
       }
       s.push({
-        journalId: l.id,
-        journalName: l.name,
-        pageId: u.id,
-        pageName: u.name,
-        entries: p
+        journalId: u.id,
+        journalName: u.name,
+        pageId: p.id,
+        pageName: p.name,
+        entries: m
       });
     }
   }
@@ -6764,7 +6771,7 @@ async function ta(o, e, { requestId: r, actorId: i, debug: n }) {
     success: !0
   });
 }
-async function na(o, e, { debug: r }) {
+async function ra(o, e, { debug: r }) {
   var u;
   if (!game.user.isGM) return;
   const i = e.foundryUserId, n = e.agentLink || e.agent_link, s = e.nonce;
@@ -6804,7 +6811,7 @@ async function Xn(o, e, r) {
 function Yn(o) {
   return typeof o.recursiveGetAllInstalledItems != "function" ? [] : o.recursiveGetAllInstalledItems().filter((e) => e.type === "cyberware");
 }
-function ra(o, e) {
+function ia(o, e) {
   var n, s, l;
   const r = o.items.filter(
     (h) => h.type === "cyberware" && h.system.isInstalled && h.system.isFoundational && h.system.type === e.system.type
@@ -6818,15 +6825,15 @@ function ra(o, e) {
       for (const p of g) {
         const y = o.items.get(p), m = (s = y == null ? void 0 : y.system) == null ? void 0 : s.installedItems;
         if (m != null && m.allowed) {
-          const w = typeof y.availableInstallSlots == "function" ? y.availableInstallSlots() : 1 / 0;
-          (l = m.allowedTypes) != null && l.includes(e.type) && w >= (e.system.size || 1) && i.push({ id: y._id, name: y.name }), u = u.concat(m.list || []);
+          const v = typeof y.availableInstallSlots == "function" ? y.availableInstallSlots() : 1 / 0;
+          (l = m.allowedTypes) != null && l.includes(e.type) && v >= (e.system.size || 1) && i.push({ id: y._id, name: y.name }), u = u.concat(m.list || []);
         }
       }
     }
   }
   return i;
 }
-async function ia(o, e, { requestId: r, actorId: i }) {
+async function sa(o, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (!n) return;
   const s = n.items.get(e.itemId);
@@ -6834,7 +6841,7 @@ async function ia(o, e, { requestId: r, actorId: i }) {
     await o.sendResponse({ type: "CYBERWARE_INSTALL_OPTIONS", requestId: r, actorId: i, success: !1, reason: "Item not found." });
     return;
   }
-  const l = !!s.system.isFoundational, h = l ? [] : ra(n, s), u = Yn(s), g = u.reduce((m, w) => `${m} + ${w.system.humanityLoss.roll}`, s.system.humanityLoss.roll), p = u.reduce((m, w) => m + w.system.humanityLoss.static, s.system.humanityLoss.static), y = l || h.length > 0;
+  const l = !!s.system.isFoundational, h = l ? [] : ia(n, s), u = Yn(s), g = u.reduce((m, v) => `${m} + ${v.system.humanityLoss.roll}`, s.system.humanityLoss.roll), p = u.reduce((m, v) => m + v.system.humanityLoss.static, s.system.humanityLoss.static), y = l || h.length > 0;
   await o.sendResponse({
     type: "CYBERWARE_INSTALL_OPTIONS",
     requestId: r,
@@ -6849,8 +6856,8 @@ async function ia(o, e, { requestId: r, actorId: i }) {
     success: !0
   });
 }
-async function sa(o, e, { requestId: r, actorId: i }) {
-  var y, m, w, C, _, k;
+async function oa(o, e, { requestId: r, actorId: i }) {
+  var y, m, v, C, _, k;
   const n = game.actors.get(i);
   if (!n) return;
   const s = n.items.get(e.itemId);
@@ -6863,7 +6870,7 @@ async function sa(o, e, { requestId: r, actorId: i }) {
   const u = Yn(s), g = e.humanityLossType || "none";
   let p = !1;
   try {
-    const b = Number((w = (m = (y = n.system) == null ? void 0 : y.derivedStats) == null ? void 0 : m.humanity) == null ? void 0 : w.value) || 0;
+    const b = Number((v = (m = (y = n.system) == null ? void 0 : y.derivedStats) == null ? void 0 : m.humanity) == null ? void 0 : v.value) || 0;
     if (p = await h.installItems([s]), p && (await n.loseHumanityValue([s].concat(u), g), g !== "none")) {
       const S = Number((k = (_ = (C = n.system) == null ? void 0 : C.derivedStats) == null ? void 0 : _.humanity) == null ? void 0 : k.value) || 0, I = Math.max(0, b - S);
       await o.sendResponse({
@@ -6886,7 +6893,7 @@ async function sa(o, e, { requestId: r, actorId: i }) {
   }
   await o.sendResponse({ type: "CYBERWARE_INSTALLED", requestId: r, actorId: i, itemId: s._id, success: p }), p && await Xn(o, i, r);
 }
-async function oa(o, e, { requestId: r, actorId: i }) {
+async function aa(o, e, { requestId: r, actorId: i }) {
   const n = game.actors.get(i);
   if (n) {
     try {
@@ -6897,7 +6904,7 @@ async function oa(o, e, { requestId: r, actorId: i }) {
     await o.sendResponse({ type: "CYBERWARE_UNINSTALLED", requestId: r, actorId: i, itemId: e.itemId, success: !0 }), await Xn(o, i, r);
   }
 }
-const aa = {
+const ca = {
   UPDATE_ACTOR: Ro,
   GET_ACTOR: Kn,
   GET_ACTORS: Eo,
@@ -6908,9 +6915,9 @@ const aa = {
   REMOVE_PROGRAM: Oo,
   TOGGLE_REZ: Bo,
   PROGRAM_ROLL: xo,
-  PREPARE_CYBERWARE_INSTALL: ia,
-  INSTALL_CYBERWARE: sa,
-  UNINSTALL_CYBERWARE: oa,
+  PREPARE_CYBERWARE_INSTALL: sa,
+  INSTALL_CYBERWARE: oa,
+  UNINSTALL_CYBERWARE: aa,
   DAMAGE_ROLL: Uo,
   DEATH_SAVE: jo,
   FACEDOWN_ROLL: Ho,
@@ -6927,18 +6934,18 @@ const aa = {
   GET_ROLL_MODIFIERS: Qo,
   UPDATE_STAT: Zo,
   UPDATE_EB: ea,
-  GET_NET_POOL: ta,
-  PAIR_AGENT: na
+  GET_NET_POOL: na,
+  PAIR_AGENT: ra
 };
 async function vn(o, e, r, i) {
-  const n = aa[e];
+  const n = ca[e];
   if (!n) {
     console.log("Unknown DataType: " + e);
     return;
   }
   return n(o, r, i);
 }
-class ca {
+class la {
   constructor() {
     this.echo = null, this.isConnected = !1, this.activeRequests = /* @__PURE__ */ new Map(), this.requestAgentLinks = /* @__PURE__ */ new Map(), this.pendingPairings = /* @__PURE__ */ new Map(), this.hookIds = {}, this._isCapturingRoll = !1, this._captureRollMode = null, this._prevRollMode = null, this._captureSafetyTimer = null, this.embedTransport = null;
   }
@@ -7285,7 +7292,7 @@ class ca {
    * Handle Logic (The Tunnel Output)
    */
   async handleIncomingData(e) {
-    var m, w;
+    var m, v;
     const r = e.payload || e, i = r.type;
     console.log(`%c[Bridge] Incoming Call: ${i}`, "color: #00ffff; font-weight: bold;", r);
     const n = r.requestId, s = r.agent_link || r.agentLink;
@@ -7297,7 +7304,7 @@ class ca {
       g && console.log("[Bridge] handleIncomingData: Message ignored (not for me).");
       return;
     }
-    !game.user.isGM && s && l !== s && (n === s || h && u === h) && (console.log(`%c[Bridge] Setting agent-link flag: ${s}`, "color: #00ff00; font-weight: bold;"), await game.user.setFlag(A, "agent-link", s), (w = ui.notifications) == null || w.info("Agent: Account linked!"));
+    !game.user.isGM && s && l !== s && (n === s || h && u === h) && (console.log(`%c[Bridge] Setting agent-link flag: ${s}`, "color: #00ff00; font-weight: bold;"), await game.user.setFlag(A, "agent-link", s), (v = ui.notifications) == null || v.info("Agent: Account linked!"));
     const y = fn(r.tokenId, h);
     await vn(this, i, r, { type: i, requestId: n, actorId: h, tokenId: y, debug: g, remote: !0 });
   }
@@ -7325,6 +7332,7 @@ class Qn extends foundry.abstract.TypeDataModel {
         id: new e.StringField({ required: !0, initial: () => foundry.utils.randomID() }),
         icon: new e.FilePathField({ categories: ["IMAGE"], initial: "icons/svg/item-bag.svg" }),
         title: new e.StringField({ required: !0, initial: "Link Title" }),
+        hidden: new e.BooleanField({ initial: !1 }),
         type: new e.StringField({ choices: ["html", "pdf"], initial: "html" }),
         htmlContent: new e.HTMLField(),
         pdfPath: new e.FilePathField({ categories: ["TEXT"] })
@@ -7384,7 +7392,7 @@ class Zn extends JournalPageSheet {
 ft(Zn, "LOCAL_TEMPLATES", {
   "cpr-agent.datapool": "modules/cpr-agent/templates/data-pool.hbs"
 });
-class la {
+class ua {
   constructor(e) {
     this.bridge = e, this.frame = null, this.nonce = null, this.origin = ss(), this.ready = !1, this._onMessage = this._onMessage.bind(this), window.addEventListener("message", this._onMessage);
   }
@@ -7422,9 +7430,9 @@ class la {
     }
   }
 }
-class ua extends Application {
+class ha extends Application {
   constructor(e, r = {}) {
-    super(r), this.bridge = e, this.nonce = foundry.utils.randomID(24), e.embedTransport || (e.embedTransport = new la(e)), this.transport = e.embedTransport;
+    super(r), this.bridge = e, this.nonce = foundry.utils.randomID(24), e.embedTransport || (e.embedTransport = new ua(e)), this.transport = e.embedTransport;
   }
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -7491,9 +7499,9 @@ class ua extends Application {
 }
 window.Pusher = is;
 window.cyberpunkBridge && window.cyberpunkBridge.destroy();
-window.cyberpunkBridge = new ca();
+window.cyberpunkBridge = new la();
 Hooks.once("init", () => {
-  ha(), CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] || (CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] = Qn, console.log("[Bridge] Registered DataPool DataModel.")), DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", Zn, {
+  da(), CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] || (CONFIG.JournalEntryPage.dataModels["cpr-agent.datapool"] = Qn, console.log("[Bridge] Registered DataPool DataModel.")), DocumentSheetConfig.registerSheet(JournalEntryPage, "cpr-agent", Zn, {
     types: ["cpr-agent.datapool"],
     makeDefault: !0,
     label: "Agent Data Pool"
@@ -7501,7 +7509,7 @@ Hooks.once("init", () => {
 });
 Hooks.once("ready", () => {
   game.user.isGM && window.cyberpunkBridge.connect(), window.cyberpunkBridge.syncPlayerLink(), window.cyberpunkBridge.registerGlobalHooks(), vo(window.cyberpunkBridge), window.cyberpunkBridge.openAgent = () => {
-    window.cyberpunkBridge._agentApp || (window.cyberpunkBridge._agentApp = new ua(window.cyberpunkBridge)), window.cyberpunkBridge._agentApp.render(!0);
+    window.cyberpunkBridge._agentApp || (window.cyberpunkBridge._agentApp = new ha(window.cyberpunkBridge)), window.cyberpunkBridge._agentApp.render(!0);
   }, console.log("[Bridge] Cyberpunk Bridge Fully Online. Open the embedded Agent with: cyberpunkBridge.openAgent()");
 });
 Hooks.on("getSceneControlButtons", (o) => {
@@ -7517,6 +7525,6 @@ Hooks.on("getSceneControlButtons", (o) => {
     }
   });
 });
-function ha() {
+function da() {
   game.settings.settings.has(`${A}.apiUrl`) || (console.log("[Bridge] Registering Module Settings..."), window.cyberpunkBridge.registerSettings());
 }
