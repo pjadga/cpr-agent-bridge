@@ -362,6 +362,28 @@ export class CyberpunkBridge {
             }
         });
 
+        // Data Pool changes (row hidden/shown, page or journal visibility, edits)
+        // never touch an actor, so nothing else tells the Agent. Signal it to
+        // re-fetch. Debounced: a single edit fires several hooks. Hosted mode only
+        // reports from the editing client so N peers don't each POST a signal.
+        const isPoolPage = (page) => page?.type === 'cpr-agent.datapool';
+        let netPoolTimer = null;
+        const signalNetPool = (userId) => {
+            if (!this.embedTransport && userId !== game.user.id) return;
+            clearTimeout(netPoolTimer);
+            netPoolTimer = setTimeout(() => this.broadcastRefresh('NET_POOL_DATA'), 300);
+        };
+        for (const hook of ['createJournalEntryPage', 'updateJournalEntryPage', 'deleteJournalEntryPage']) {
+            this.hookIds[hook] = Hooks.on(hook, (page, ...args) => {
+                if (isPoolPage(page)) signalNetPool(args[args.length - 1]);
+            });
+        }
+        for (const hook of ['updateJournalEntry', 'deleteJournalEntry']) {
+            this.hookIds[hook] = Hooks.on(hook, (journal, ...args) => {
+                if (journal.pages.some(isPoolPage)) signalNetPool(args[args.length - 1]);
+            });
+        }
+
         // Wall blocking for Agent moves lives in handlers/tokens.js moveToken, not
         // a global preUpdateToken hook: a hook here also blocked the GM's own drags.
 
