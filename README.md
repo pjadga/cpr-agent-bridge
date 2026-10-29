@@ -3,8 +3,8 @@
 This is a fork of [SurrealTech's Cyberpunk Red Agent Bridge](https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge)
 (MIT licence, kept in `LICENSE.md`), for use with a self-hosted
 [Cyberpunk Agent](https://gitlab.com/surrealtech/cyberpunk-red-agent). The code is upstream's 1.3.4; this
-fork changes only the module's title, version (1.3.4.1) and where Foundry fetches updates from
-(this repository's GitHub releases). It keeps upstream's module id, `cpr-agent`, so don't install
+fork changes only the module's version (1.3.4.x) and where Foundry fetches updates from (this
+repository's GitHub releases). It keeps upstream's module id, `cpr-agent`, so don't install
 both.
 
 **Pointing it at your own Agent:** in your Agent, open **Settings**, generate an **API Key** and click
