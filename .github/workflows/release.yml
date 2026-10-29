@@ -1,0 +1,34 @@
+name: Release module
+
+# Push a tag such as v1.3.4.1: the version and download URL are stamped into module.json, the module
+# is zipped as cpr-agent.zip, and both are attached to a GitHub release, which the manifest URL
+# (releases/latest/download/module.json) then serves to Foundry.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stamp version and download URL into module.json
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          jq --arg v "$VERSION" \
+             --arg dl "https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}/cpr-agent.zip" \
+             '.version = $v | .download = $dl' module.json > module.json.tmp
+          mv module.json.tmp module.json
+
+      - name: Zip the module
+        run: zip -r cpr-agent.zip module.json dist lang templates LICENSE.md README.md CHANGELOG
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            module.json
+            cpr-agent.zip

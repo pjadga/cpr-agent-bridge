@@ -1,3 +1,23 @@
+# Cyberpunk Red Agent Bridge (pjadga fork)
+
+This is a fork of [SurrealTech's Cyberpunk Red Agent Bridge](https://gitlab.com/surrealtech/Cyberpunk-Red-Agent-Bridge)
+(MIT licence, kept in `LICENSE.md`), for use with a self-hosted
+[Cyberpunk Agent](https://gitlab.com/surrealtech/cyberpunk-red-agent). The code is upstream's 1.3.4; this
+fork changes only the module's title, version (1.3.4.1) and where Foundry fetches updates from
+(this repository's GitHub releases). It keeps upstream's module id, `cpr-agent`, so don't install
+both.
+
+**Pointing it at your own Agent:** in your Agent, open **Settings**, generate an **API Key** and click
+**Copy Foundry Setup Code**; in Foundry, paste it in **Configure Settings → Agent Bridge → Quick
+Setup**. That sets your Agent's address, channel, API key and Reverb key for the world. The built-in
+default address is still upstream's hosted Agent.
+
+**Manifest URL:** `https://github.com/pjadga/cpr-agent-bridge/releases/latest/download/module.json`
+
+All credit for the module goes to its original author; upstream's README follows.
+
+---
+
 # Cyberpunk Red Agent Bridge
 
 A Foundry VTT module that connects your Cyberpunk Red game to the Cyberpunk Agent web application, enabling real-time character synchronization, remote dice rolling, token movement and management.

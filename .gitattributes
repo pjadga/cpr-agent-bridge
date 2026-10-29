@@ -1,0 +1,6 @@
+# Keep text files LF in every checkout, so builds and releases match the repository byte for byte.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.zip binary
