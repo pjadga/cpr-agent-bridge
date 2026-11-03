@@ -54,7 +54,7 @@
 * CitiNet now respects Foundry visibility. Data Pool pages in journals or pages a player cannot Observe are no longer sent to their Agent.
 * Added a "Hidden" toggle to each Data Pool link/content row to hide it from the Agent only. Rows default to visible, so existing pools are unchanged. A page with every row hidden is not shown.
 
-Unreleased
+1.3.4.3
 * Rolls now report correctly on Foundry 12 (Core 0.92) and Foundry 13 (Core 0.93). The Bridge reads each roll as Core renders its card (CPRChat.RenderRollCard), which both versions use, instead of patching Foundry's global renderTemplate, which Core 0.93 doesn't call.
 * Fixed rolls the Agent asks for never reporting back on Foundry 13: the roll happened in Foundry but the Agent got no result.
 * Fixed rolls made in Foundry reaching the Agent with only the d10 as their total and "Dice Roll" as their label on Foundry 13. They now carry the full total, the roll's title and whether it was a critical.
