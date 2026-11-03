@@ -3,7 +3,8 @@
   "version": "1.0.5",
   "scripts": {
     "build": "vite build",
-    "dev": "vite build --watch"
+    "dev": "vite build --watch",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "laravel-echo": "^1.16.0",

@@ -1,67 +1,75 @@
+import { MODULE_ID } from './constants.js';
+import { nextRoll } from './roll-tap.js';
+
 // ==================================================================
 // ROLL CAPTURE
 //
-// Intercepts Foundry's renderTemplate to capture the result of a roll
-// triggered programmatically (so Agent-initiated rolls return a result).
+// Runs a roll triggered programmatically (an Agent-initiated roll) and
+// resolves with its result, read from the roll card through the roll tap.
 // ==================================================================
 
+// After the trigger returns (the roll dialog was confirmed or cancelled), how
+// long to wait for its card before giving up.
+const AFTER_TRIGGER_MS = 1500;
+// Upper bound while a roll dialog waits for someone to confirm it.
+const MAX_WAIT_MS = 120000;
+
 /**
- * Run `triggerFunction` and resolve with the captured rollcard result.
+ * Run `triggerFunction` and resolve with the captured roll's result.
  * @param {CyberpunkBridge} bridge
  * @param {string} actorId
  * @param {Function} triggerFunction
  * @param {string|null} rollMode
  */
 export async function rollAndCapture(bridge, actorId, triggerFunction, rollMode = null) {
-    console.log(`%c[Bridge] Starting Render Interceptor for Actor ${actorId}`, "color: #00ffff; font-weight: bold;");
+    if (game.settings.get(MODULE_ID, 'debugMode')) {
+        console.log(`%c[Bridge] Capturing a roll for Actor ${actorId}`, "color: #00ffff; font-weight: bold;");
+    }
 
     // Marks the capture active and mirrors rollMode onto core.rollMode. Awaited
     // so the setting has landed before the roll fires. The flag is consumed later
-    // by the roll's createChatMessage (or a safety timer), NOT here: resetting it
-    // at render time would fire before preCreateChatMessage and lose the privacy
-    // stamp and the self-roll dedupe.
-    await bridge._beginRollCapture(rollMode);
+    // by the roll's createChatMessage (or a safety timer), NOT here, so the
+    // privacy stamp and the self-roll dedupe still apply to its chat message.
+    await bridge._beginRollCapture(rollMode, MAX_WAIT_MS);
 
-    return new Promise(async (resolve, reject) => {
-        let rollFound = false;
-        const originalRender = renderTemplate;
+    const roll = nextRoll();
+    const failed = (error) => {
+        roll.cancel();
+        bridge._endRollCapture();
+        return { success: false, error };
+    };
 
-        const spyRender = function(path, data) {
-            if (path && typeof path === 'string' && path.includes('rollcard')) {
-                console.log(`%c[Bridge] Intercepted Render: ${path}`, "color: #00ff00;", data);
-                rollFound = true;
-                renderTemplate = originalRender;
+    let timer;
+    const timeout = new Promise((resolve) => { timer = setTimeout(() => resolve(null), MAX_WAIT_MS); });
+    const triggered = (async () => {
+        await triggerFunction();
+        // A cancelled dialog renders no card: give a confirmed one a moment, then stop waiting.
+        await new Promise((resolve) => setTimeout(resolve, AFTER_TRIGGER_MS));
+        return null;
+    })();
 
-                resolve({
-                    success: true,
-                    total: data.resultTotal,
-                    isCriticalSuccess: data.wasCritSuccess ? data.wasCritSuccess() : (data.isCriticalSuccess || false),
-                    isCriticalFailure: data.wasCritFail ? data.wasCritFail() : (data.isCriticalFailure || false),
-                    label: data.rollTitle,
-                    rollMode: bridge._captureRollMode || game.settings.get("core", "rollMode"),
-                    rawRoll: data
-                });
-            }
-            return originalRender.apply(this, arguments);
-        };
+    let summary;
+    try {
+        summary = await Promise.race([roll.promise, triggered, timeout]);
+    } catch (e) {
+        clearTimeout(timer);
+        return failed('Trigger failed');
+    }
+    clearTimeout(timer);
+    if (!summary) {
+        console.warn("[Bridge] No roll card was rendered for the Agent's roll.");
+        return failed('No roll card rendered');
+    }
 
-        renderTemplate = spyRender;
-
-        setTimeout(async () => {
-            if (!rollFound) {
-                renderTemplate = originalRender;
-                console.warn("[Bridge] ❌ Interceptor timed out. No rollcard rendered.");
-                bridge._endRollCapture();
-                resolve({ success: false, error: "Timed out waiting for render" });
-            }
-        }, 5000);
-
-        try {
-            await triggerFunction();
-        } catch (e) {
-            renderTemplate = originalRender;
-            bridge._endRollCapture();
-            resolve({ success: false, error: "Trigger failed" });
-        }
-    });
+    // The card's chat message follows; leave the capture to it, with a short safety net.
+    bridge._armCaptureSafety();
+    return {
+        success: true,
+        total: summary.total,
+        isCriticalSuccess: summary.isCriticalSuccess,
+        isCriticalFailure: summary.isCriticalFailure,
+        label: summary.label,
+        rollMode: bridge._captureRollMode || game.settings.get("core", "rollMode"),
+        rawRoll: summary.rawRoll
+    };
 }

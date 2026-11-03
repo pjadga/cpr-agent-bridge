@@ -5,6 +5,7 @@ import { registerPairingHooks } from './pairing-hooks.js';
 import { DataPoolPageModel } from "./data-pool-model.js";
 import { DataPoolPageSheet } from "./data-pool-sheet.js";
 import { AgentApp } from "./ui/agent-app.js";
+import { installRollTap } from './roll-tap.js';
 
 // Make Pusher available globally (required for Echo)
 window.Pusher = Pusher;
@@ -34,6 +35,8 @@ Hooks.once('init', () => {
 });
 
 Hooks.once('ready', () => {
+    // Full roll results on Core 0.92 (Foundry v12) and 0.93 (v13); see roll-tap.js.
+    installRollTap();
     if (game.user.isGM) {
         window.cyberpunkBridge.connect();
     }

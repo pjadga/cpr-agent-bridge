@@ -2,6 +2,8 @@ import Echo from 'laravel-echo';
 import { MODULE_ID, DEFAULT_REVERB_KEY } from './constants.js';
 import { flattenToDelta, resolveWsSecurity, isPrimaryGM, resolveTokenId } from './utils.js';
 import { rollAndCapture } from './roll-capture.js';
+import { takeRecentRoll } from './roll-tap.js';
+import { cardSummary } from './roll-summary.js';
 import { registerSettings } from './settings.js';
 import { dispatch } from './handlers/index.js';
 
@@ -45,9 +47,10 @@ export class CyberpunkBridge {
      * mirrors it onto core.rollMode (so a CPR roll that reads the dropdown picks
      * it up). Awaited, so the setting has landed before the roll fires. A safety
      * timer guarantees the capture state can't leak if, unusually, no chat
-     * message is ever created to consume it.
+     * message is ever created to consume it. `windowMs` covers a roll dialog
+     * waiting for someone to confirm it.
      */
-    async _beginRollCapture(rollMode = null) {
+    async _beginRollCapture(rollMode = null, windowMs = 6000) {
         this._isCapturingRoll = true;
         this._captureRollMode = rollMode || null;
         this._prevRollMode = game.settings.get("core", "rollMode");
@@ -57,6 +60,13 @@ export class CyberpunkBridge {
         if (rollMode) {
             try { await game.settings.set("core", "rollMode", rollMode); } catch (e) {}
         }
+        clearTimeout(this._captureSafetyTimer);
+        this._captureSafetyTimer = setTimeout(() => this._endRollCapture(), windowMs);
+    }
+
+    /** Once the roll card is out, its chat message has a few seconds to consume the capture. */
+    _armCaptureSafety() {
+        if (!this._isCapturingRoll) return;
         clearTimeout(this._captureSafetyTimer);
         this._captureSafetyTimer = setTimeout(() => this._endRollCapture(), 6000);
     }
@@ -428,7 +438,9 @@ export class CyberpunkBridge {
         });
 
         this.hookIds.createChatMessage = Hooks.on('createChatMessage', (message, options, userId) => {
-            const hasRolls = !!(message.rolls && message.rolls.length > 0);
+            // Core 0.92 (Foundry v12) posts its roll cards with no rolls on the
+            // message, so a Cyberpunk RED card counts as a roll too.
+            const hasRolls = !!(message.rolls && message.rolls.length > 0) || !!cardSummary(message.content);
             const mine = message.author?.id === game.user.id;
             if (game.settings.get(MODULE_ID, 'debugMode')) {
                 console.log(`%c[Bridge] createChatMessage: hasRolls=${hasRolls} mine=${mine} capturing=${this._isCapturingRoll} embed=${!!this.embedTransport}`, "color:#00ff88; font-weight:bold;");
@@ -448,6 +460,7 @@ export class CyberpunkBridge {
             // peers via the socket inside sendResponse.
             if (this._isCapturingRoll) {
                 this._endRollCapture();
+                takeRecentRoll(); // already reported by rollAndCapture
                 return;
             }
             this.broadcastRoll(message);
@@ -542,21 +555,36 @@ export class CyberpunkBridge {
         }
 
         let rollJson = null;
-        try { rollJson = roll.toJSON(); } catch (e) { /* CPRRoll may not serialize on a peer; the tee doesn't need it */ }
+        try { rollJson = roll?.toJSON() ?? null; } catch (e) { /* CPRRoll may not serialize on a peer; the tee doesn't need it */ }
+
+        // A Cyberpunk RED card: its full total and title, from the roll that was
+        // just rendered (roll tap), else from the card. The message's own roll
+        // total is the d10 alone. Other rolls (/r 1d6) keep the plain roll.
+        const card = cardSummary(message.content);
+        const recent = takeRecentRoll();
+        const cpr = card ? (recent ?? card) : null;
+        const total = cpr?.total ?? roll?.total ?? null;
+        const formula = roll?.formula ?? null;
+        const label = cpr?.label || message.flavor || 'Dice Roll';
 
         this.sendResponse({
             type: 'ROLL_RESULT',
             actorId: message.speaker?.actor || null,
             agentLink: user ? user.getFlag(MODULE_ID, 'agent-link') : null,
             playerName: message.alias,
-            total: roll.total,
-            formula: roll.formula,
+            total,
+            formula,
             rollMode: message.rollMode || rollMode,
-            label: message.flavor || 'Dice Roll',
+            label,
+            isCriticalSuccess: cpr?.isCriticalSuccess ?? false,
+            isCriticalFailure: cpr?.isCriticalFailure ?? false,
             rawRoll: {
-                total: roll.total,
-                formula: roll.formula,
-                rollTitle: message.flavor || 'Dice Roll',
+                total,
+                formula,
+                rollTitle: label,
+                resultTotal: total,
+                isCriticalSuccess: cpr?.isCriticalSuccess ?? false,
+                isCriticalFailure: cpr?.isCriticalFailure ?? false,
                 _roll: rollJson
             },
             success: true
