@@ -11,7 +11,14 @@ export async function consumeItem(bridge, data, { type, requestId, actorId }) {
         console.warn(`Item ID ${data.itemId} not found on actor ${actor.name}.`);
         return;
     }
-    await item.snort();
+    // The player already confirmed in the Agent. Core's own "Confirm consumption"
+    // dialog would open on the GM's screen and hold the request until the GM clicked.
+    if (typeof item._confirmSnort === 'function') item._confirmSnort = async () => true;
+    try {
+        await item.snort();
+    } finally {
+        delete item._confirmSnort;
+    }
     ui.notifications.info(`Sync: ${item.name} consumed.`);
     await bridge.sendResponse({ type: 'CONFIRMATION', action: type, actorId: actorId, success: true, requestId });
 }

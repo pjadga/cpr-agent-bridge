@@ -62,3 +62,13 @@
 * An Agent roll now waits for the roll dialog as long as it stays open (up to two minutes) instead of giving up after five seconds, and stops waiting as soon as the dialog is cancelled.
 * Marked as verified on Foundry 13.
 * Dev: `npm test` runs the pure tests in tests/ with node --test.
+
+Unreleased
+* Fixed a Foundry-side change (damage, healing, the GM editing the sheet) only reaching a player's open Agent page: it was stamped with the GM's agent link, so the player's stored sheet kept the old values and a reload showed them. The GM's client now sends it once per linked player who owns the actor.
+* Fixed death saves showing FAIL for a success on a natural 1, and a critical success for the automatic failure on a natural 10. The Agent now gets the save's outcome.
+* Fixed pairing leaving the Agent on its demo character when the GM had assigned the character before the player paired: the assignment is sent when pairing completes.
+* Fixed the Agent's die roller: the chosen roll mode was ignored (every roll was public), rolls were posted as the GM rather than the character, and each result reached the Agent twice.
+* Autofire uses Core's autofire DV table, for the DV the Agent shows (with an Agent that sends the fire mode) and the DV an attack reports.
+* Consuming a drug from the Agent no longer waits for a "Confirm consumption" click on the GM's screen; the player already confirmed in the Agent.
+* Moving while the game is paused, and rolling initiative outside the current combat, now tell the Agent why nothing happened instead of doing nothing.
+* Moves from the Agent are no longer animated: on Foundry 13 an animated move only lands once its animation has run, which never happens while the GM's tab is in the background.

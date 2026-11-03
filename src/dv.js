@@ -17,14 +17,16 @@ function parseDV(description) {
 
 /**
  * Rows ({ min, max, dv, label }) for a weapon from its configured Foundry DV table,
- * or null when the weapon has no table / the table cannot be found.
+ * or null when the weapon has no table / the table cannot be found. Autofire uses
+ * Core's "<table> (Autofire)" table when there is one.
  */
-export async function foundryDvRows(weapon) {
+export async function foundryDvRows(weapon, { autofire = false } = {}) {
     const name = weapon?.system?.dvTable;
     if (!name) return null;
     try {
         const pack = game.packs.get(game.settings.get(game.system.id, 'dvRollTableCompendium'));
-        const entry = pack?.index.find(e => e.name === name);
+        const entry = (autofire && pack?.index.find(e => e.name === `${name} (Autofire)`))
+            || pack?.index.find(e => e.name === name);
         if (!entry) return null;
         const table = await pack.getDocument(entry._id);
         const rows = [];
@@ -44,9 +46,9 @@ export async function foundryDvRows(weapon) {
  * DV for a weapon at a distance (whole metres), plus the full table for display.
  * Returns { dv, table, activeIndex, category, source }; dv is a number, 'VS' or 'Out of Range'.
  */
-export async function resolveWeaponDV(weapon, distanceM) {
+export async function resolveWeaponDV(weapon, distanceM, { autofire = false } = {}) {
     const category = weaponCategory(weapon);
-    const rows = await foundryDvRows(weapon);
+    const rows = await foundryDvRows(weapon, { autofire });
     if (rows) {
         const activeIndex = rows.findIndex(r => distanceM >= r.min && distanceM <= r.max);
         const dv = activeIndex === -1 ? OUT_OF_RANGE : rows[activeIndex].dv;

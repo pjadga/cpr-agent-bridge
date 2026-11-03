@@ -6,7 +6,11 @@ import { requestingUser, hasNoClip, tokenDistanceM } from '../utils.js';
 // MOVE_TOKEN, TARGET_TOKEN, LIST_VISIBLE_TOKENS, GET_DV_INFO, GET_ROLL_MODIFIERS.
 
 export async function moveToken(bridge, data, { type, requestId, actorId, tokenId }) {
-    if (game.paused) return;
+    // Foundry doesn't let players move while paused; say so instead of ignoring the button.
+    if (game.paused) {
+        await bridge.sendResponse({ type: 'CONFIRMATION', action: type, actorId: actorId, tokenId, success: false, message: 'The game is paused.', requestId });
+        return;
+    }
 
     // A GM can view a scene without activating it; the Agent must not drive tokens there.
     // Players always see the active scene, so this only ever bites a viewing GM.
@@ -40,7 +44,9 @@ export async function moveToken(bridge, data, { type, requestId, actorId, tokenI
             return;
         }
 
-        await token.document.update(newPos);
+        // Without animation: on Foundry 13 an animated move only lands once its
+        // animation has run, which never happens while the GM's tab is in the background.
+        await token.document.update(newPos, { animate: false });
 
         await bridge.sendResponse({ type: 'CONFIRMATION', action: type, actorId: actorId, tokenId, success: true, requestId });
     } else {
@@ -107,7 +113,9 @@ export async function getDvInfo(bridge, data, { requestId, actorId, tokenId }) {
             return;
         }
 
-        const { dv, table, activeIndex, category, source } = await resolveWeaponDV(weaponData, distanceM);
+        // The Agent's fire mode ids are Single, Aimed, Auto and Suppress.
+        const autofire = /^auto/i.test(String(data.fireMode ?? ''));
+        const { dv, table, activeIndex, category, source } = await resolveWeaponDV(weaponData, distanceM, { autofire });
 
         const result = {
             targetName: target.name,

@@ -41,7 +41,22 @@ export function rollSummary(roll) {
         isCriticalSuccess: flag(roll, 'wasCritSuccess') || flag(roll, 'isCriticalSuccess'),
         isCriticalFailure: flag(roll, 'wasCritFail') || flag(roll, 'isCriticalFailure'),
     };
-    return { ...summary, rawRoll: { ...summary, resultTotal: total, rollTitle: label } };
+    // A death save's outcome, set by Core before the card renders (a localized "Success" / "Failed").
+    const saveResult = typeof roll.saveResult === 'string' ? roll.saveResult : null;
+    return { ...summary, rawRoll: { ...summary, resultTotal: total, rollTitle: label, saveResult } };
+}
+
+/**
+ * Flags for a death save: pass or fail is the save's outcome, not a critical die. A natural 1
+ * passes (rolls under BODY) and a natural 10 always fails, so the d10's critical flags would
+ * show both the wrong way round.
+ * @param {string|null} saveResult Core's localized outcome.
+ * @param {string} successLabel Core's localized "Success" (CPR.rolls.success).
+ * @returns {{isCriticalSuccess: boolean, isCriticalFailure: boolean}|null} null when unknown.
+ */
+export function deathSaveFlags(saveResult, successLabel) {
+    if (!saveResult) return null;
+    return { isCriticalSuccess: false, isCriticalFailure: saveResult !== successLabel };
 }
 
 const text = (html) => html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();

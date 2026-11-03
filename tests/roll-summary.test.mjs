@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { rollSummary, cardSummary } from '../src/roll-summary.js';
+import { rollSummary, cardSummary, deathSaveFlags } from '../src/roll-summary.js';
 
 // A CPRRoll as Core passes it to CPRChat.RenderRollCard.
 class FakeRoll {
@@ -16,6 +16,17 @@ test('rollSummary reads the full total, title and criticals from a CPRRoll', () 
     assert.equal(s.isCriticalFailure, true);
     assert.equal(s.isCriticalSuccess, false);
     assert.deepEqual([s.rawRoll.resultTotal, s.rawRoll.rollTitle], [11, 'Handgun']);
+});
+
+test('a death save reports its outcome, not the critical die', () => {
+    // A natural 1 under BODY passes; Core sets saveResult before rendering the card.
+    const pass = rollSummary(new FakeRoll({ resultTotal: 1, initialRoll: 1, rollTitle: 'Death Save', saveResult: 'Success' }));
+    assert.equal(pass.rawRoll.saveResult, 'Success');
+    assert.deepEqual(deathSaveFlags(pass.rawRoll.saveResult, 'Success'), { isCriticalSuccess: false, isCriticalFailure: false });
+    // A natural 10 always fails.
+    assert.deepEqual(deathSaveFlags('Failed', 'Success'), { isCriticalSuccess: false, isCriticalFailure: true });
+    assert.equal(deathSaveFlags(null, 'Success'), null);
+    assert.equal(rollSummary({ resultTotal: 5 }).rawRoll.saveResult, null);
 });
 
 test('rollSummary accepts plain copies and falls back to total', () => {

@@ -281,6 +281,15 @@ export class CyberpunkBridge {
         }
     }
 
+    /** Agent links of the non-GM users who own this actor and have paired an Agent. */
+    _ownerAgentLinks(actor) {
+        const links = game.users
+            .filter(u => !u.isGM && actor.testUserPermission(u, "OWNER"))
+            .map(u => u.getFlag(MODULE_ID, 'agent-link'))
+            .filter(Boolean);
+        return [...new Set(links)];
+    }
+
     registerGlobalHooks() {
         if (this.hookIds.updateActor) return;
 
@@ -296,13 +305,18 @@ export class CyberpunkBridge {
             if (!actor || !['character', 'mook'].includes(actor.type)) return;
 
             console.log(`%c[Bridge] Syncing change for ${actor.name}`, "color: #ffaa00;", delta);
-            await this.sendResponse({
-                type: 'SHEET_DELTA',
-                actorId: actor.id,
-                uuid: actor.id,
-                delta: delta,
-                success: true
-            });
+            const message = { type: 'SHEET_DELTA', actorId: actor.id, uuid: actor.id, delta: delta, success: true };
+            // The Agent stores a change for the account its agent link names. Stamped
+            // with the GM's own link (sendResponse's default), a change made in Foundry
+            // updated nobody's stored sheet, so a player who reloaded saw old values.
+            // The GM's client sends it once per linked player who owns the actor.
+            const links = game.user.isGM ? this._ownerAgentLinks(actor) : [];
+            if (!links.length) {
+                await this.sendResponse(message);
+                return;
+            }
+            if (!isPrimaryGM()) return;
+            for (const agentLink of links) await this.sendResponse({ ...message, agentLink });
         };
 
         // Hook into Actor updates (stats, derived stats, etc.)

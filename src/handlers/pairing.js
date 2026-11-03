@@ -56,4 +56,16 @@ export async function pairAgent(bridge, data, { debug }) {
         nonce,
         success: true,
     });
+
+    // A character the GM assigned before the player paired: tell the Agent now. The Character
+    // Assignment menu only sends changes, so without this the Agent kept its demo character.
+    if (user.character) {
+        await bridge.sendResponse({
+            type: 'GM_LINK_PLAYER_CHARACTER',
+            agentLink,
+            actorId: user.character.id,
+            character: user.character.id,
+            isGM: user.isGM,
+        });
+    }
 }

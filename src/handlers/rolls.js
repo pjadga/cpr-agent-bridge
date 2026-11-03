@@ -1,5 +1,6 @@
 import { resolveWeaponDV } from '../dv.js';
 import { tokenDistanceM } from '../utils.js';
+import { deathSaveFlags } from '../roll-summary.js';
 
 // Handlers for rolls: DAMAGE_ROLL, DEATH_SAVE, FACEDOWN_ROLL, INITIATIVE_ROLL,
 // ROLE_ROLL, SKILL_ROLL, STAT_ROLL, DICE_ROLL, ATTACK_ROLL.
@@ -67,6 +68,9 @@ export async function deathSave(bridge, data, { requestId, actorId }) {
         if (result.success) {
             // After roll, sync the updated death saves counter
             const deathSaves = actor.system.derivedStats.deathsave || {};
+            // The Agent shows FAIL for isCriticalFailure, so report the save's outcome there.
+            const flags = deathSaveFlags(result.rawRoll?.saveResult, game.i18n.localize('CPR.rolls.success'))
+                ?? { isCriticalSuccess: result.isCriticalSuccess, isCriticalFailure: result.isCriticalFailure };
 
             await bridge.sendResponse({
                 type: 'ROLL_RESULT',
@@ -74,13 +78,12 @@ export async function deathSave(bridge, data, { requestId, actorId }) {
                 requestId: requestId,
                 actorId: actorId,
                 total: result.total,
-                isCriticalSuccess: result.isCriticalSuccess,
-                isCriticalFailure: result.isCriticalFailure,
+                ...flags,
                 label: 'Death Save',
                 rawRoll: {
                     total: result.total,
-                    isCriticalSuccess: result.isCriticalSuccess,
-                    isCriticalFailure: result.isCriticalFailure,
+                    ...flags,
+                    saveResult: result.rawRoll?.saveResult ?? null,
                     label: result.label,
                     resultTotal: result.rawRoll?.resultTotal,
                     rollTitle: result.rawRoll?.rollTitle
@@ -141,9 +144,14 @@ export async function facedownRoll(bridge, data, { requestId, actorId }) {
     }
 }
 
-export async function initiativeRoll(bridge, data, { requestId, actorId }) {
+export async function initiativeRoll(bridge, data, { type, requestId, actorId }) {
     const actor = game.actors.get(actorId);
     if (actor) {
+        // Core only rolls initiative for combatants; outside a combat nothing happened at all.
+        if (!game.combat?.combatants.some(c => c.actor?.id === actor.id)) {
+            await bridge.sendResponse({ type: 'CONFIRMATION', action: type, actorId, success: false, message: 'You are not in the current combat. Ask your GM to add you.', requestId });
+            return;
+        }
         const trigger = async () => {
             await actor.rollInitiative();
         };
@@ -317,19 +325,29 @@ export async function statRoll(bridge, data, { requestId, actorId }) {
 }
 
 export async function diceRoll(bridge, data, { requestId, actorId }) {
-    if (requestId) bridge.activeRequests.set(requestId, { actorId: actorId, timestamp: Date.now() });
+    // The Agent's die roller names its character as speaker ("Actor.<id>") rather than actorId.
+    const rollerId = actorId || String(data.speaker ?? '').replace(/^Actor\./, '') || null;
+    if (requestId) bridge.activeRequests.set(requestId, { actorId: rollerId, timestamp: Date.now() });
+    const rollMode = data.rollMode || game.settings.get("core", "rollMode");
     const roll = new Roll(data.formula);
     await roll.evaluate();
-    await roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: game.actors.get(actorId) }),
-        flavor: data.flavor,
-        rollMode: data.rollMode || game.settings.get("core", "rollMode")
-    });
+    // Roll#toMessage takes rollMode as an option, not message data; in the data it was ignored and
+    // every roll was public. The capture marks the chat message as reported here, so the
+    // createChatMessage hook doesn't send the result to the Agent a second time.
+    await bridge._beginRollCapture(rollMode);
+    try {
+        await roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: game.actors.get(rollerId) }),
+            flavor: data.flavor
+        }, { rollMode });
+    } finally {
+        bridge._armCaptureSafety();
+    }
     await bridge.sendResponse({
         type: 'ROLL_RESULT',
-        rollMode: data.rollMode || game.settings.get("core", "rollMode"),
+        rollMode,
         requestId: requestId,
-        actorId: actorId,
+        actorId: rollerId,
         total: roll.total,
         isCriticalSuccess: roll.isCriticalSuccess || false,
         isCriticalFailure: roll.isCriticalFailure || false,
@@ -396,7 +414,7 @@ export async function attackRoll(bridge, data, { requestId, actorId, tokenId }) 
                 const distanceM = tokenDistanceM(shooter, targetToken);
 
                 const weaponData = actor.items.get(weaponId);
-                computedDV = (await resolveWeaponDV(weaponData, distanceM)).dv;
+                computedDV = (await resolveWeaponDV(weaponData, distanceM, { autofire: fireMode === 'Auto' })).dv;
             }
         }
 
